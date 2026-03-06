@@ -414,7 +414,7 @@ Focus on these 3 areas to improve fastest: ${primary.gapText}.`
                     </span>
 
                     <span className="text-[10px] text-slate-700">{statusMeaning(primaryStatus)}</span>
-                  </div>
+              </div>
                 ) : null}
               </div>
             </div>

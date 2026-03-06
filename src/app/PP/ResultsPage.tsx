@@ -220,6 +220,16 @@ const ResultsPage: React.FC<ResultsPageProps> = ({
       container.style.width = `${EXPORT_WIDTH}px`;
       container.style.maxWidth = `${EXPORT_WIDTH}px`;
 
+    // ✅ Force Personality block width for stable html2canvas capture
+    const personalityBlock = container.querySelector('[data-pdf="personality"]') as HTMLElement | null;
+    const prevPersonality = personalityBlock ? { width: personalityBlock.style.width } : null;
+
+if (personalityBlock) {
+  personalityBlock.style.width = `${EXPORT_WIDTH}px`; // 900px
+}  
+if (personalityBlock && prevPersonality) {
+  personalityBlock.style.width = prevPersonality.width;
+}
 // ✅ PDF chart layout: MI + DISC in SAME ROW (like screen)
 if (chartsRow) {
   chartsRow.style.display = "grid";
@@ -611,29 +621,31 @@ className="flex flex-col items-center -gap-6 lg:flex-row lg:items-start lg:justi
               </div>
             </div>
 
-            <div className="max-w-2xl mx-auto mt-4">
-              <h4 className="text-lg text-center font-semibold text-gray-700 mb-3">Personality</h4>
-              <div className="border border-gray-400 rounded-[18px] px-4 py-3">
-                <div className="-space-y-1">
-                  <DiplomaticIndependentScore questions={allQuestions} responses={userResponses} />
-                  <CooperativeCompetitiveScore questions={allQuestions} responses={userResponses} />
-                  <SubmissiveAssertiveScore questions={allQuestions} responses={userResponses} />
-                  <SpontaneousConscientiousScore questions={allQuestions} responses={userResponses} />
-                  <InnovativeConventionalScore questions={allQuestions} responses={userResponses} />
-                  <ReactiveOrganizedScore questions={allQuestions} responses={userResponses} />
-                  <IntrovertExtrovertScore questions={allQuestions} responses={userResponses} />
-                  <SelfSufficientGroupOrientedScore
-                    questions={allQuestions}
-                    responses={userResponses}
-                  />
-                  <ReservedOutgoingScore questions={allQuestions} responses={userResponses} />
-                  <EmotionalStableScore questions={allQuestions} responses={userResponses} />
-                  <RestlessPoisedScore questions={allQuestions} responses={userResponses} />
-                  <ExcitableRelaxedScore questions={allQuestions} responses={userResponses} />
-                  <FrankSocialDesirabilityScore questions={allQuestions} responses={userResponses} />
-                </div>
-              </div>
-            </div>
+{/* ✅ Personality (PDF-safe) */}
+<div className="max-w-[900px] mx-auto mt-4" data-pdf="personality">
+  <h4 className="text-lg text-center font-semibold text-gray-700 mb-3">
+    Personality
+  </h4>
+
+  <div className="border border-gray-400 rounded-[18px] px-4 py-4">
+    {/* ✅ no negative spacing in PDF */}
+    <div className="space-y-1">
+      <DiplomaticIndependentScore questions={allQuestions} responses={userResponses} />
+      <CooperativeCompetitiveScore questions={allQuestions} responses={userResponses} />
+      <SubmissiveAssertiveScore questions={allQuestions} responses={userResponses} />
+      <SpontaneousConscientiousScore questions={allQuestions} responses={userResponses} />
+      <InnovativeConventionalScore questions={allQuestions} responses={userResponses} />
+      <ReactiveOrganizedScore questions={allQuestions} responses={userResponses} />
+      <IntrovertExtrovertScore questions={allQuestions} responses={userResponses} />
+      <SelfSufficientGroupOrientedScore questions={allQuestions} responses={userResponses} />
+      <ReservedOutgoingScore questions={allQuestions} responses={userResponses} />
+      <EmotionalStableScore questions={allQuestions} responses={userResponses} />
+      <RestlessPoisedScore questions={allQuestions} responses={userResponses} />
+      <ExcitableRelaxedScore questions={allQuestions} responses={userResponses} />
+      <FrankSocialDesirabilityScore questions={allQuestions} responses={userResponses} />
+    </div>
+  </div>
+</div>
           </div>
         </div>
 
