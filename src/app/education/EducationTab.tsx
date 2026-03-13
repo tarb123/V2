@@ -362,142 +362,128 @@ export default function EducationTab()
 return (
   <div className="min-h-screen w-full bg-gradient-to-b from-slate-950 via-slate-950 to-slate-900 text-slate-100">
     {/* Top header / hero */}
-    <div className="border-b border-white/10 text-black bg-gradient-to-b from-slate-200 to-slate-400">
-      <div className="mx-auto max-w-7xl px-4 py-9 sm:px-6 lg:px-8">
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div className="space-y-2">
+<div className="border-b border-white/10 bg-gradient-to-b from-slate-200 to-slate-400 text-black pt-15 md:pt-20">
+  <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 sm:py-8 lg:px-8">
+    <div className="flex flex-col gap-3">
+      <div className="space-y-2">
+        {/* <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-600 sm:text-xs">
+          Career Explorer
+        </p> */}
+<h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+  Education
+</h1>
 
-            <div className="font-sans flex items-end gap-1">
-              <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-                Education
-              </h1>
-                    
-              {activeFieldId && (
-                <>
-                  <h1 className="text-2xl text-slate-500">/</h1>
-                  <h1 className="text-2xl text-black">
-                    {activeField?.name ?? "Field"}
-                  </h1>
-                </>
-              )}
-              {selectedRoleId && (
-                <>
-                  <h1 className="text-2xl text-slate-500">/</h1>
-                  <h1 className="text-2xl text-black">
-                    {selectedRole?.title ?? "Role"}
-                  </h1>
-                </>
-              )}
-            </div>
- 
-            <span className="hidden sm:inline-flex items-center rounded-full py-1 px-2 
-               font-sans bg-emerald-400 text-xs font-bold text-slate-950">
-              Skill Matching Engine  
-            </span>
-            
-            <ol className="space-y-1 text-xs font-sans font-semibold">
-              <li className="before:content-['✔'] before:text-emerald-600 before:mr-1 before:animate-pulse before:drop-shadow-[0_0_6px_rgba(255,255,255,0.95)]">
-                Explore career fields & job roles
-              </li>
-              <li className="before:content-['✔'] before:text-emerald-600 before:mr-1 before:animate-pulse before:drop-shadow-[0_0_6px_rgba(255,255,255,0.95)]">
-                Compare your skills
-              </li>
-              <li className="before:content-['✔'] before:text-emerald-600 before:mr-1 before:animate-pulse before:drop-shadow-[0_0_6px_rgba(255,255,255,0.95)]">
-                Generate a skill-gap report with match percentage
-              </li>
-            </ol>
-          </div>
-          
-          {/* <div className="flex items-center gap-2">
-
-            {(activeFieldId || selectedRoleId) && (
-              <button type="button" onClick={goBack} aria-label="Back"
-                className="before:text-4xl inline-flex items-center justify-center px-3 py-2 text-slate-100
-                before:content-['<'] before:text-white before:animate-pulse
-                before:drop-shadow-[0_0_6px_rgba(255,255,255,0.95)]"
-              >
-              </button>
+        {(activeFieldId || selectedRoleId) && (
+          <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm">
+            {activeFieldId && (
+              <span className="rounded-full bg-white/70 px-3 py-1 text-slate-800">
+                {activeField?.name ?? "Field"}
+              </span>
             )}
-            <button type="button" aria-label="Reset"
-              onClick={() => { setActiveFieldId(null); setSelectedRoleId(null); setSearch(""); setMatchResult(null);}}
-              className="before:text-4xl inline-flex items-center justify-center px-3 py-2 text-slate-100
-              before:content-['>'] before:text-white before:animate-pulse
-              before:drop-shadow-[0_0_6px_rgba(255,255,255,0.95)]"
-            >
-            </button>
-          </div> */}
-        
-      </div>
+            {selectedRoleId && (
+              <span className="rounded-full bg-white/70 px-3 py-1 text-slate-800">
+                {selectedRole?.title ?? "Role"}
+              </span>
+            )}
+          </div>
+        )}
 
+        <div className="flex flex-wrap gap-2">
+          <span className="inline-flex items-center rounded-full bg-emerald-400 px-2 py-1 text-xs font-bold text-slate-950">
+            Skill Matching Engine
+          </span>
+        </div>
+
+        <ol className="space-y-1 text-xs font-sans font-semibold sm:text-sm">
+          <li className="before:mr-1 before:content-['✔'] before:text-emerald-600 before:animate-pulse before:drop-shadow-[0_0_6px_rgba(255,255,255,0.95)]">
+            Explore career fields & job roles
+          </li>
+          <li className="before:mr-1 before:content-['✔'] before:text-emerald-600 before:animate-pulse before:drop-shadow-[0_0_6px_rgba(255,255,255,0.95)]">
+            Compare your skills
+          </li>
+          <li className="before:mr-1 before:content-['✔'] before:text-emerald-600 before:animate-pulse before:drop-shadow-[0_0_6px_rgba(255,255,255,0.95)]">
+            Generate a skill-gap report with match percentage
+          </li>
+        </ol>
       </div>
     </div>
+  </div>
+</div>
 
     {/* Main layout */}
-    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-7xl px-3 py-4 sm:px-6 sm:py-6 lg:px-8">
       <div className="grid gap-6 lg:grid-cols-12">
-        
         {/* LEFT: Main content */}
-        <div className="lg:col-span-8 space-y-6">
+        <div className="space-y-6 lg:col-span-8">
           {/* Main Card */}
           <div className="rounded-2xl border border-white/10 bg-slate-200 shadow-[0_1px_0_0_rgba(255,255,255,0.06)]">
-            <div className="flex flex-col gap-3 border-b border-slate-700 p-5 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <div className="text-sm font-sans font-semibold text-slate-950">
-                  {selectedRole
-                    ? "Job Role Details"
-                    : activeField
-                      ? `${activeField.name} — Job Roles`
-                      : "Career Fields"}
-                </div>
-                <div className="text-lg font-sans font-semibold text-slate-950">
-                  {selectedRole
-                    ? selectedRole.title
-                    : activeField
-                      ? "Select a role to view skills"
-                      : "Choose a career domain"}
-                </div>
-                <div className="mt-1 text-sm font-sans text-emerald-700">
-                  {selectedRole
-                    ? "Review required skills, compare your profile, and run Match Profile."
-                    : activeField
-                      ? "Browse roles inside this field."
-                      : "Pick a domain to explore available job roles."}
-                </div>
-              </div>
-          <div className="flex items-center gap-2">
+            <div className="border-b border-slate-300 p-4 sm:p-5">
+              <div className="flex flex-col gap-4">
+                <div>
+                  <div className="text-sm font-sans font-semibold text-slate-950">
+                    {selectedRole
+                      ? "Job Role Details"
+                      : activeField
+                        ? `${activeField.name} — Job Roles`
+                        : "Career Fields"}
+                  </div>
 
-            {(activeFieldId || selectedRoleId) && (
-              <button type="button" onClick={goBack} aria-label="Back"
-                className="before:text-4xl inline-flex items-center justify-center px-3 py-2 text-slate-100
-                before:content-['<'] before:text-white before:animate-pulse
-                before:drop-shadow-[0_0_6px_rgba(255,255,255,0.95)]"
-              >
-              </button>
-            )}
-            <button type="button" aria-label="Reset"
-              onClick={() => { setActiveFieldId(null); setSelectedRoleId(null); setSearch(""); setMatchResult(null);}}
-              className="before:text-4xl inline-flex items-center justify-center px-3 py-2 text-slate-100
-              before:content-['>'] before:text-white before:animate-pulse
-              before:drop-shadow-[0_0_6px_rgba(255,255,255,0.95)]"
-            >
-            </button>
-          </div>
-              {/* Match button when role selected */}
-              <div className = "px-2 mt-20">
-              {selectedRole && (
-                <button
-                  type="button"
-                  onClick={onMatchProfile}
-                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-400 px-4 py-2 text-sm font-semibold text-slate-950 hover:bg-emerald-300 focus:outline-none focus:ring-2 focus:ring-emerald-200/30"
-                >
-                  <span aria-hidden="true">✨</span> Match Profile
-                </button>
-              )}
+                  <div className="text-lg font-sans font-semibold text-slate-950 sm:text-xl">
+                    {selectedRole
+                      ? selectedRole.title
+                      : activeField
+                        ? "Select a role to view skills"
+                        : "Choose a career domain"}
+                  </div>
+
+                  <div className="mt-1 text-sm font-sans text-emerald-700">
+                    {selectedRole
+                      ? "Review required skills, compare your profile, and run Match Profile."
+                      : activeField
+                        ? "Browse roles inside this field."
+                        : "Pick a domain to explore available job roles."}
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div className="flex items-center gap-2">
+                    {(activeFieldId || selectedRoleId) && (
+                      <button
+                        type="button"
+                        onClick={goBack}
+                        aria-label="Back"
+                        className="before:text-3xl inline-flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900/90 before:content-['<'] before:text-white before:animate-pulse before:drop-shadow-[0_0_6px_rgba(255,255,255,0.95)]"
+                      />
+                    )}
+
+                    <button
+                      type="button"
+                      aria-label="Reset"
+                      onClick={() => {
+                        setActiveFieldId(null);
+                        setSelectedRoleId(null);
+                        setSearch("");
+                        setMatchResult(null);
+                      }}
+                      className="before:text-3xl inline-flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900/90 before:content-['>'] before:text-white before:animate-pulse before:drop-shadow-[0_0_6px_rgba(255,255,255,0.95)]"
+                    />
+                  </div>
+
+                  {selectedRole && (
+                    <button
+                      type="button"
+                      onClick={onMatchProfile}
+                      className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-400 px-4 py-2 text-sm font-semibold text-slate-950 hover:bg-emerald-300 focus:outline-none focus:ring-2 focus:ring-emerald-200/30"
+                    >
+                      <span aria-hidden="true">✨</span>
+                      Match Profile
+                    </button>
+                  )}
+                </div>
               </div>
- 
             </div>
 
-            <div className="p-5">
+            <div className="p-4 sm:p-5">
               {/* Search (hide inside role view) */}
               {!selectedRole && (
                 <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-center">
@@ -510,8 +496,7 @@ return (
                       value={search}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
                       placeholder={activeField ? "Search roles..." : "Search fields or roles..."}
-                      className="w-full rounded-xl border border-white/10 bg-slate-950/40 pl-10 pr-3 py-2 text-sm text-slate-900 
-                      placeholder:text-slate-100 outline-none focus:ring-2 focus:ring-white/15"
+                      className="w-full rounded-xl border border-slate-300 bg-white py-2 pl-10 pr-3 text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-slate-300"
                     />
                   </div>
 
@@ -527,7 +512,7 @@ return (
 
               {/* Fields Grid */}
               {!activeFieldId && !selectedRole && (
-                <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
                   {fields
                     .filter((f) => {
                       const q = search.trim().toLowerCase();
@@ -544,10 +529,8 @@ return (
                         onClick={() => setActiveFieldId(f.id)}
                         className="group text-left"
                       >
-                        <div className="rounded-1xl border border-white/10 bg-blue-950 p-4 
-                        transition hover:bg-blue-950/70 hover:border-white/20 
-                        focus:outline-none focus:ring-2 focus:ring-white/15">
-                          <div className="flex items-start justify-between ">
+                        <div className="rounded-xl border border-white/10 bg-blue-950 p-4 transition hover:border-white/20 hover:bg-blue-950/70 focus:outline-none focus:ring-2 focus:ring-white/15">
+                          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                             <div>
                               <div className="text-base font-semibold text-white">
                                 {f.name}
@@ -557,8 +540,7 @@ return (
                               </div>
                             </div>
 
-                            <span className="inline-flex items-center rounded-full border 
-                            border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-200 group-hover:bg-white/10">
+                            <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-200 group-hover:bg-white/10">
                               Browse →
                             </span>
                           </div>
@@ -574,7 +556,7 @@ return (
                   {fieldRoles.map((r) => (
                     <div
                       key={r.id}
-                      className="rounded-1xl border border-white/10 bg-blue-950 p-4 hover:border-white/20 hover:bg-blue-950/70 transition"
+                      className="rounded-xl border border-white/10 bg-blue-950 p-4 transition hover:border-white/20 hover:bg-blue-950/70"
                     >
                       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                         <div className="min-w-0">
@@ -628,7 +610,7 @@ return (
                 <div className="space-y-5">
                   {/* Filters row */}
                   <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                    <div className="flex flex-wrap items-center gap-3">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
                       <div className="w-full sm:w-56">
                         <label className="mb-1 block text-xs font-semibold text-slate-900">
                           Filter skills
@@ -645,7 +627,7 @@ return (
                         />
                       </div>
 
-                      <label className="mt-5 flex items-center gap-2 text-xs text-black sm:mt-6">
+                      <label className="flex items-center gap-2 pt-1 text-xs text-black sm:pt-5">
                         <input
                           aria-label="Show only missing skills"
                           type="checkbox"
@@ -653,8 +635,7 @@ return (
                           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                             setShowOnlyMissing(e.target.checked)
                           }
-                          className="h-4 w-4 rounded border-white/20 bg-white/5
-                           focus:ring-2 focus:ring-white/15"
+                          className="h-4 w-4 rounded border-white/20 bg-white/5 focus:ring-2 focus:ring-white/15"
                         />
                         Show only missing
                       </label>
@@ -674,9 +655,9 @@ return (
                       return (
                         <div
                           key={req.id}
-                          className="rounded-1xl border border-white/10 bg-blue-950 p-3"
+                          className="rounded-xl border border-white/10 bg-blue-950 p-3"
                         >
-                          <div className="flex items-start justify-between">
+                          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                             <div className="min-w-0">
                               <div className="flex flex-wrap items-center gap-2">
                                 <div className="truncate text-sm font-semibold text-white">
@@ -698,10 +679,10 @@ return (
                               className={
                                 "shrink-0 rounded-full px-3 py-1 text-xs font-semibold " +
                                 (!u
-                                  ? "bg-rose-400/15 text-rose-300 border border-rose-400/20"
+                                  ? "border border-rose-400/20 bg-rose-400/15 text-rose-300"
                                   : percent === 100
-                                    ? "bg-emerald-400/15 text-emerald-300 border border-emerald-400/20"
-                                    : "bg-amber-400/15 text-amber-300 border border-amber-400/20")
+                                    ? "border border-emerald-400/20 bg-emerald-400/15 text-emerald-300"
+                                    : "border border-amber-400/20 bg-amber-400/15 text-amber-300")
                               }
                             >
                               {u ? `${percent}% • ${status}` : "Missing"}
@@ -731,8 +712,7 @@ return (
                       <button
                         type="button"
                         onClick={addUserSkill}
-                        className="inline-flex items-center justify-center rounded-xl border border-white/10 bg-white px-4 py-2 
-                        text-sm font-semibold text-black hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/15"
+                        className="inline-flex items-center justify-center rounded-xl border border-white/10 bg-white px-4 py-2 text-sm font-semibold text-black hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/15"
                       >
                         Add
                       </button>
@@ -742,9 +722,9 @@ return (
                       {userSkills.map((s, idx) => (
                         <div
                           key={idx}
-                          className="rounded-1xl border border-white/10 bg-slate-300 p-2"
+                          className="rounded-xl border border-white/10 bg-slate-300 p-3"
                         >
-                          <div className="grid gap-2 md:grid-cols-12 md:items-center">
+                          <div className="grid gap-3 md:grid-cols-12 md:items-center">
                             <div className="md:col-span-5">
                               <label className="mb-1 block text-xs font-semibold text-black">
                                 Skill name
@@ -754,7 +734,7 @@ return (
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                                   updateUserSkill(idx, { name: e.target.value })
                                 }
-                                className="w-full rounded-xl border border-white/10 bg-white px-2 py-2 text-sm text-black placeholder:text-slate-500 outline-none focus:ring-2 focus:ring-white/15"
+                                className="w-full rounded-xl border border-white/10 bg-white px-3 py-2 text-sm text-black placeholder:text-slate-500 outline-none focus:ring-2 focus:ring-white/15"
                                 placeholder="e.g. React"
                               />
                             </div>
@@ -764,7 +744,6 @@ return (
                                 Type
                               </label>
                               <Select
-                               
                                 value={s.type}
                                 onChange={(v: string) =>
                                   updateUserSkill(idx, { type: v as SkillType })
@@ -777,11 +756,10 @@ return (
                             </div>
 
                             <div className="md:col-span-3">
-                              <label className="mb-1 block text-xs text-black font-semibold">
+                              <label className="mb-1 block text-xs font-semibold text-black">
                                 Level
                               </label>
                               <Select
-                                
                                 value={s.level}
                                 onChange={(v: string) =>
                                   updateUserSkill(idx, { level: v as Proficiency })
@@ -795,38 +773,37 @@ return (
                             </div>
 
                             <div className="md:col-span-1 md:flex md:justify-end">
-                             <button
-  type="button"
-  onClick={() => removeUserSkill(idx)}
-  className="mt-5 inline-flex w-full items-center justify-center px-3 py-2 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/15 md:mt-6 md:w-auto group"
-  aria-label="Remove skill"
->
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    className="h-6 w-6 group-hover:fill-white"
-    aria-hidden="true"
-  >
-    <path d="M18.36 5.64a1.5 1.5 0 0 0-2.12 0L12 9.88 7.76 5.64a1.5 1.5 0 1 0-2.12 2.12L9.88 12l-4.24 4.24a1.5 1.5 0 1 0 2.12 2.12L12 14.12l4.24 4.24a1.5 1.5 0 0 0 2.12-2.12L14.12 12l4.24-4.24a1.5 1.5 0 0 0 0-2.12Z" />
-  </svg>
-</button>
+                              <button
+                                type="button"
+                                onClick={() => removeUserSkill(idx)}
+                                className="group mt-1 inline-flex w-full items-center justify-center px-3 py-2 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/15 md:mt-6 md:w-auto"
+                                aria-label="Remove skill"
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  viewBox="0 0 24 24"
+                                  className="h-6 w-6 group-hover:fill-white"
+                                  aria-hidden="true"
+                                >
+                                  <path d="M18.36 5.64a1.5 1.5 0 0 0-2.12 0L12 9.88 7.76 5.64a1.5 1.5 0 1 0-2.12 2.12L9.88 12l-4.24 4.24a1.5 1.5 0 1 0 2.12 2.12L12 14.12l4.24 4.24a1.5 1.5 0 0 0 2.12-2.12L14.12 12l4.24-4.24a1.5 1.5 0 0 0 0-2.12Z" />
+                                </svg>
+                              </button>
                             </div>
 
-    <div className="md:col-span-12 flex flex-wrap gap-2 pt-1">
-      <span className="rounded-full border border-white/10 bg-white px-3 py-1 text-xs text-black">
-        Source: {s.source ?? "Profile"}
-      </span>
-    </div>
-            
-      </div>
-    </div>
-   ))}
-  </div>
-  </div>
+                            <div className="flex flex-wrap gap-2 pt-1 md:col-span-12">
+                              <span className="rounded-full border border-white/10 bg-white px-3 py-1 text-xs text-black">
+                                Source: {s.source ?? "Profile"}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
 
                   {/* Match results */}
                   <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                    <div className="flex items-start justify-between gap-3">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                       <div>
                         <div className="text-base font-semibold text-black font-sans">
                           Match Results
@@ -852,15 +829,17 @@ return (
                     ) : (
                       <div className="mt-3 space-y-5">
                         <div className="flex items-center justify-between">
-                          <div className="text-sm font-sans font-bold text-green-700">Match Percentage</div>
+                          <div className="text-sm font-sans font-bold text-green-700">
+                            Match Percentage
+                          </div>
                           <span
                             className={
                               "rounded-full px-3 py-1 text-xs font-semibold " +
                               (matchResult.matchPercent >= 80
-                                ? "bg-emerald-600/100 text-white-100 border border-emerald-400/20"
+                                ? "border border-emerald-400/20 bg-emerald-600/100 text-white-100"
                                 : matchResult.matchPercent >= 60
-                                  ? "bg-amber-400 text-amber-100 border border-amber-400/20"
-                                  : "bg-rose-400 text-rose-100 border border-rose-400/20")
+                                  ? "border border-amber-400/20 bg-amber-400 text-amber-100"
+                                  : "border border-rose-400/20 bg-rose-400 text-rose-100")
                             }
                           >
                             {matchResult.matchPercent}%
@@ -892,7 +871,9 @@ return (
 
                         {/* Gaps */}
                         <div className="space-y-3">
-                          <div className="text-sm font-sans font-bold text-black">Skill Gaps</div>
+                          <div className="text-sm font-sans font-bold text-black">
+                            Skill Gaps
+                          </div>
 
                           {matchResult.missingSkills.length === 0 &&
                           matchResult.weakSkills.length === 0 ? (
@@ -919,15 +900,19 @@ return (
 
                               {matchResult.weakSkills.length > 0 && (
                                 <div className="rounded-2xl border border-white/10 bg-slate-950/30 p-4">
-                                  <div className="text-xs font-semibold text-slate-200">Needs improvement</div>
+                                  <div className="text-xs font-semibold text-slate-200">
+                                    Needs improvement
+                                  </div>
                                   <div className="mt-3 space-y-2">
                                     {matchResult.weakSkills.map((w) => (
                                       <div
                                         key={w.skill.id}
                                         className="rounded-2xl border border-white/10 bg-slate-950/40 p-4"
                                       >
-                                        <div className="flex items-start justify-between gap-3">
-                                          <div className="font-semibold font-sans text-white">{w.skill.name}</div>
+                                        <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                                          <div className="font-semibold font-sans text-white">
+                                            {w.skill.name}
+                                          </div>
                                           <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-black">
                                             Δ {w.delta}
                                           </span>
@@ -969,13 +954,13 @@ return (
                                   key={p.skillName}
                                   className="rounded-2xl border border-white/10 bg-slate-950/30 p-4"
                                 >
-                                  <div className="flex items-center justify-between gap-3">
+                                  <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                                     <div className="font-semibold text-white">{p.skillName}</div>
                                     <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-sans text-white">
                                       Target: {p.targetLevel}
                                     </span>
                                   </div>
-                                  <ol className="mt-2 list-disc space-y-1 pl-1 text-xs text-white">
+                                  <ol className="mt-2 list-disc space-y-1 pl-4 text-xs text-white">
                                     {p.steps.map((step, i) => (
                                       <li key={i}>{step}</li>
                                     ))}
@@ -1001,7 +986,7 @@ return (
                               {matchResult.recommendedOpenings.map((o) => (
                                 <div
                                   key={o.id}
-                                  className="rounded-1xl border border-white/10 bg-slate-950/30 p-4 flex items-start justify-between gap-3"
+                                  className="flex flex-col gap-3 rounded-xl border border-white/10 bg-slate-950/30 p-4 sm:flex-row sm:items-start sm:justify-between"
                                 >
                                   <div>
                                     <div className="font-semibold text-white">{o.title}</div>
@@ -1030,10 +1015,10 @@ return (
         </div>
 
         {/* RIGHT: Sticky side panel */}
-        <div className="lg:col-span-4 space-y-6">
-          <div className="lg:sticky lg:top-6 space-y-6">
+        <div className="space-y-4 lg:col-span-4 lg:space-y-6">
+          <div className="space-y-4 lg:sticky lg:top-6 lg:space-y-6">
             {/* Quick actions */}
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-4 sm:p-5">
               <div className="text-base font-semibold text-white">Quick Navigation</div>
               <p className="mt-1 text-sm text-slate-300">
                 Jump between views quickly.
@@ -1079,7 +1064,7 @@ return (
             </div>
 
             {/* Profile summary */}
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-4 sm:p-5">
               <div className="text-base font-semibold text-white">Profile Snapshot</div>
               <p className="mt-1 text-sm text-slate-300">
                 Keep your skill list updated for accurate matching.
@@ -1105,7 +1090,8 @@ return (
               </div>
 
               <div className="mt-4 rounded-2xl border border-white/10 bg-slate-950/30 p-4 text-sm text-slate-300">
-                Tip: Keep skill naming consistent (e.g., <span className="font-semibold text-white">JavaScript/TypeScript</span>) to improve matching accuracy.
+                Tip: Keep skill naming consistent (e.g.{" "}
+                <span className="font-semibold text-white">JavaScript/TypeScript</span>) to improve matching accuracy.
               </div>
             </div>
           </div>

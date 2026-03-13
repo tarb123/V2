@@ -213,7 +213,7 @@ export const coursesData = [
   ];
   export const team = [
     {
-      cover: "/fb.jpg",
+      cover: "/fb.png",
       name: "Mirza Faizan Baig (CEO)",
       work: "Career Consultant / HR Consultant Faizan is the founder of Conductivity Career & HR Solutions. with 17 years of experience in HR and passion for Career Development.",
     },

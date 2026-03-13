@@ -431,7 +431,7 @@ const calculateCareerMatches = (normTraitScores: ScoreRecord, normCategoryScores
                 {/* ✅ top offset a bit larger on big screens */}
                 <div className="space-y-4 lg:sticky lg:top-24 2xl:top-28">
                   {/* Progress Card */}
-                  <div className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 2xl:p-6 shadow-sm">
+                  <div className="rounded-2xl border -mb-6 border-slate-200 bg-white p-4 sm:p-5 2xl:p-6 shadow-sm">
                     <div className="flex items-center justify-between">
                       <h2 className="text-sm 2xl:text-base font-semibold">Progress</h2>
                       <div className="mt-3 flex items-center justify-between text-xs 2xl:text-sm text-slate-500">
@@ -460,8 +460,8 @@ const calculateCareerMatches = (normTraitScores: ScoreRecord, normCategoryScores
                   </div>
 
                   {/* Question Map */}
-                  <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-                    <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3 2xl:px-5 2xl:py-4">
+                  <div className="overflow-hidden -mb-3 rounded-2xl border border-slate-200 bg-white shadow-sm">
+                    <div className="flex items-center justify-between border-b border-slate-200  px-3 py-3 2xl:px-5 2xl:py-4">
                       <h3 className="text-sm 2xl:text-base font-semibold">Question Map</h3>
                       {/* <span className="text-xs 2xl:text-sm text-slate-500">Jump to any</span> */}
                        <button
@@ -543,11 +543,11 @@ const calculateCareerMatches = (normTraitScores: ScoreRecord, normCategoryScores
 
               {/* Main Quiz Card */}
               <section className="order-1 lg:order-2 lg:col-span-8 xl:col-span-9">
-                <div className="rounded-2xl border border-slate-200 bg-white shadow-[0_10px_30px_rgba(2,6,23,0.08)]">
+                <div className="rounded-2xl border mt-20 border-slate-200 bg-white shadow-[0_10px_30px_rgba(2,6,23,0.08)]">
                   {/* ✅ Responsive padding */}
-                  <div className="border-b border-slate-200 p-5 sm:p-8 lg:p-10 2xl:p-12">
+                  <div className="border-b  border-slate-200 p-5 sm:p-8 lg:px-16 2xl:p-12">
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                      <div className="-mb-7">
+                      <div className="-mb-3">
          
                         {/* ✅ Scale title for big screens */}
                         <h1 className="-mt-1 text-xl sm:text-2xl lg:text-3xl 2xl:text-4xl font-semibold">
