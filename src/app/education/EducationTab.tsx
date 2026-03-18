@@ -1,9 +1,6 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
-
-/** ---------------- Types ---------------- */
-
 type Proficiency = "Beginner" | "Intermediate" | "Advanced";
 type SkillType = "Technical" | "Soft";
 
@@ -27,6 +24,13 @@ type CareerField = {
   id: string;
   name: string;
   shortDesc?: string;
+};
+
+type SubDepartment = {
+  id: string;
+  fieldId: string;
+  name: string;
+  roles: JobRole[];
 };
 
 type UserSkill = {
@@ -143,15 +147,1199 @@ function computeMatch(role: JobRole, userSkills: UserSkill[], openings: JobOpeni
 /** ---------------- Mock Data ---------------- */
 
 const MOCK_FIELDS: CareerField[] = [
-  { id: "it", name: "IT", shortDesc: "Software, systems, data, networks" },
   { id: "hr", name: "HR", shortDesc: "People ops, recruitment, policies" },
   { id: "finance", name: "Finance", shortDesc: "Accounting, analysis, FP&A" },
+  { id: "sales", name: "Sales", shortDesc: "Revenue, client acquisition, accounts"},
   { id: "marketing", name: "Marketing", shortDesc: "Growth, content, brand" },
+  { id: "customer_relation", name: "Customer Relation", shortDesc: "Service, communication, public engagement" },
+  { id: "supply_chain_management", name: "Supply Chain Management", shortDesc: "Procurement, logistics, inventory, production" },
+  { id: "it", name: "IT", shortDesc: "Software, systems, data, networks" },
+  { id: "product_innovation", name: "Product & Innovation", shortDesc: "Product strategy, roadmap, innovation" },
+{ id: "program_delivery_management", name: "Program & Delivery Management", shortDesc: "Projects, PMO, portfolio delivery" },
+{ id: "operations_process_excellence", name: "Operations & Process Excellence", shortDesc: "Business analysis, process improvement, governance" },
   { id: "engineering", name: "Engineering", shortDesc: "Civil, mechanical, electrical" },
   { id: "medical", name: "Medical", shortDesc: "Clinical and healthcare roles" },
   { id: "education", name: "Education", shortDesc: "Teaching, training, curriculum" },
 ];
 
+const HR_DEPARTMENT_CONTENT = [
+  {
+    id: "hr_talent_acquisition",
+    name: "Talent Acquisition",
+    roles: [
+      {
+        title: "HR Intern",
+        skills: ["CV screening", "Job posting", "Interview coordination", "HR documentation"],
+      },
+      {
+        title: "TA Officer",
+        skills: ["Candidate sourcing", "Interview scheduling", "Database management", "Offer drafting"],
+      },
+      {
+        title: "Senior TA Specialist",
+        skills: ["Employer branding", "Bulk hiring", "Stakeholder coordination", "Recruitment analytics"],
+      },
+      {
+        title: "TA Manager",
+        skills: ["Workforce planning", "Recruitment budgeting", "Team supervision", "Policy compliance"],
+      },
+      {
+        title: "Head of TA",
+        skills: ["Hiring strategy", "Employer brand leadership", "Executive hiring", "Talent pipeline development"],
+      },
+    ],
+  },
+  {
+    id: "hr_comp_benefits",
+    name: "Compensation & Benefits",
+    roles: [
+      {
+        title: "HR Assistant",
+        skills: ["Payroll data entry", "Leave records", "Benefits documentation", "Excel reporting"],
+      },
+      {
+        title: "C&B Officer",
+        skills: ["Salary processing", "EOBI/SESSI handling", "Tax deductions", "Employee queries"],
+      },
+      {
+        title: "Senior Analyst",
+        skills: ["Salary benchmarking", "Incentive planning", "Benefits cost analysis", "HRIS reporting"],
+      },
+      {
+        title: "Compensation Manager",
+        skills: ["Pay structure design", "Policy formulation", "Compliance oversight", "Budgeting"],
+      },
+      {
+        title: "Head of Compensation",
+        skills: ["Reward strategy", "Executive compensation planning", "Regulatory alignment", "Financial control"],
+      },
+    ],
+  },
+  {
+    id: "hr_org_dev",
+    name: "Organizational Development",
+    roles: [
+      {
+        title: "Coordinator",
+        skills: ["Training logistics", "Feedback collection", "Documentation", "HR reporting"],
+      },
+      {
+        title: "OD Officer",
+        skills: ["Performance appraisal support", "Competency mapping", "Employee surveys", "Data analysis"],
+      },
+      {
+        title: "OD Specialist",
+        skills: ["KPI framework design", "Succession planning", "Engagement strategy", "Change support"],
+      },
+      {
+        title: "OD Manager",
+        skills: ["Organizational restructuring", "Leadership development", "Performance governance", "HR strategy alignment"],
+      },
+      {
+        title: "Head of OD",
+        skills: ["Culture transformation", "Workforce strategy", "Executive advisory", "Organizational effectiveness"],
+      },
+    ],
+  },
+  {
+    id: "hr_payroll",
+    name: "Payroll Management",
+    roles: [
+      {
+        title: "Assistant",
+        skills: ["Attendance verification", "Data entry", "Pay slip preparation", "Record maintenance"],
+      },
+      {
+        title: "Officer",
+        skills: ["Salary calculation", "Overtime processing", "Tax deduction", "Compliance filing"],
+      },
+      {
+        title: "Senior Executive",
+        skills: ["Payroll reconciliation", "Statutory compliance", "Audit coordination", "MIS reports"],
+      },
+      {
+        title: "Payroll Manager",
+        skills: ["Payroll system control", "Risk management", "Policy enforcement", "Team supervision"],
+      },
+    ],
+  },
+  {
+    id: "hr_change_management",
+    name: "Change Management",
+    roles: [
+      {
+        title: "Officer",
+        skills: ["Change documentation", "Training coordination"],
+      },
+      {
+        title: "Manager",
+        skills: ["Change strategy", "Stakeholder engagement"],
+      },
+      {
+        title: "Head",
+        skills: ["Organizational transformation leadership"],
+      },
+    ],
+  },
+  {
+    id: "hr_compliance",
+    name: "Compliance",
+    roles: [
+      {
+        title: "Officer",
+        skills: ["Regulatory documentation", "Monitoring reports", "Policy implementation", "Compliance checks"],
+      },
+      {
+        title: "Executive",
+        skills: ["Regulatory filing", "Audit coordination", "Compliance tracking", "Risk documentation"],
+      },
+      {
+        title: "Senior Specialist",
+        skills: ["Regulatory advisory", "Internal control review", "Policy drafting", "Compliance analytics"],
+      },
+      {
+        title: "Manager",
+        skills: ["Compliance framework development", "Regulatory communication", "Team oversight", "Risk mitigation"],
+      },
+      {
+        title: "Chief Compliance Officer",
+        skills: ["Regulatory governance", "Compliance strategy", "Institutional oversight", "Legal"],
+      },
+    ],
+  },
+  {
+    id: "hr_legal_affairs",
+    name: "Legal Affairs",
+    roles: [
+      {
+        title: "Officer",
+        skills: ["Contract review", "Case documentation"],
+      },
+      {
+        title: "Senior",
+        skills: ["Legal drafting", "Compliance review"],
+      },
+      {
+        title: "Manager",
+        skills: ["Litigation management"],
+      },
+      {
+        title: "Head",
+        skills: ["Corporate legal governance"],
+      },
+    ],
+  },
+];
+
+const FINANCE_DEPARTMENT_CONTENT = [
+  {
+    id: "finance_corporate_finance",
+    name: "Corporate Finance",
+    roles: [
+      {
+        title: "Finance Executive",
+        skills: ["Voucher entry", "Bank reconciliation", "Ledger posting", "Reporting"],
+      },
+      {
+        title: "Financial Analyst",
+        skills: ["Budget preparation", "Financial modeling", "Variance analysis", "Forecasting"],
+      },
+      {
+        title: "Senior Analyst",
+        skills: ["Cost optimization", "Financial planning", "Capital budgeting", "Performance review"],
+      },
+      {
+        title: "Finance Manager",
+        skills: ["Budget control", "Team supervision", "Compliance management", "Cash flow oversight"],
+      },
+      {
+        title: "Finance Director",
+        skills: ["Capital structure planning", "Financial strategy", "Board reporting", "Risk control"],
+      },
+      {
+        title: "CFO",
+        skills: ["Corporate finance leadership", "Investor relations", "Governance oversight", "Enterprise risk strategy"],
+      },
+    ],
+  },
+  {
+    id: "finance_fpa",
+    name: "Financial Planning & Analysis (FP&A)",
+    roles: [
+      {
+        title: "Executive",
+        skills: ["Data consolidation", "Budget templates", "Excel modeling", "Reporting support"],
+      },
+      {
+        title: "Analyst",
+        skills: ["Forecasting", "Cost analysis", "KPI tracking", "Performance dashboards"],
+      },
+      {
+        title: "Senior Analyst",
+        skills: ["Financial scenario planning", "Margin analysis", "Strategic insights", "Management reporting"],
+      },
+      {
+        title: "FP&A Manager",
+        skills: ["Financial planning cycle management", "Budgeting strategy", "Variance control", "Stakeholder reporting"],
+      },
+      {
+        title: "Finance Director",
+        skills: ["Long-term financial planning", "Capital allocation", "Strategic financial oversight", "Board presentation"],
+      },
+    ],
+  },
+  {
+    id: "finance_taxation",
+    name: "Taxation",
+    roles: [
+      {
+        title: "Assistant",
+        skills: ["Tax filing support", "Documentation", "Data compilation", "FBR portal handling"],
+      },
+      {
+        title: "Officer",
+        skills: ["Income tax returns", "Sales tax filing", "Withholding tax compliance", "Audit support"],
+      },
+      {
+        title: "Senior Consultant",
+        skills: ["Tax advisory", "Compliance review", "Risk assessment", "Client handling"],
+      },
+      {
+        title: "Tax Manager",
+        skills: ["Tax planning", "Regulatory compliance", "Audit defense", "Team supervision"],
+      },
+      {
+        title: "Head of Tax",
+        skills: ["Corporate tax strategy", "Policy compliance", "Regulatory engagement", "Financial risk control"],
+      },
+    ],
+  },
+  {
+    id: "finance_treasury",
+    name: "Treasury",
+    roles: [
+      {
+        title: "Officer",
+        skills: ["Bank coordination", "Payment processing", "Liquidity tracking", "Documentation"],
+      },
+      {
+        title: "Analyst",
+        skills: ["Cash flow forecasting", "Fund allocation", "Risk assessment", "Banking reconciliation"],
+      },
+      {
+        title: "Senior Analyst",
+        skills: ["Investment planning", "Debt management", "Financial risk mitigation", "Reporting"],
+      },
+      {
+        title: "Treasury Manager",
+        skills: ["Liquidity strategy", "Banking negotiations", "Capital management", "Compliance oversight"],
+      },
+    ],
+  },
+  {
+    id: "finance_risk_management",
+    name: "Risk Management",
+    roles: [
+      {
+        title: "Officer",
+        skills: ["Risk documentation", "Compliance monitoring", "Reporting support", "Policy review"],
+      },
+      {
+        title: "Analyst",
+        skills: ["Risk assessment models", "Operational risk analysis", "Audit coordination", "Mitigation planning"],
+      },
+      {
+        title: "Senior Analyst",
+        skills: ["Enterprise risk mapping", "Regulatory risk analysis", "Fraud detection", "Reporting"],
+      },
+      {
+        title: "Risk Manager",
+        skills: ["Risk framework design", "Compliance governance", "Team supervision", "Strategic oversight"],
+      },
+      {
+        title: "Head of Risk",
+        skills: ["Enterprise risk leadership", "Governance advisory", "Regulatory liaison", "Crisis management"],
+      },
+    ],
+  },
+  {
+    id: "finance_commercial_banking",
+    name: "Commercial Banking",
+    roles: [
+      {
+        title: "Banking Officer",
+        skills: ["Account opening", "Cash handling", "KYC verification", "Customer servicing"],
+      },
+      {
+        title: "Relationship Officer",
+        skills: ["Deposit mobilization", "Loan processing", "Client coordination", "Target achievement"],
+      },
+      {
+        title: "Senior RM",
+        skills: ["Corporate portfolio handling", "Credit assessment", "Risk evaluation", "Revenue growth"],
+      },
+      {
+        title: "Branch Manager",
+        skills: ["Branch operations control", "Team supervision", "Compliance management", "Sales strategy"],
+      },
+      {
+        title: "Regional Manager",
+        skills: ["Multi-branch oversight", "Performance monitoring", "Regulatory compliance", "Strategic planning"],
+      },
+    ],
+  },
+  {
+    id: "finance_corporate_banking",
+    name: "Corporate Banking",
+    roles: [
+      {
+        title: "Credit Officer",
+        skills: ["Financial statement analysis", "Credit proposals", "Risk grading", "Documentation"],
+      },
+      {
+        title: "RM",
+        skills: ["Corporate client handling", "Loan structuring", "Negotiation", "Portfolio growth"],
+      },
+      {
+        title: "Senior RM",
+        skills: ["Large exposure management", "Syndicate financing", "Credit risk assessment", "Compliance review"],
+      },
+      {
+        title: "Manager",
+        skills: ["Corporate portfolio supervision", "Revenue planning", "Risk mitigation", "Team leadership"],
+      },
+      {
+        title: "Head",
+        skills: ["Corporate banking strategy", "Credit governance", "Regulatory liaison", "Institutional growth"],
+      },
+    ],
+  },
+  {
+    id: "finance_islamic_banking",
+    name: "Islamic Banking",
+    roles: [
+      {
+        title: "Officer",
+        skills: ["Account management", "Islamic product handling", "Documentation"],
+      },
+      {
+        title: "Shariah Officer",
+        skills: ["Shariah audit", "Product compliance", "Reporting", "Regulatory coordination"],
+      },
+      {
+        title: "Senior Manager",
+        skills: ["Islamic financing portfolio", "Product structuring (Murabaha, Ijarah)", "Risk monitoring"],
+      },
+      {
+        title: "Head",
+        skills: ["Shariah governance", "Islamic banking strategy", "Regulatory alignment", "Product development"],
+      },
+    ],
+  },
+  {
+    id: "finance_microfinance",
+    name: "Microfinance",
+    roles: [
+      {
+        title: "Loan Officer",
+        skills: ["Field verification", "Loan disbursement", "Recovery follow-up", "Client assessment"],
+      },
+      {
+        title: "Credit Officer",
+        skills: ["Credit analysis", "Portfolio tracking", "Documentation control", "Compliance"],
+      },
+      {
+        title: "Branch Manager",
+        skills: ["Microfinance operations", "Team supervision", "Recovery management", "Risk control"],
+      },
+      {
+        title: "Regional Manager",
+        skills: ["Regional loan portfolio oversight", "Policy compliance", "Performance monitoring"],
+      },
+    ],
+  },
+  {
+    id: "finance_insurance",
+    name: "Insurance",
+    roles: [
+      {
+        title: "Officer",
+        skills: ["Policy issuance", "Documentation", "Client servicing", "Premium calculation"],
+      },
+      {
+        title: "Underwriter",
+        skills: ["Risk evaluation", "Policy pricing", "Claim review", "Compliance"],
+      },
+      {
+        title: "Senior Underwriter",
+        skills: ["Complex risk assessment", "Reinsurance coordination", "Portfolio review"],
+      },
+      {
+        title: "Manager",
+        skills: ["Insurance operations control", "Team leadership", "Regulatory compliance"],
+      },
+      {
+        title: "Head",
+        skills: ["Insurance product strategy", "Underwriting governance", "Risk framework oversight"],
+      },
+    ],
+  },
+];
+
+const SALES_DEPARTMENT_CONTENT = [
+  {
+    id: "sales_general",
+    name: "Sales",
+    roles: [
+      {
+        title: "Executive",
+        skills: ["Client visits", "Order booking", "Sales reporting", "Target achievement"],
+      },
+      {
+        title: "Senior Exec",
+        skills: ["Key account handling", "Negotiation", "Revenue tracking", "CRM management"],
+      },
+      {
+        title: "Supervisor",
+        skills: ["Field team monitoring", "Sales planning", "Territory management"],
+      },
+      {
+        title: "Manager",
+        skills: ["Sales strategy", "Revenue forecasting", "Performance review", "Channel expansion"],
+      },
+      {
+        title: "Head",
+        skills: ["National sales planning", "Pricing strategy", "Distribution governance"],
+      },
+    ],
+  },
+  {
+    id: "sales_corporate",
+    name: "Corporate Sales",
+    roles: [
+      {
+        title: "Officer",
+        skills: ["Corporate client approach", "Proposal drafting", "CRM updates"],
+      },
+      {
+        title: "KAM",
+        skills: ["Contract negotiation", "Account growth", "Client retention"],
+      },
+      {
+        title: "Senior KAM",
+        skills: ["Strategic partnerships", "Portfolio expansion", "Revenue planning"],
+      },
+      {
+        title: "Manager",
+        skills: ["Corporate sales governance", "Target setting", "Team leadership"],
+      },
+    ],
+  },
+  {
+    id: "sales_business_development",
+    name: "Business Development",
+    roles: [
+      {
+        title: "Executive",
+        skills: ["Market visits", "Proposal drafting", "Client prospecting"],
+      },
+      {
+        title: "Officer",
+        skills: ["Deal negotiation", "Pipeline management", "Revenue forecasting"],
+      },
+      {
+        title: "Manager",
+        skills: ["Market expansion strategy", "Partnership development", "Financial projections"],
+      },
+      {
+        title: "Head",
+        skills: ["Growth strategy", "Strategic alliances", "Diversification planning"],
+      },
+    ],
+  },
+];
+
+const MARKETING_DEPARTMENT_CONTENT = [
+  {
+    id: "marketing_general",
+    name: "Marketing",
+    roles: [
+      {
+        title: "Executive",
+        skills: ["Campaign execution", "Social media handling", "Reporting"],
+      },
+      {
+        title: "Officer",
+        skills: ["Branding support", "Digital ads management", "Market analysis"],
+      },
+      {
+        title: "Manager",
+        skills: ["Marketing strategy", "Campaign budgeting", "Team supervision"],
+      },
+      {
+        title: "Head",
+        skills: ["Corporate branding", "Market positioning", "Revenue growth strategy"],
+      },
+    ],
+  },
+  {
+    id: "marketing_brand_management",
+    name: "Brand Management",
+    roles: [
+      {
+        title: "Executive",
+        skills: ["Brand monitoring", "Competitor analysis", "Campaign support"],
+      },
+      {
+        title: "Officer",
+        skills: ["Brand positioning", "Media coordination", "Product launches"],
+      },
+      {
+        title: "Manager",
+        skills: ["Brand strategy development", "ATL/BTL planning", "Budget control"],
+      },
+      {
+        title: "Head",
+        skills: ["Corporate brand governance", "Brand equity management"],
+      },
+    ],
+  },
+  {
+    id: "marketing_market_research",
+    name: "Market Research",
+    roles: [
+      {
+        title: "Executive",
+        skills: ["Data collection", "Surveys", "Field coordination"],
+      },
+      {
+        title: "Analyst",
+        skills: ["Data analysis", "SPSS usage", "Reporting"],
+      },
+      {
+        title: "Senior Analyst",
+        skills: ["Consumer insights", "Forecasting", "Statistical modeling"],
+      },
+      {
+        title: "Manager",
+        skills: ["Research strategy", "Client reporting", "Team leadership"],
+      },
+    ],
+  },
+  {
+    id: "marketing_digital_marketing",
+    name: "Digital Marketing",
+    roles: [
+      {
+        title: "Digital Marketing Specialist",
+        skills: [
+          "Digital strategy development",
+          "Campaign management",
+          "SEO optimization",
+          "Paid ads management",
+          "Content planning",
+          "Email marketing",
+        ],
+      },
+      {
+        title: "SEO Executive / Manager",
+        skills: [
+          "SEO strategy",
+          "Technical SEO audits",
+          "Content optimization",
+          "Competitor analysis",
+        ],
+      },
+      {
+        title: "Social Media Executive",
+        skills: [
+          "Social media strategy",
+          "Campaign design",
+          "Influencer coordination",
+          "Analytics tracking",
+          "Content posting",
+          "Community management",
+          "Engagement monitoring",
+        ],
+      },
+    ],
+  },
+];
+
+const CUSTOMER_RELATION_DEPARTMENT_CONTENT = [
+  {
+    id: "cr_public_relations",
+    name: "Public Relations",
+    roles: [
+      {
+        title: "Officer",
+        skills: ["Press release drafting", "Media coordination"],
+      },
+      {
+        title: "Executive",
+        skills: ["Event coverage", "Brand communication", "Crisis support"],
+      },
+      {
+        title: "Manager",
+        skills: ["Media strategy", "Corporate communication planning"],
+      },
+      {
+        title: "Head",
+        skills: ["Reputation management", "Communication governance"],
+      },
+    ],
+  },
+  {
+    id: "cr_customer_service",
+    name: "Customer Service",
+    roles: [
+      {
+        title: "CSR",
+        skills: ["Complaint handling", "Call logging", "Customer queries"],
+      },
+      {
+        title: "Senior CSR",
+        skills: ["Escalation handling", "Reporting", "Service monitoring"],
+      },
+      {
+        title: "Supervisor",
+        skills: ["Team monitoring", "Quality checks", "Performance reporting"],
+      },
+      {
+        title: "Manager",
+        skills: ["Service policy development", "Customer retention strategy"],
+      },
+    ],
+  },
+  {
+    id: "cr_call_center_ops",
+    name: "Call Center Operations",
+    roles: [
+      {
+        title: "Agent",
+        skills: ["Inbound/outbound calls", "CRM updates", "Issue resolution"],
+      },
+      {
+        title: "Team Leader",
+        skills: ["Team monitoring", "KPI tracking", "Coaching"],
+      },
+      {
+        title: "Floor Manager",
+        skills: ["Shift management", "Performance control"],
+      },
+      {
+        title: "Operations Manager",
+        skills: ["Call center strategy", "SLA compliance"],
+      },
+    ],
+  },
+];
+
+const SUPPLY_CHAIN_DEPARTMENT_CONTENT = [
+  {
+    id: "scm_procurement",
+    name: "Procurement",
+    roles: [
+      {
+        title: "Officer",
+        skills: ["Vendor sourcing", "Quotation comparison", "Purchase orders"],
+      },
+      {
+        title: "Senior Officer",
+        skills: ["Contract negotiation", "Cost analysis", "Vendor evaluation"],
+      },
+      {
+        title: "Manager",
+        skills: ["Procurement planning", "Supplier management", "Compliance"],
+      },
+      {
+        title: "Head",
+        skills: ["Strategic sourcing", "Cost optimization", "Policy governance"],
+      },
+    ],
+  },
+  {
+    id: "scm_logistics",
+    name: "Logistics",
+    roles: [
+      {
+        title: "Officer",
+        skills: ["Shipment tracking", "Dispatch planning", "Documentation"],
+      },
+      {
+        title: "Senior Officer",
+        skills: ["Route planning", "Freight negotiation", "Cost monitoring"],
+      },
+      {
+        title: "Manager",
+        skills: ["Logistics network management", "Vendor contracts", "Risk control"],
+      },
+    ],
+  },
+  {
+    id: "scm_inventory_management",
+    name: "Inventory Management",
+    roles: [
+      {
+        title: "Store Officer",
+        skills: ["Stock entry", "GRN handling", "Stock audits"],
+      },
+      {
+        title: "Controller",
+        skills: ["Inventory reconciliation", "Stock forecasting", "ERP tracking"],
+      },
+      {
+        title: "Manager",
+        skills: ["Warehouse operations", "Stock optimization", "Risk mitigation"],
+      },
+    ],
+  },
+  {
+    id: "scm_manufacturing",
+    name: "Manufacturing",
+    roles: [
+      {
+        title: "Officer",
+        skills: ["Line supervision", "Machine monitoring", "Quality checks"],
+      },
+      {
+        title: "Senior Officer",
+        skills: ["Output planning", "Workforce allocation"],
+      },
+      {
+        title: "Manager",
+        skills: ["Production scheduling", "Cost control", "Compliance"],
+      },
+      {
+        title: "Plant Manager",
+        skills: ["Factory operations", "Capacity planning", "Safety governance"],
+      },
+    ],
+  },
+  {
+    id: "scm_production",
+    name: "Production",
+    roles: [
+      {
+        title: "Executive",
+        skills: ["Line operation", "Reporting", "Safety compliance"],
+      },
+      {
+        title: "Supervisor",
+        skills: ["Shift management", "Quality monitoring"],
+      },
+      {
+        title: "Manager",
+        skills: ["Output planning", "Workforce control"],
+      },
+    ],
+  },
+  {
+    id: "scm_quality_assurance",
+    name: "Quality Assurance",
+    roles: [
+      {
+        title: "Officer",
+        skills: ["Quality checks", "SOP compliance"],
+      },
+      {
+        title: "Analyst",
+        skills: ["Process audits", "Defect analysis"],
+      },
+      {
+        title: "Manager",
+        skills: ["QA framework implementation", "Compliance monitoring"],
+      },
+      {
+        title: "Head",
+        skills: ["Quality governance", "ISO compliance strategy"],
+      },
+    ],
+  },
+  {
+    id: "scm_quality_control",
+    name: "Quality Control",
+    roles: [
+      {
+        title: "Inspector",
+        skills: ["Material inspection", "Testing"],
+      },
+      {
+        title: "Supervisor",
+        skills: ["Process monitoring", "Reporting"],
+      },
+      {
+        title: "Manager",
+        skills: ["Quality standards enforcement"],
+      },
+    ],
+  },
+  {
+    id: "scm_lean_management",
+    name: "Lean Management",
+    roles: [
+      {
+        title: "Officer",
+        skills: ["Process mapping", "Waste analysis"],
+      },
+      {
+        title: "Specialist",
+        skills: ["Kaizen implementation", "KPI tracking"],
+      },
+      {
+        title: "Manager",
+        skills: ["Continuous improvement strategy"],
+      },
+    ],
+  },
+];
+
+const IT_DEPARTMENT_CONTENT = [
+  {
+    id: "it_web_development",
+    name: "Web Development",
+    roles: [
+      {
+        title: "Junior",
+        skills: ["HTML", "CSS", "Debugging"],
+      },
+      {
+        title: "Developer",
+        skills: ["Frontend coding", "Backend coding", "API integration"],
+      },
+      {
+        title: "Senior",
+        skills: ["Architecture design", "Code optimization"],
+      },
+      {
+        title: "Manager",
+        skills: ["Project planning", "Team leadership"],
+      },
+    ],
+  },
+  {
+    id: "it_mobile_app_development",
+    name: "Mobile App Development",
+    roles: [
+      {
+        title: "Junior",
+        skills: ["Flutter basics", "Android basics", "Debugging"],
+      },
+      {
+        title: "Developer",
+        skills: ["API integration", "UI development"],
+      },
+      {
+        title: "Senior",
+        skills: ["Architecture planning", "Performance optimization"],
+      },
+      {
+        title: "Manager",
+        skills: ["Mobile strategy", "Release management"],
+      },
+    ],
+  },
+  {
+    id: "it_business_intelligence",
+    name: "Business Intelligence",
+    roles: [
+      {
+        title: "Executive",
+        skills: ["Data cleaning", "Dashboard support"],
+      },
+      {
+        title: "Analyst",
+        skills: ["SQL queries", "Power BI", "Reporting"],
+      },
+      {
+        title: "Senior",
+        skills: ["Data modeling", "KPI tracking"],
+      },
+      {
+        title: "Manager",
+        skills: ["BI strategy", "Analytics governance"],
+      },
+    ],
+  },
+  {
+    id: "it_artificial_intelligence",
+    name: "Artificial Intelligence",
+    roles: [
+      {
+        title: "Engineer",
+        skills: ["Python", "ML models", "Data preprocessing"],
+      },
+      {
+        title: "Senior",
+        skills: ["Model deployment", "Deep learning"],
+      },
+      {
+        title: "Manager",
+        skills: ["AI project leadership", "Solution strategy"],
+      },
+    ],
+  },
+  {
+    id: "it_cloud_computing",
+    name: "Cloud Computing",
+    roles: [
+      {
+        title: "Engineer",
+        skills: ["AWS setup", "Azure setup", "Deployment"],
+      },
+      {
+        title: "Senior",
+        skills: ["Cloud architecture", "Security"],
+      },
+      {
+        title: "Manager",
+        skills: ["Cloud governance", "Infrastructure planning"],
+      },
+    ],
+  },
+  {
+    id: "it_devops",
+    name: "DevOps",
+    roles: [
+      {
+        title: "Engineer",
+        skills: ["CI/CD pipelines", "Docker"],
+      },
+      {
+        title: "Senior",
+        skills: ["Infrastructure automation", "Kubernetes"],
+      },
+      {
+        title: "Manager",
+        skills: ["DevOps strategy", "Release governance"],
+      },
+    ],
+  },
+  {
+    id: "it_erp_systems",
+    name: "ERP Systems",
+    roles: [
+      {
+        title: "Executive",
+        skills: ["ERP data entry", "Module support"],
+      },
+      {
+        title: "Consultant",
+        skills: ["SAP configuration", "Oracle configuration"],
+      },
+      {
+        title: "Manager",
+        skills: ["ERP governance", "Implementation strategy"],
+      },
+    ],
+  },
+  {
+    id: "it_mis_reporting",
+    name: "MIS & Reporting",
+    roles: [
+      {
+        title: "Officer",
+        skills: ["Excel reports", "Database updates"],
+      },
+      {
+        title: "Analyst",
+        skills: ["Data modeling", "KPI dashboards"],
+      },
+      {
+        title: "Manager",
+        skills: ["Reporting framework", "Data governance"],
+      },
+    ],
+  },
+  {
+    id: "it_network_administration",
+    name: "Network Administration",
+    roles: [
+      {
+        title: "Support",
+        skills: ["LAN troubleshooting", "WAN troubleshooting"],
+      },
+      {
+        title: "Engineer",
+        skills: ["Router configuration", "Switch configuration"],
+      },
+      {
+        title: "Senior",
+        skills: ["Network security", "Firewall management"],
+      },
+      {
+        title: "Manager",
+        skills: ["Infrastructure planning"],
+      },
+    ],
+  },
+  {
+    id: "it_database_administration",
+    name: "Database Administration",
+    roles: [
+      {
+        title: "Officer",
+        skills: ["Data entry", "Backups"],
+      },
+      {
+        title: "DBA",
+        skills: ["SQL management", "Tuning"],
+      },
+      {
+        title: "Senior",
+        skills: ["Database optimization", "Security"],
+      },
+      {
+        title: "Manager",
+        skills: ["Database governance"],
+      },
+    ],
+  },
+  {
+    id: "it_blockchain",
+    name: "Blockchain",
+    roles: [
+      {
+        title: "Developer",
+        skills: ["Smart contracts", "Solidity"],
+      },
+      {
+        title: "Senior",
+        skills: ["DApp architecture", "Security"],
+      },
+      {
+        title: "Lead",
+        skills: ["Blockchain strategy", "Integration planning"],
+      },
+    ],
+  },
+]; 
+
+const PRODUCT_INNOVATION_DEPARTMENT_CONTENT = [
+  {
+    id: "pi_product_management",
+    name: "Product Management",
+    roles: [
+      {
+        title: "Product Executive",
+        skills: [
+          "Product documentation",
+          "Coordination with development teams",
+          "Backlog updates",
+          "Market data collection",
+        ],
+      },
+      {
+        title: "Product Manager",
+        skills: [
+          "Product roadmap planning",
+          "Market analysis",
+          "Feature prioritization",
+          "Stakeholder coordination",
+        ],
+      },
+      {
+        title: "Senior Product Manager",
+        skills: [
+          "Product strategy",
+          "Lifecycle management",
+          "Cross-functional leadership",
+          "Product performance monitoring",
+        ],
+      },
+      {
+        title: "Head of Product",
+        skills: [
+          "Product governance",
+          "Innovation strategy",
+          "Portfolio management",
+          "Long-term product vision",
+        ],
+      },
+    ],
+  },
+];
+
+const PROGRAM_DELIVERY_DEPARTMENT_CONTENT = [
+  {
+    id: "pdm_project_management_pmo",
+    name: "Project Management / PMO",
+    roles: [
+      {
+        title: "Project Coordinator",
+        skills: [
+          "Project scheduling",
+          "Documentation management",
+          "Meeting coordination",
+          "Progress tracking",
+        ],
+      },
+      {
+        title: "Project Manager",
+        skills: [
+          "Budget control",
+          "Risk management",
+          "Team coordination",
+          "Milestone monitoring",
+        ],
+      },
+      {
+        title: "Senior Project Manager",
+        skills: [
+          "Multi-project oversight",
+          "Stakeholder management",
+          "Strategic project alignment",
+          "Governance reporting",
+        ],
+      },
+      {
+        title: "PMO Head",
+        skills: [
+          "Portfolio management",
+          "Project governance frameworks",
+          "PM methodology development",
+          "Executive reporting",
+        ],
+      },
+    ],
+  },
+];
+
+const OPERATIONS_PROCESS_EXCELLENCE_CONTENT = [
+  {
+    id: "ope_business_analysis",
+    name: "Business Analysis",
+    roles: [
+      {
+        title: "Business Analyst",
+        skills: [
+          "Requirement gathering",
+          "Process documentation",
+          "Stakeholder interviews",
+          "Workflow analysis",
+        ],
+      },
+      {
+        title: "Senior Business Analyst",
+        skills: [
+          "Process modeling",
+          "Solution design support",
+          "Stakeholder coordination",
+          "Gap analysis",
+        ],
+      },
+      {
+        title: "BA Manager",
+        skills: [
+          "Business analysis governance",
+          "Team supervision",
+          "Methodology implementation",
+          "Process improvement strategy",
+        ],
+      },
+    ],
+  },
+];
 const MOCK_ROLES: JobRole[] = [
   {
     id: "role_fe",
@@ -167,24 +1355,10 @@ const MOCK_ROLES: JobRole[] = [
       { id: "s6", name: "Problem Solving", type: "Soft", requiredLevel: "Intermediate" },
     ],
   },
-  {
-    id: "role_hr",
-    fieldId: "hr",
-    title: "HR Generalist",
-    description: "Support HR operations, hiring coordination, documentation, and employee lifecycle processes.",
-    skills: [
-      { id: "s7", name: "Recruitment", type: "Technical", requiredLevel: "Intermediate", weight: 1.2 },
-      { id: "s8", name: "HR Policies", type: "Technical", requiredLevel: "Intermediate" },
-      { id: "s9", name: "Excel", type: "Technical", requiredLevel: "Intermediate" },
-      { id: "s10", name: "Stakeholder Management", type: "Soft", requiredLevel: "Advanced", weight: 1.2 },
-      { id: "s11", name: "Communication", type: "Soft", requiredLevel: "Advanced", weight: 1.2 },
-    ],
-  },
 ];
 
 const MOCK_OPENINGS: JobOpening[] = [
   { id: "j1", roleId: "role_fe", title: "Frontend Developer", company: "Sanjeeda Labs", location: "Karachi", isRemote: true },
-  { id: "j2", roleId: "role_hr", title: "HR Generalist", company: "Conductivity Consultancy", location: "Karachi", isRemote: false },
 ];
 
 const DEFAULT_USER_SKILLS: UserSkill[] = [
@@ -220,7 +1394,7 @@ function Badge(props: { children: React.ReactNode; variant?: "solid" | "outline"
     variant === "solid"
       ? "bg-black text-white"
       : variant === "muted"
-        ? "bg-gray-100 text-gray-700 border border-gray-200"
+        ? "bg-gray text-gray-700 border border-gray-200"
         : "bg-white text-gray-800 border border-gray-200";
   return <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs ${cls}`}>{props.children}</span>;
 }
@@ -278,9 +1452,10 @@ export default function EducationTab()
 {  const [fields] = useState<CareerField[]>(MOCK_FIELDS);
   const [roles] = useState<JobRole[]>(MOCK_ROLES);
   const [userSkills, setUserSkills] = useState<UserSkill[]>(DEFAULT_USER_SKILLS);
-
+  
   const [activeFieldId, setActiveFieldId] = useState<string | null>(null);
   const [selectedRoleId, setSelectedRoleId] = useState<string | null>(null);
+  const [selectedSubDepartmentId, setSelectedSubDepartmentId] = useState<string | null>(null);
 
   const [search, setSearch] = useState<string>("");
 
@@ -299,11 +1474,13 @@ export default function EducationTab()
     [roles, selectedRoleId]
   );
 
-  const userMap = useMemo(() => {
-    const m = new Map<string, UserSkill>();
-    for (const s of userSkills) m.set(normalizeSkillName(s.name), s);
-    return m;
-  }, [userSkills]);
+const hrSubDepartments = useMemo(() => {
+  return activeFieldId === "hr" ? HR_DEPARTMENT_CONTENT : [];
+}, [activeFieldId]);
+
+const selectedSubDepartment = useMemo(() => {
+  return hrSubDepartments.find((d) => d.id === selectedSubDepartmentId) ?? null;
+}, [hrSubDepartments, selectedSubDepartmentId]);
 
   const fieldRoles = useMemo(() => {
     const list = roles.filter((r) => (activeFieldId ? r.fieldId === activeFieldId : true));
@@ -311,6 +1488,20 @@ export default function EducationTab()
     if (!q) return list;
     return list.filter((r) => r.title.toLowerCase().includes(q) || r.description.toLowerCase().includes(q));
   }, [roles, activeFieldId, search]);
+
+const visibleRoles = useMemo(() => {
+  if (activeFieldId === "hr") {
+    if (!selectedSubDepartment) return [];
+    return selectedSubDepartment.roles;
+  }
+  return fieldRoles;
+}, [activeFieldId, selectedSubDepartment, fieldRoles]);
+
+  const userMap = useMemo(() => {
+    const m = new Map<string, UserSkill>();
+    for (const s of userSkills) m.set(normalizeSkillName(s.name), s);
+    return m;
+  }, [userSkills]);
 
   const roleSkills = useMemo(() => {
     if (!selectedRole) return [];
@@ -320,18 +1511,72 @@ export default function EducationTab()
     return list;
   }, [selectedRole, skillFilter, showOnlyMissing, userMap]);
 
-  function goBack(): void {
-    if (selectedRoleId) {
-      setSelectedRoleId(null);
-      setMatchResult(null);
-      return;
-    }
-    if (activeFieldId) {
-      setActiveFieldId(null);
-      setSearch("");
-      setMatchResult(null);
-    }
+const selectedHrDepartmentContent = useMemo(() => {
+  return HR_DEPARTMENT_CONTENT.find((dept) => dept.id === selectedSubDepartmentId) ?? null;
+}, [selectedSubDepartmentId]);
+
+const selectedFinanceDepartmentContent = useMemo(() => {
+  return FINANCE_DEPARTMENT_CONTENT.find((dept) => dept.id === selectedSubDepartmentId) ?? null;
+}, [selectedSubDepartmentId]);
+
+const selectedSalesDepartmentContent = useMemo(() => {
+  return SALES_DEPARTMENT_CONTENT.find((dept) => dept.id === selectedSubDepartmentId) ?? null;
+}, [selectedSubDepartmentId]);
+
+const selectedMarketingDepartmentContent = useMemo(() => {
+  return MARKETING_DEPARTMENT_CONTENT.find((dept) => dept.id === selectedSubDepartmentId) ?? null;
+}, [selectedSubDepartmentId]);
+
+const selectedCustomerRelationDepartmentContent = useMemo(() => {
+  return CUSTOMER_RELATION_DEPARTMENT_CONTENT.find((dept) => dept.id === selectedSubDepartmentId) ?? null;
+}, [selectedSubDepartmentId]);
+
+const selectedSupplyChainDepartmentContent = useMemo(() => {
+  return SUPPLY_CHAIN_DEPARTMENT_CONTENT.find((dept) => dept.id === selectedSubDepartmentId) ?? null;
+}, [selectedSubDepartmentId]);
+
+const selectedITDepartmentContent = useMemo(() => {
+  return IT_DEPARTMENT_CONTENT.find((dept) => dept.id === selectedSubDepartmentId) ?? null;
+}, [selectedSubDepartmentId]);
+
+const selectedProductInnovationDepartmentContent = useMemo(() => {
+  return PRODUCT_INNOVATION_DEPARTMENT_CONTENT.find(
+    (dept) => dept.id === selectedSubDepartmentId
+  ) ?? null;
+}, [selectedSubDepartmentId]);
+
+const selectedProgramDeliveryDepartmentContent = useMemo(() => {
+  return PROGRAM_DELIVERY_DEPARTMENT_CONTENT.find(
+    (dept) => dept.id === selectedSubDepartmentId
+  ) ?? null;
+}, [selectedSubDepartmentId]);
+
+const selectedOperationsProcessExcellenceContent = useMemo(() => {
+  return OPERATIONS_PROCESS_EXCELLENCE_CONTENT.find(
+    (dept) => dept.id === selectedSubDepartmentId
+  ) ?? null;
+}, [selectedSubDepartmentId]);
+
+function goBack(): void {
+  if (selectedRoleId) {
+    setSelectedRoleId(null);
+    setMatchResult(null);
+    return;
   }
+
+  if (selectedSubDepartmentId) {
+    setSelectedSubDepartmentId(null);
+    setMatchResult(null);
+    return;
+  }
+
+  if (activeFieldId) {
+    setActiveFieldId(null);
+    setSelectedSubDepartmentId(null);
+    setSearch("");
+    setMatchResult(null);
+  }
+}
 
   function onMatchProfile(): void {
     if (!selectedRole) return;
@@ -428,21 +1673,19 @@ return (
                         : "Career Fields"}
                   </div>
 
-                  <div className="text-lg font-sans font-semibold text-slate-950 sm:text-xl">
-                    {selectedRole
-                      ? selectedRole.title
-                      : activeField
-                        ? "Select a role to view skills"
-                        : "Choose a career domain"}
-                  </div>
+  
 
-                  <div className="mt-1 text-sm font-sans text-emerald-700">
-                    {selectedRole
-                      ? "Review required skills, compare your profile, and run Match Profile."
-                      : activeField
-                        ? "Browse roles inside this field."
-                        : "Pick a domain to explore available job roles."}
-                  </div>
+<div className="mt-1 text-sm font-sans text-emerald-700">
+  {selectedRole
+    ? "Review required skills, compare your profile, and run Match Profile."
+    : selectedSubDepartment
+      ? "Browse position roles inside this sub department."
+      : activeField
+        ? activeFieldId === "hr"
+          ? "Browse position roles inside this sub department."
+          : "Browse roles inside this field."
+        : "Pick a domain to explore available job roles."}
+</div>
                 </div>
 
                 <div className="flex flex-wrap items-center justify-between gap-3">
@@ -550,152 +1793,1195 @@ return (
                 </div>
               )}
 
-              {/* Roles List */}
-              {activeFieldId && !selectedRole && (
-                <div className="space-y-4">
-                  {fieldRoles.map((r) => (
-                    <div
-                      key={r.id}
-                      className="rounded-xl border border-white/10 bg-blue-950 p-4 transition hover:border-white/20 hover:bg-blue-950/70"
-                    >
-                      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                        <div className="min-w-0">
-                          <div className="flex flex-wrap items-center gap-2">
-                            <div className="truncate text-base font-semibold text-white">
-                              {r.title}
-                            </div>
-                            <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-200">
-                              {activeField?.name ?? r.fieldId}
-                            </span>
-                          </div>
+{/* HR Department Dropdown */}
+{activeFieldId === "hr" && !selectedRole && (
+  <div className="mb-6">
+    <div className="rounded-2xl border border-slate-300 bg-gradient-to-r from-white via-slate-50 to-slate-100 p-4 shadow-sm">
+      <div className="mb-3 flex items-center gap-3">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-white shadow-md">
+          <span className="text-sm font-bold">HR</span>
+        </div>
 
-                          <p className="mt-1 text-xs text-slate-300">
-                            {r.description}
-                          </p>
+        <div>
+          <h3 className="text-base font-semibold tracking-tight text-slate-900">
+            HR Sub Departments
+          </h3>
+          <p className="text-xs text-slate-500">
+            Select a department to explore its position roles
+          </p>
+        </div>
+      </div>
 
-                          <div className="mt-3 flex flex-wrap gap-2">
-                            <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-200">
-                              {r.skills.length} skills
-                            </span>
-                            <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-200">
-                              {r.skills.filter((s) => s.type === "Technical").length} technical
-                            </span>
-                            <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-200">
-                              {r.skills.filter((s) => s.type === "Soft").length} soft
-                            </span>
-                          </div>
-                        </div>
+      <div className="relative">
+        <label
+          htmlFor="hr-department"
+          className="mb-2 block text-xs font-semibold uppercase tracking-wide text-slate-600"
+        >
+          Department
+        </label>
 
-                        <button
-                          type="button"
-                          onClick={() => setSelectedRoleId(r.id)}
-                          className="inline-flex items-center justify-center rounded-xl bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-white/30"
-                        >
-                          Open
-                        </button>
-                      </div>
+        <select
+          id="hr-department"
+          value={selectedSubDepartmentId ?? ""}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+            setSelectedSubDepartmentId(e.target.value || null)
+          }
+          className=" appearance-none rounded-xl border border-slate-300 bg-white 
+          px-4 py-2 pr-10 text-xs font-medium text-slate-900 shadow-sm outline-none transition 
+          duration-200 hover:border-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+        >
+          <option value="">Select HR Sub-Department</option>
+          <option value="hr_talent_acquisition">Talent Acquisition</option>
+          <option value="hr_comp_benefits">Compensation & Benefits</option>
+          <option value="hr_org_dev">Organizational Development</option>
+          <option value="hr_payroll">Payroll Management</option>
+          <option value="hr_change_management">Change Management</option>
+          <option value="hr_compliance">Compliance</option>
+          <option value="hr_legal_affairs">Legal Affairs</option>
+        </select>
+
+        <div className="-mt-2 pointer-events-none absolute left-44 top-[42px] text-slate-500">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            className="h-5 w-5"
+            aria-hidden="true"
+          >
+            <path
+              fillRule="evenodd"
+              d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.25 4.5a.75.75 0 0 1-1.08 0l-4.25-4.5a.75.75 0 0 1 .02-1.06Z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </div>
+      </div>
+
+      <div className="mt-3 flex flex-wrap gap-2">
+        <span className="rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-semibold text-emerald-700">
+          Structured Career Path
+        </span>
+        <span className="rounded-full bg-slate-200 px-3 py-1 text-[11px] font-semibold text-slate-700">
+          Department Based Roles
+        </span>
+      </div>
+    </div>
+  </div>
+)}
+{/* Finance Department Dropdown */}
+{activeFieldId === "finance" && !selectedRole && (
+  <div className="mb-6">
+    <div className="rounded-2xl border border-slate-300 bg-gradient-to-r from-white via-slate-50 to-slate-100 p-4 shadow-sm">
+      <div className="mb-3 flex items-center gap-3">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-white shadow-md">
+          <span className="text-[11px] font-bold">FIN</span>
+        </div>
+
+        <div>
+          <h3 className="text-base font-semibold tracking-tight text-slate-900">
+            Finance Sub Departments
+          </h3>
+          <p className="text-xs text-slate-500">
+            Select a finance department to explore its role ladder
+          </p>
+        </div>
+      </div>
+
+      <div className="relative">
+        <label
+          htmlFor="finance-department"
+          className="mb-2 block text-xs font-semibold uppercase tracking-wide text-slate-600"
+        >
+          Department
+        </label>
+
+        <select
+          id="finance-department"
+          value={selectedSubDepartmentId ?? ""}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+            setSelectedSubDepartmentId(e.target.value || null)
+          }
+          className="appearance-none rounded-xl border border-slate-300 bg-white px-4 py-2 pr-10 text-xs font-medium text-slate-900 shadow-sm outline-none transition duration-200 hover:border-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+        >
+          <option value="">Select Finance Sub-Department</option>
+          <option value="finance_corporate_finance">Corporate Finance</option>
+          <option value="finance_fpa">Financial Planning & Analysis (FP&A)</option>
+          <option value="finance_taxation">Taxation</option>
+          <option value="finance_treasury">Treasury</option>
+          <option value="finance_risk_management">Risk Management</option>
+          <option value="finance_commercial_banking">Commercial Banking</option>
+          <option value="finance_corporate_banking">Corporate Banking</option>
+          <option value="finance_islamic_banking">Islamic Banking</option>
+          <option value="finance_microfinance">Microfinance</option>
+          <option value="finance_insurance">Insurance</option>
+        </select>
+
+        <div className="-mt-2 pointer-events-none absolute left-48 top-[42px] text-slate-500">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            className="h-5 w-5"
+            aria-hidden="true"
+          >
+            <path
+              fillRule="evenodd"
+              d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.25 4.5a.75.75 0 0 1-1.08 0l-4.25-4.5a.75.75 0 0 1 .02-1.06Z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </div>
+      </div>
+
+      <div className="mt-3 flex flex-wrap gap-2">
+        <span className="rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-semibold text-emerald-700">
+          Structured Career Path
+        </span>
+        <span className="rounded-full bg-slate-200 px-3 py-1 text-[11px] font-semibold text-slate-700">
+          Finance Role Ladder
+        </span>
+      </div>
+    </div>
+  </div>
+)}
+{/* Sales Department Dropdown */}
+{activeFieldId === "sales" && !selectedRole && (
+  <div className="mb-6">
+    <div className="rounded-2xl border border-slate-300 bg-gradient-to-r from-white via-slate-50 to-slate-100 p-4 shadow-sm">
+      <div className="mb-3 flex items-center gap-3">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-white shadow-md">
+          <span className="text-[11px] font-bold">SAL</span>
+        </div>
+
+        <div>
+          <h3 className="text-base font-semibold tracking-tight text-slate-900">
+            Sales Sub Departments
+          </h3>
+          <p className="text-xs text-slate-500">
+            Select a sales department to explore its role ladder
+          </p>
+        </div>
+      </div>
+
+      <div className="relative">
+        <label
+          htmlFor="sales-department"
+          className="mb-2 block text-xs font-semibold uppercase tracking-wide text-slate-600"
+        >
+          Department
+        </label>
+
+        <select
+          id="sales-department"
+          value={selectedSubDepartmentId ?? ""}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+            setSelectedSubDepartmentId(e.target.value || null)
+          }
+          className="appearance-none rounded-xl border border-slate-300 bg-white px-4 py-2 pr-10 text-xs font-medium text-slate-900 shadow-sm outline-none transition duration-200 hover:border-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+        >
+          <option value="">Select Sales Sub-Department</option>
+          <option value="sales_general">Sales</option>
+          <option value="sales_corporate">Corporate Sales</option>
+          <option value="sales_business_development">Business Development</option>
+        </select>
+
+        <div className="-mt-2 pointer-events-none absolute left-48 top-[42px] text-slate-500">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            className="h-5 w-5"
+            aria-hidden="true"
+          >
+            <path
+              fillRule="evenodd"
+              d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.25 4.5a.75.75 0 0 1-1.08 0l-4.25-4.5a.75.75 0 0 1 .02-1.06Z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </div>
+      </div>
+
+      <div className="mt-3 flex flex-wrap gap-2">
+        <span className="rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-semibold text-emerald-700">
+          Structured Career Path
+        </span>
+        <span className="rounded-full bg-slate-200 px-3 py-1 text-[11px] font-semibold text-slate-700">
+          Sales Role Ladder
+        </span>
+      </div>
+    </div>
+  </div>
+)}
+{/* Marketing Department Dropdown */}
+{activeFieldId === "marketing" && !selectedRole && (
+  <div className="mb-6">
+    <div className="rounded-2xl border border-slate-300 bg-gradient-to-r from-white via-slate-50 to-slate-100 p-4 shadow-sm">
+      <div className="mb-3 flex items-center gap-3">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-white shadow-md">
+          <span className="text-[10px] font-bold">MKT</span>
+        </div>
+
+        <div>
+          <h3 className="text-base font-semibold tracking-tight text-slate-900">
+            Marketing Sub Departments
+          </h3>
+          <p className="text-xs text-slate-500">
+            Select a marketing department to explore its role ladder
+          </p>
+        </div>
+      </div>
+
+      <div className="relative">
+        <label
+          htmlFor="marketing-department"
+          className="mb-2 block text-xs font-semibold uppercase tracking-wide text-slate-600"
+        >
+          Department
+        </label>
+
+        <select
+          id="marketing-department"
+          value={selectedSubDepartmentId ?? ""}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+            setSelectedSubDepartmentId(e.target.value || null)
+          }
+          className="appearance-none rounded-xl border border-slate-300 bg-white px-4 py-2 pr-10 
+          text-xs font-medium text-slate-900 shadow-sm outline-none transition duration-200 hover:border-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+        >
+          <option value="">Select Marketing Sub-Department</option>
+          <option value="marketing_general">Marketing</option>
+          <option value="marketing_brand_management">Brand Management</option>
+          <option value="marketing_market_research">Market Research</option>
+          <option value="marketing_digital_marketing">Digital Marketing</option>
+        </select>
+
+        <div className="-mt-2 pointer-events-none absolute left-52 top-[42px] text-slate-500">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            className="h-5 w-5"
+            aria-hidden="true"
+          >
+            <path
+              fillRule="evenodd"
+              d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.25 4.5a.75.75 0 0 1-1.08 0l-4.25-4.5a.75.75 0 0 1 .02-1.06Z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </div>
+      </div>
+
+      <div className="mt-3 flex flex-wrap gap-2">
+        <span className="rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-semibold text-emerald-700">
+          Structured Career Path
+        </span>
+        <span className="rounded-full bg-slate-200 px-3 py-1 text-[11px] font-semibold text-slate-700">
+          Marketing Role Ladder
+        </span>
+      </div>
+    </div>
+  </div>
+)}
+{/* Customer Relation Department Dropdown */}
+{activeFieldId === "customer_relation" && !selectedRole && (
+  <div className="mb-6">
+    <div className="rounded-2xl border border-slate-300 bg-gradient-to-r from-white via-slate-50 to-slate-100 p-4 shadow-sm">
+      <div className="mb-3 flex items-center gap-3">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-white shadow-md">
+          <span className="text-[10px] font-bold">CR</span>
+        </div>
+
+        <div>
+          <h3 className="text-base font-semibold tracking-tight text-slate-900">
+            Customer Relation Sub Departments
+          </h3>
+          <p className="text-xs text-slate-500">
+            Select a department to explore its role ladder
+          </p>
+        </div>
+      </div>
+
+      <div className="relative">
+        <label
+          htmlFor="customer-relation-department"
+          className="mb-2 block text-xs font-semibold uppercase tracking-wide text-slate-600"
+        >
+          Department
+        </label>
+
+        <select
+          id="customer-relation-department"
+          value={selectedSubDepartmentId ?? ""}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+            setSelectedSubDepartmentId(e.target.value || null)
+          }
+          className="appearance-none rounded-xl border border-slate-300 bg-white px-4 py-2 pr-10 text-xs font-medium text-slate-900 shadow-sm outline-none transition duration-200 hover:border-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+        >
+          <option value="">Select Customer Relation Sub-Department</option>
+          <option value="cr_public_relations">Public Relations</option>
+          <option value="cr_customer_service">Customer Service</option>
+          <option value="cr_call_center_ops">Call Center Operations</option>
+        </select>
+
+        <div className="-mt-2 pointer-events-none absolute left-64 top-[42px] text-slate-500">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            className="h-5 w-5"
+            aria-hidden="true"
+          >
+            <path
+              fillRule="evenodd"
+              d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.25 4.5a.75.75 0 0 1-1.08 0l-4.25-4.5a.75.75 0 0 1 .02-1.06Z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </div>
+      </div>
+
+      <div className="mt-3 flex flex-wrap gap-2">
+        <span className="rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-semibold text-emerald-700">
+          Structured Career Path
+        </span>
+        <span className="rounded-full bg-slate-200 px-3 py-1 text-[11px] font-semibold text-slate-700">
+          Customer Relation Roles
+        </span>
+      </div>
+    </div>
+  </div>
+)}
+{/* Supply Chain Department Dropdown*/}
+{activeFieldId === "supply_chain_management" && !selectedRole && (
+  <div className="mb-6">
+    <div className="rounded-2xl border border-slate-300 bg-gradient-to-r from-white via-slate-50 to-slate-100 p-4 shadow-sm">
+      <div className="mb-3 flex items-center gap-3">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-white shadow-md">
+          <span className="text-[10px] font-bold">SCM</span>
+        </div>
+
+        <div>
+          <h3 className="text-base font-semibold tracking-tight text-slate-900">
+            Supply Chain Sub Departments
+          </h3>
+          <p className="text-xs text-slate-500">
+            Select a supply chain department to explore its role ladder
+          </p>
+        </div>
+      </div>
+
+      <div className="relative">
+        <label
+          htmlFor="scm-department"
+          className="mb-2 block text-xs font-semibold uppercase tracking-wide text-slate-600"
+        >
+          Department
+        </label>
+
+        <select
+          id="scm-department"
+          value={selectedSubDepartmentId ?? ""}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+            setSelectedSubDepartmentId(e.target.value || null)
+          }
+          className="appearance-none rounded-xl border border-slate-300 bg-white px-4 py-2 pr-10 text-xs font-medium text-slate-900 shadow-sm outline-none transition duration-200 hover:border-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+        >
+          <option value="">Select Supply Chain Sub-Department</option>
+          <option value="scm_procurement">Procurement</option>
+          <option value="scm_logistics">Logistics</option>
+          <option value="scm_inventory_management">Inventory Management</option>
+          <option value="scm_manufacturing">Manufacturing</option>
+          <option value="scm_production">Production</option>
+          <option value="scm_quality_assurance">Quality Assurance</option>
+          <option value="scm_quality_control">Quality Control</option>
+          <option value="scm_lean_management">Lean Management</option>
+        </select>
+
+        <div className="-mt-2 pointer-events-none absolute left-56 top-[42px] text-slate-500">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            className="h-5 w-5"
+            aria-hidden="true"
+          >
+            <path
+              fillRule="evenodd"
+              d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.25 4.5a.75.75 0 0 1-1.08 0l-4.25-4.5a.75.75 0 0 1 .02-1.06Z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </div>
+      </div>
+
+      <div className="mt-3 flex flex-wrap gap-2">
+        <span className="rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-semibold text-emerald-700">
+          Structured Career Path
+        </span>
+        <span className="rounded-full bg-slate-200 px-3 py-1 text-[11px] font-semibold text-slate-700">
+          SCM Role Ladder
+        </span>
+      </div>
+    </div>
+  </div>
+)}
+{/* IT Department Dropdown*/}
+{activeFieldId === "it" && !selectedRole && (
+  <div className="mb-6">
+    <div className="rounded-2xl border border-slate-300 bg-gradient-to-r from-white via-slate-50 to-slate-100 p-4 shadow-sm">
+      <div className="mb-3 flex items-center gap-3">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-white shadow-md">
+          <span className="text-[12px] font-bold">IT</span>
+        </div>
+
+        <div>
+          <h3 className="text-base font-semibold tracking-tight text-slate-900">
+            IT Sub Departments
+          </h3>
+          <p className="text-xs text-slate-500">
+            Select an IT department to explore its role ladder
+          </p>
+        </div>
+      </div>
+
+      <div className="relative">
+        <label
+          htmlFor="it-department"
+          className="mb-2 block text-xs font-semibold uppercase tracking-wide text-slate-600"
+        >
+          Department
+        </label>
+
+        <select
+          id="it-department"
+          value={selectedSubDepartmentId ?? ""}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+            setSelectedSubDepartmentId(e.target.value || null)
+          }
+          className="appearance-none rounded-xl border border-slate-300 bg-white px-4 py-2 pr-10 text-xs font-medium text-slate-900 shadow-sm outline-none transition duration-200 hover:border-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+        >
+          <option value="">Select IT Sub-Department</option>
+          <option value="it_web_development">Web Development</option>
+          <option value="it_mobile_app_development">Mobile App Development</option>
+          <option value="it_business_intelligence">Business Intelligence</option>
+          <option value="it_artificial_intelligence">Artificial Intelligence</option>
+          <option value="it_cloud_computing">Cloud Computing</option>
+          <option value="it_devops">DevOps</option>
+          <option value="it_erp_systems">ERP Systems</option>
+          <option value="it_mis_reporting">MIS & Reporting</option>
+          <option value="it_network_administration">Network Administration</option>
+          <option value="it_database_administration">Database Administration</option>
+          <option value="it_blockchain">Blockchain</option>
+        </select>
+
+        <div className="-mt-2 pointer-events-none absolute left-44 top-[42px] text-slate-500">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            className="h-5 w-5"
+            aria-hidden="true"
+          >
+            <path
+              fillRule="evenodd"
+              d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.25 4.5a.75.75 0 0 1-1.08 0l-4.25-4.5a.75.75 0 0 1 .02-1.06Z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </div>
+      </div>
+
+      <div className="mt-3 flex flex-wrap gap-2">
+        <span className="rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-semibold text-emerald-700">
+          Structured Career Path
+        </span>
+        <span className="rounded-full bg-slate-200 px-3 py-1 text-[11px] font-semibold text-slate-700">
+          IT Role Ladder
+        </span>
+      </div>
+    </div>
+  </div>
+)}
+{/* Product Innovation Department Dropdown*/}
+{activeFieldId === "product_innovation" && !selectedRole && (
+  <div className="mb-6">
+    <div className="rounded-2xl border border-slate-300 bg-gradient-to-r from-white via-slate-50 to-slate-100 p-4 shadow-sm">
+      <div className="mb-3 flex items-center gap-3">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-white shadow-md">
+          <span className="text-[10px] font-bold">PI</span>
+        </div>
+
+        <div>
+          <h3 className="text-base font-semibold tracking-tight text-slate-900">
+            Product & Innovation
+          </h3>
+          <p className="text-xs text-slate-500">
+            Select a sub department to explore its role ladder
+          </p>
+        </div>
+      </div>
+
+      <div className="relative">
+        <label
+          htmlFor="product-innovation-department"
+          className="mb-2 block text-xs font-semibold uppercase tracking-wide text-slate-600"
+        >
+          Department
+        </label>
+
+        <select
+          id="product-innovation-department"
+          value={selectedSubDepartmentId ?? ""}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+            setSelectedSubDepartmentId(e.target.value || null)
+          }
+          className="appearance-none rounded-xl border border-slate-300 bg-white px-4 py-2 pr-10 text-xs font-medium text-slate-900 shadow-sm outline-none transition duration-200 hover:border-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+        >
+          <option value="">Select Product Sub-Department</option>
+          <option value="pi_product_management">Product Management</option>
+        </select>
+
+        <div className="-mt-2 pointer-events-none absolute left-52 top-[42px] text-slate-500">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            className="h-5 w-5"
+            aria-hidden="true"
+          >
+            <path
+              fillRule="evenodd"
+              d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.25 4.5a.75.75 0 0 1-1.08 0l-4.25-4.5a.75.75 0 0 1 .02-1.06Z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </div>
+      </div>
+
+      <div className="mt-3 flex flex-wrap gap-2">
+        <span className="rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-semibold text-emerald-700">
+          Structured Career Path
+        </span>
+        <span className="rounded-full bg-slate-200 px-3 py-1 text-[11px] font-semibold text-slate-700">
+          Product Role Ladder
+        </span>
+      </div>
+    </div>
+  </div>
+)}
+{/* Program & Delivery Management Dropdowm*/}
+{activeFieldId === "program_delivery_management" && !selectedRole && (
+  <div className="mb-6">
+    <div className="rounded-2xl border border-slate-300 bg-gradient-to-r from-white via-slate-50 to-slate-100 p-4 shadow-sm">
+      <div className="mb-3 flex items-center gap-3">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-white shadow-md">
+          <span className="text-[10px] font-bold">PDM</span>
+        </div>
+
+        <div>
+          <h3 className="text-base font-semibold tracking-tight text-slate-900">
+            Program & Delivery Management
+          </h3>
+          <p className="text-xs text-slate-500">
+            Select a sub department to explore its role ladder
+          </p>
+        </div>
+      </div>
+
+      <div className="relative">
+        <label
+          htmlFor="pdm-department"
+          className="mb-2 block text-xs font-semibold uppercase tracking-wide text-slate-600"
+        >
+          Department
+        </label>
+
+        <select
+          id="pdm-department"
+          value={selectedSubDepartmentId ?? ""}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+            setSelectedSubDepartmentId(e.target.value || null)
+          }
+          className="appearance-none rounded-xl border border-slate-300 bg-white px-4 py-2 pr-10 text-xs font-medium text-slate-900 shadow-sm outline-none transition duration-200 hover:border-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+        >
+          <option value="">Select Program & Delivery Sub-Department</option>
+          <option value="pdm_project_management_pmo">Project Management / PMO</option>
+        </select>
+
+        <div className="-mt-2 pointer-events-none absolute left-64 top-[42px] text-slate-500">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            className="h-5 w-5"
+            aria-hidden="true"
+          >
+            <path
+              fillRule="evenodd"
+              d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.25 4.5a.75.75 0 0 1-1.08 0l-4.25-4.5a.75.75 0 0 1 .02-1.06Z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </div>
+
+      </div>
+
+      
+
+      <div className="mt-3 flex flex-wrap gap-2">
+        <span className="rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-semibold text-emerald-700">
+          Structured Career Path
+        </span>
+        <span className="rounded-full bg-slate-200 px-3 py-1 text-[11px] font-semibold text-slate-700">
+          Delivery Role Ladder
+        </span>
+      </div>
+    </div>
+  </div>
+)}
+{/*Operations & Process Excellence Dropdown*/}
+{activeFieldId === "operations_process_excellence" && !selectedRole && (
+  <div className="mb-6">
+    <div className="rounded-2xl border border-slate-300 bg-gradient-to-r from-white via-slate-50 to-slate-100 p-4 shadow-sm">
+      <div className="mb-3 flex items-center gap-3">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-white shadow-md">
+          <span className="text-[10px] font-bold">OPE</span>
+        </div>
+
+        <div>
+          <h3 className="text-base font-semibold tracking-tight text-slate-900">
+            Operations &amp; Process Excellence
+          </h3>
+          <p className="text-xs text-slate-500">
+            Select a sub department to explore its role ladder
+          </p>
+        </div>
+      </div>
+
+      <div className="relative">
+        <label
+          htmlFor="ope-department"
+          className="mb-2 block text-xs font-semibold uppercase tracking-wide text-slate-600"
+        >
+          Department
+        </label>
+
+        <select
+          id="ope-department"
+          value={selectedSubDepartmentId ?? ""}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+            setSelectedSubDepartmentId(e.target.value || null)
+          }
+          className="appearance-none rounded-xl border border-slate-300 bg-white px-4 py-2 pr-10 text-xs font-medium text-slate-900 shadow-sm outline-none transition duration-200 hover:border-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+        >
+          <option value="">Select Operations Sub-Department</option>
+          <option value="ope_business_analysis">Business Analysis</option>
+        </select>
+
+        <div className="-mt-2 pointer-events-none absolute left-52 top-[42px] text-slate-500">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            className="h-5 w-5"
+            aria-hidden="true"
+          >
+            <path
+              fillRule="evenodd"
+              d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.25 4.5a.75.75 0 0 1-1.08 0l-4.25-4.5a.75.75 0 0 1 .02-1.06Z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </div>
+      </div>
+
+      <div className="mt-3 flex flex-wrap gap-2">
+        <span className="rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-semibold text-emerald-700">
+          Structured Career Path
+        </span>
+        <span className="rounded-full bg-slate-200 px-3 py-1 text-[11px] font-semibold text-slate-700">
+          Process Excellence Roles
+        </span>
+      </div>
+    </div>
+  </div>
+)}
+
+{/* Roles List */}
+{activeFieldId === "hr" && !selectedRole && selectedHrDepartmentContent && (
+  <div className="mb-6">
+    <div className="border-b border-slate-300 pb-3">
+      <h3 className="text-lg font-semibold tracking-tight text-slate-900">
+        {selectedHrDepartmentContent.name}
+      </h3>
+      <p className="mt-1 text-sm text-slate-600">
+        Structured role ladder and core skill responsibilities.
+      </p>
+    </div>
+
+    <div className="mt-4 space-y-4">
+      {selectedHrDepartmentContent.roles.map((role, index) => (
+        <div key={role.title} className="border-l-2 border-emerald-500/70 pl-4">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-full 
+            bg-blue-200 px-2 text-xs font-bold text-blue-700">
+              {index + 1}
+            </span>
+            <h4 className="text-sm font-semibold text-slate-900 sm:text-sm">
+              {role.title}
+            </h4>
+          </div>
+
+          <div className="mt-2 flex flex-wrap gap-2">
+            {role.skills.map((skill) => (
+              <span
+                key={skill}
+                className="inline-flex rounded-full bg-slate-100 
+                px-3 py-1 text-xs font-sans
+                text-slate-700 ring-1 ring-slate-200"
+              >
+                {skill}
+              </span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+{activeFieldId === "finance" && !selectedRole && selectedFinanceDepartmentContent && (
+  <div className="mb-6">
+    <div className="border-b border-slate-300 pb-3">
+      <h3 className="text-lg font-semibold tracking-tight text-slate-900">
+        {selectedFinanceDepartmentContent.name}
+      </h3>
+      <p className="mt-1 text-sm text-slate-600">
+        Structured finance role ladder and core functional skills.
+      </p>
+    </div>
+
+    <div className="mt-4 space-y-4">
+      {selectedFinanceDepartmentContent.roles.map((role, index) => (
+        <div key={role.title} className="border-l-2 border-emerald-500/70 pl-4">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-full bg-blue-200 px-2 text-xs font-bold text-blue-700">
+              {index + 1}
+            </span>
+            <h4 className="text-sm font-semibold text-slate-900 sm:text-sm">
+              {role.title}
+            </h4>
+          </div>
+
+          <div className="mt-2 flex flex-wrap gap-2">
+            {role.skills.map((skill) => (
+              <span
+                key={skill}
+                className="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-sans text-slate-700 ring-1 ring-slate-200"
+              >
+                {skill}
+              </span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+{activeFieldId === "sales" && !selectedRole && selectedSalesDepartmentContent && (
+  <div className="mb-6">
+    <div className="border-b border-slate-300 pb-3">
+      <h3 className="text-lg font-semibold tracking-tight text-slate-900">
+        {selectedSalesDepartmentContent.name}
+      </h3>
+      <p className="mt-1 text-sm text-slate-600">
+        Structured sales role ladder and core commercial skills.
+      </p>
+    </div>
+
+    <div className="mt-4 space-y-4">
+      {selectedSalesDepartmentContent.roles.map((role, index) => (
+        <div key={role.title} className="border-l-2 border-emerald-500/70 pl-4">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-full bg-blue-200 px-2 text-xs font-bold text-blue-700">
+              {index + 1}
+            </span>
+            <h4 className="text-sm font-semibold text-slate-900 sm:text-sm">
+              {role.title}
+            </h4>
+          </div>
+
+          <div className="mt-2 flex flex-wrap gap-2">
+            {role.skills.map((skill) => (
+              <span
+                key={skill}
+                className="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-sans text-slate-700 ring-1 ring-slate-200"
+              >
+                {skill}
+              </span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+{activeFieldId === "marketing" && !selectedRole && selectedMarketingDepartmentContent && (
+  <div className="mb-6">
+    <div className="border-b border-slate-300 pb-3">
+      <h3 className="text-lg font-semibold tracking-tight text-slate-900">
+        {selectedMarketingDepartmentContent.name}
+      </h3>
+      <p className="mt-1 text-sm text-slate-600">
+        Structured marketing role ladder and core functional skills.
+      </p>
+    </div>
+
+    <div className="mt-4 space-y-4">
+      {selectedMarketingDepartmentContent.roles.map((role, index) => (
+        <div key={role.title} className="border-l-2 border-emerald-500/70 pl-4">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-full bg-blue-200 px-2 text-xs font-bold text-blue-700">
+              {index + 1}
+            </span>
+            <h4 className="text-sm font-semibold text-slate-900 sm:text-sm">
+              {role.title}
+            </h4>
+          </div>
+
+          <div className="mt-2 flex flex-wrap gap-2">
+            {role.skills.map((skill) => (
+              <span
+                key={skill}
+                className="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-sans text-slate-700 ring-1 ring-slate-200"
+              >
+                {skill}
+              </span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+{activeFieldId === "customer_relation" && !selectedRole && selectedCustomerRelationDepartmentContent && (
+  <div className="mb-6">
+    <div className="border-b border-slate-300 pb-3">
+      <h3 className="text-lg font-semibold tracking-tight text-slate-900">
+        {selectedCustomerRelationDepartmentContent.name}
+      </h3>
+      <p className="mt-1 text-sm text-slate-600">
+        Structured customer relation role ladder and core functional skills.
+      </p>
+    </div>
+
+    <div className="mt-4 space-y-4">
+      {selectedCustomerRelationDepartmentContent.roles.map((role, index) => (
+        <div key={role.title} className="border-l-2 border-emerald-500/70 pl-4">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-full bg-blue-200 px-2 text-xs font-bold text-blue-700">
+              {index + 1}
+            </span>
+            <h4 className="text-sm font-semibold text-slate-900 sm:text-sm">
+              {role.title}
+            </h4>
+          </div>
+
+          <div className="mt-2 flex flex-wrap gap-2">
+            {role.skills.map((skill) => (
+              <span
+                key={skill}
+                className="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-sans text-slate-700 ring-1 ring-slate-200"
+              >
+                {skill}
+              </span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+{activeFieldId === "supply_chain_management" && !selectedRole && selectedSupplyChainDepartmentContent && (
+  <div className="mb-6">
+    <div className="border-b border-slate-300 pb-3">
+      <h3 className="text-lg font-semibold tracking-tight text-slate-900">
+        {selectedSupplyChainDepartmentContent.name}
+      </h3>
+      <p className="mt-1 text-sm text-slate-600">
+        Structured supply chain role ladder and core operational skills.
+      </p>
+    </div>
+
+    <div className="mt-4 space-y-4">
+      {selectedSupplyChainDepartmentContent.roles.map((role, index) => (
+        <div key={role.title} className="border-l-2 border-emerald-500/70 pl-4">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-full bg-blue-200 px-2 text-xs font-bold text-blue-700">
+              {index + 1}
+            </span>
+            <h4 className="text-sm font-semibold text-slate-900 sm:text-sm">
+              {role.title}
+            </h4>
+          </div>
+
+          <div className="mt-2 flex flex-wrap gap-2">
+            {role.skills.map((skill) => (
+              <span
+                key={skill}
+                className="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-sans text-slate-700 ring-1 ring-slate-200"
+              >
+                {skill}
+              </span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+)}    
+{activeFieldId === "it" && !selectedRole && selectedITDepartmentContent && (
+  <div className="mb-6">
+    <div className="border-b border-slate-300 pb-3">
+      <h3 className="text-lg font-semibold tracking-tight text-slate-900">
+        {selectedITDepartmentContent.name}
+      </h3>
+      <p className="mt-1 text-sm text-slate-600">
+        Structured IT role ladder and core technical skills.
+      </p>
+    </div>
+
+    <div className="mt-4 space-y-4">
+      {selectedITDepartmentContent.roles.map((role, index) => (
+        <div key={role.title} className="border-l-2 border-emerald-500/70 pl-4">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-full bg-blue-200 px-2 text-xs font-bold text-blue-700">
+              {index + 1}
+            </span>
+            <h4 className="text-sm font-semibold text-slate-900 sm:text-sm">
+              {role.title}
+            </h4>
+          </div>
+
+          <div className="mt-2 flex flex-wrap gap-2">
+            {role.skills.map((skill) => (
+              <span
+                key={skill}
+                className="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-sans text-slate-700 ring-1 ring-slate-200"
+              >
+                {skill}
+              </span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+)}    
+{activeFieldId === "product_innovation" && !selectedRole && selectedProductInnovationDepartmentContent && (
+  <div className="mb-6">
+    <div className="border-b border-slate-300 pb-3">
+      <h3 className="text-lg font-semibold tracking-tight text-slate-900">
+        {selectedProductInnovationDepartmentContent.name}
+      </h3>
+      <p className="mt-1 text-sm text-slate-600">
+        Structured product role ladder and core innovation skills.
+      </p>
+    </div>
+
+    <div className="mt-4 space-y-4">
+      {selectedProductInnovationDepartmentContent.roles.map((role, index) => (
+        <div key={role.title} className="border-l-2 border-emerald-500/70 pl-4">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-full bg-blue-200 px-2 text-xs font-bold text-blue-700">
+              {index + 1}
+            </span>
+            <h4 className="text-sm font-semibold text-slate-900 sm:text-sm">
+              {role.title}
+            </h4>
+          </div>
+
+          <div className="mt-2 flex flex-wrap gap-2">
+            {role.skills.map((skill) => (
+              <span
+                key={skill}
+                className="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-sans text-slate-700 ring-1 ring-slate-200"
+              >
+                {skill}
+              </span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+{activeFieldId === "program_delivery_management" && !selectedRole && selectedProgramDeliveryDepartmentContent && (
+  <div className="mb-6">
+    <div className="border-b border-slate-300 pb-3">
+      <h3 className="text-lg font-semibold tracking-tight text-slate-900">
+        {selectedProgramDeliveryDepartmentContent.name}
+      </h3>
+      <p className="mt-1 text-sm text-slate-600">
+        Structured delivery role ladder and core project governance skills.
+      </p>
+    </div>
+
+    <div className="mt-4 space-y-4">
+      {selectedProgramDeliveryDepartmentContent.roles.map((role, index) => (
+        <div key={role.title} className="border-l-2 border-emerald-500/70 pl-4">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-full bg-blue-200 px-2 text-xs font-bold text-blue-700">
+              {index + 1}
+            </span>
+            <h4 className="text-sm font-semibold text-slate-900 sm:text-sm">
+              {role.title}
+            </h4>
+          </div>
+
+          <div className="mt-2 flex flex-wrap gap-2">
+            {role.skills.map((skill) => (
+              <span
+                key={skill}
+                className="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-sans text-slate-700 ring-1 ring-slate-200"
+              >
+                {skill}
+              </span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+{activeFieldId === "operations_process_excellence" && !selectedRole && selectedOperationsProcessExcellenceContent && (
+  <div className="mb-6">
+    <div className="border-b border-slate-300 pb-3">
+      <h3 className="text-lg font-semibold tracking-tight text-slate-900">
+        {selectedOperationsProcessExcellenceContent.name}
+      </h3>
+      <p className="mt-1 text-sm text-slate-600">
+        Structured business analysis role ladder and core process skills.
+      </p>
+    </div>
+
+    <div className="mt-4 space-y-4">
+      {selectedOperationsProcessExcellenceContent.roles.map((role, index) => (
+        <div key={role.title} className="border-l-2 border-emerald-500/70 pl-4">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-full bg-blue-200 px-2 text-xs font-bold text-blue-700">
+              {index + 1}
+            </span>
+            <h4 className="text-sm font-semibold text-slate-900 sm:text-sm">
+              {role.title}
+            </h4>
+          </div>
+
+          <div className="mt-2 flex flex-wrap gap-2">
+            {role.skills.map((skill) => (
+              <span
+                key={skill}
+                className="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-sans text-slate-700 ring-1 ring-slate-200"
+              >
+                {skill}
+              </span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+{/* Role view: filters + requirements */}
+  {selectedRole && (
+    <div className="space-y-5">
+        {/* Filters row */}
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+              <div className="w-full sm:w-56">
+                  
+                <label className="mb-1 block text-xs font-semibold text-slate-900">
+                  Filter skills
+                </label>
+                <Select
+                  value={skillFilter}
+                  onChange={(v: string) => setSkillFilter(v as "all" | SkillType)}
+                  options={[
+                    { label: "All skills", value: "all" },
+                    { label: "Technical", value: "Technical" },
+                    { label: "Soft", value: "Soft" },
+                  ]}
+                />
+
+              </div>
+
+              <label className="flex items-center gap-2 pt-1 text-xs text-black sm:pt-5">
+                <input
+                  aria-label="Show only missing skills"
+                  type="checkbox"
+                  checked={showOnlyMissing}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setShowOnlyMissing(e.target.checked)
+                    }
+                  className="h-4 w-4 rounded border-white/20 bg-white/5 focus:ring-2 focus:ring-white/15"
+                />
+                  Show only missing
+                </label>
+
+        </div>
+
+      </div>
+
+      {/* Skill requirement list */}
+      <div className="space-y-3">
+        {roleSkills.map((req) => {
+          const u = userMap.get(normalizeSkillName(req.name)) ?? null;
+          const score = getSkillScore(u?.level ?? null, req.requiredLevel);
+          const percent = Math.round(score * 100);
+
+          const status =  !u ? "Missing" : percent === 100 ? "Matched" : "Partial";
+
+          return (
+          <div key={req.id} className="rounded-xl border border-white/10 bg-blue-950 p-3">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div className="min-w-0"> 
+                  <div className="flex flex-wrap items-center gap-2">
+                    <div className="truncate text-sm font-semibold text-white">
+                      {req.name}
                     </div>
-                  ))}
-
-                  {fieldRoles.length === 0 && (
-                    <div className="rounded-2xl border border-white/10 bg-blue-950 p-4 text-sm text-slate-100">
-                      No roles found.
-                    </div>
-                  )}
+                    <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-200">
+                      {req.type}
+                    </span>
+                    <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-200">
+                      Required: {req.requiredLevel}
+                    </span>
+                    <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-200">
+                      Yours: {u ? u.level : "None"}
+                    </span>
+                  </div>
                 </div>
-              )}
 
-              {/* Role view: filters + requirements */}
-              {selectedRole && (
-                <div className="space-y-5">
-                  {/* Filters row */}
-                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                    <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-                      <div className="w-full sm:w-56">
-                        <label className="mb-1 block text-xs font-semibold text-slate-900">
-                          Filter skills
-                        </label>
+                  <span className={
+                    "shrink-0 rounded-full px-3 py-1 text-xs font-semibold " +
+                      (!u
+                       ? "border border-rose-400/20 bg-rose-400/15 text-rose-300"
+                       : percent === 100
+                       ? "border border-emerald-400/20 bg-emerald-400/15 text-emerald-300"
+                       : "border border-amber-400/20 bg-amber-400/15 text-amber-300")
+                      }
+                  >
+                    {u ? `${percent}% • ${status}` : "Missing"}
+                  </span>
+            </div>
 
-                        <Select
-                          value={skillFilter}
-                          onChange={(v: string) => setSkillFilter(v as "all" | SkillType)}
-                          options={[
-                            { label: "All skills", value: "all" },
-                            { label: "Technical", value: "Technical" },
-                            { label: "Soft", value: "Soft" },
-                          ]}
-                        />
-                      </div>
-
-                      <label className="flex items-center gap-2 pt-1 text-xs text-black sm:pt-5">
-                        <input
-                          aria-label="Show only missing skills"
-                          type="checkbox"
-                          checked={showOnlyMissing}
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                            setShowOnlyMissing(e.target.checked)
-                          }
-                          className="h-4 w-4 rounded border-white/20 bg-white/5 focus:ring-2 focus:ring-white/15"
-                        />
-                        Show only missing
-                      </label>
-                    </div>
-                  </div>
-
-                  {/* Skill requirement list */}
-                  <div className="space-y-3">
-                    {roleSkills.map((req) => {
-                      const u = userMap.get(normalizeSkillName(req.name)) ?? null;
-                      const score = getSkillScore(u?.level ?? null, req.requiredLevel);
-                      const percent = Math.round(score * 100);
-
-                      const status =
-                        !u ? "Missing" : percent === 100 ? "Matched" : "Partial";
-
-                      return (
-                        <div
-                          key={req.id}
-                          className="rounded-xl border border-white/10 bg-blue-950 p-3"
-                        >
-                          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                            <div className="min-w-0">
-                              <div className="flex flex-wrap items-center gap-2">
-                                <div className="truncate text-sm font-semibold text-white">
-                                  {req.name}
-                                </div>
-                                <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-200">
-                                  {req.type}
-                                </span>
-                                <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-200">
-                                  Required: {req.requiredLevel}
-                                </span>
-                                <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-200">
-                                  Yours: {u ? u.level : "None"}
-                                </span>
-                              </div>
-                            </div>
-
-                            <span
-                              className={
-                                "shrink-0 rounded-full px-3 py-1 text-xs font-semibold " +
-                                (!u
-                                  ? "border border-rose-400/20 bg-rose-400/15 text-rose-300"
-                                  : percent === 100
-                                    ? "border border-emerald-400/20 bg-emerald-400/15 text-emerald-300"
-                                    : "border border-amber-400/20 bg-amber-400/15 text-amber-300")
-                              }
-                            >
-                              {u ? `${percent}% • ${status}` : "Missing"}
-                            </span>
-                          </div>
-
-                          <div className="mt-3">
-                            <ProgressBar value={u ? percent : 0} />
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
+            <div className="mt-3">
+              <ProgressBar value={u ? percent : 0} />
+            </div>
+        </div>
+           );
+      })}
+        </div>
 
                   {/* Skill profile editor */}
                   <div className="mt-2 rounded-2xl border border-white/10 bg-white/5 p-4">
@@ -709,13 +2995,12 @@ return (
                         </div>
                       </div>
 
-                      <button
-                        type="button"
-                        onClick={addUserSkill}
-                        className="inline-flex items-center justify-center rounded-xl border border-white/10 bg-white px-4 py-2 text-sm font-semibold text-black hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/15"
-                      >
-                        Add
-                      </button>
+       <button type="button" onClick={addUserSkill}
+        className="inline-flex items-center justify-center rounded-xl border border-white/10 
+        bg-white px-4 py-2 text-sm font-semibold text-black hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/15"
+        >
+          Add
+      </button>
                     </div>
 
                     <div className="mt-4 space-y-3">
@@ -989,8 +3274,8 @@ return (
                                   className="flex flex-col gap-3 rounded-xl border border-white/10 bg-slate-950/30 p-4 sm:flex-row sm:items-start sm:justify-between"
                                 >
                                   <div>
-                                    <div className="font-semibold text-white">{o.title}</div>
-                                    <div className="mt-1 text-xs text-white">
+                                    <div className="font-semibold text-black">{o.title}</div>
+                                    <div className="mt-1 text-xs text-black">
                                       {o.company} • {o.location} • {o.isRemote ? "Remote" : "On-site"}
                                     </div>
                                   </div>
@@ -1009,10 +3294,10 @@ return (
                     )}
                   </div>
                 </div>
-              )}
-            </div>
-          </div>
+  )}
         </div>
+      </div>
+    </div>
 
         {/* RIGHT: Sticky side panel */}
         <div className="space-y-4 lg:col-span-4 lg:space-y-6">
@@ -1029,6 +3314,7 @@ return (
                   type="button"
                   onClick={() => {
                     setActiveFieldId(null);
+                    setSelectedSubDepartmentId(null);
                     setSelectedRoleId(null);
                     setSearch("");
                     setMatchResult(null);
@@ -1042,6 +3328,7 @@ return (
                   <button
                     type="button"
                     onClick={() => {
+                      setSelectedSubDepartmentId(null);
                       setSelectedRoleId(null);
                       setMatchResult(null);
                     }}
