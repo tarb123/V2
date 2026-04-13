@@ -52,7 +52,7 @@ const handleSubmit = async (e: FormEvent) => {
       password: formData.password,
     });
 
-    setMessage(response.data.message || "Signup successful!");
+    setMessage("Signup successful!");
     router.push("/pgp");
   } catch (error: any) {
     setMessage(
