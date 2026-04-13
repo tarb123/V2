@@ -1,4 +1,3 @@
-import React from 'react'
 import Hero from '../Home/Hero'
 import Habout from './Habout'
 // import AboutCard from '@/app/aboutus/AboutCard'

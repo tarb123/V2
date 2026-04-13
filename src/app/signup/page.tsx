@@ -19,30 +19,49 @@ const Signup: React.FC = () => {
     message?: string;
   };
   
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    try {
-const response = await axios.post<AuthResponse>("/api/signup", formData);
+//   const handleSubmit = async (e: FormEvent) => {
+//     e.preventDefault();
+//     try {
+// const response = await axios.post<AuthResponse>("/api/signup", formData);
 
-      if (response.data.token) {
-        localStorage.setItem("authToken", response.data.token);
-        setMessage("Signup successful!");
-        router.push("/FinancialOffer");
-      } else {
-        setMessage(response.data.message || "Signup failed");
-      }
-    } 
+//       if (response.data.token) {
+//         localStorage.setItem("authToken", response.data.token);
+//         setMessage("Signup successful!");
+//         router.push("/FinancialOffer");
+//       } else {
+//         setMessage(response.data.message || "Signup failed");
+//       }
+//     } 
     
-catch (error: unknown) {
-  if (error instanceof Error) {
-    setMessage(error.message);
-  } else {
-    setMessage("Signup failed");
-  }
-}
+// catch (error: unknown) {
+//   if (error instanceof Error) {
+//     setMessage(error.message);
+//   } else {
+//     setMessage("Signup failed");
+//   }
+// }
 
-  };
-  
+//   };
+const handleSubmit = async (e: FormEvent) => {
+  e.preventDefault();
+
+  try {
+    const response = await axios.post("/api/signup", {
+      name: formData.name.trim(),
+      email: formData.email.trim().toLowerCase(),
+      password: formData.password,
+    });
+
+    setMessage(response.data.message || "Signup successful!");
+    router.push("/pgp");
+  } catch (error: any) {
+    setMessage(
+      error?.response?.data?.message ||
+        error?.message ||
+        "Signup failed"
+    );
+  }
+};
   const handleGoogleSuccess = async (credentialResponse: CredentialResponse) => {
     if (!credentialResponse.credential) {
       setMessage("Google Signup failed: No credential received.");
@@ -70,63 +89,111 @@ catch (error: unknown) {
   };
   
 return (
-   
-  <form onSubmit={handleSubmit} className="w-full max-w-md min-w-[320px] mx-auto my-12 bg-white p-8 rounded-lg shadow-md space-y-4">
-  <h2 className="text-xl font-bold text-center  text-Red">Sign Up</h2>
+    <div className="min-h-screen 
+    bg-slate-100 md:mt-16 -mt-36
+    flex items-center justify-center">    
+    <form
+      onSubmit={handleSubmit}
+      className="w-full max-w-md p-6 sm:p-8 space-y-6"
+    >
+      <div className="text-center">
+        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-blue-600">
+          Sign Up
+        </p>
+        <h1 className="-mb-4 text-3xl 
+        font-semibold tracking-tight text-slate-900">
+          Welcome Here
+        </h1>
+      </div>
 
-  <div className="relative w-full">
-    <input className="peer w-[370px] border-Blue border-2 px-3 pt-5 pb-1 text-xs font-sans serif"
-      type="text" name="name" value={formData.name} onChange={handleChange} required
-    />
-   <label className="absolute left-3 top-1 text-xs text-black font-medium font-sans serif">Name</label>
-  </div>
+      <div className="space-y-2">
+        <div>
+          <input
+            id="name"
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+            placeholder="Enter your full name"
+            className="
+            w-full
+            rounded-xl border border-gray-300 bg-white 
+            px-4 py-2 text-sm 
+            text-gray-900 outline-none transition focus:border-red-500 
+            focus:ring-2 focus:ring-red-100"
+          />
+        </div>
 
-<div className="relative w-full">
-  <input
-    type="email"
-    name="email"   // 👈 add this
-    value={formData.email}
-    onChange={handleChange}
-    required
-    className="peer w-[370px] border-Blue border-2 px-3 pt-5 pb-1 text-xs font-sans serif"
-  />
-  <label className="absolute left-3 top-1 text-xs text-black font-medium font-sans serif">
-    Email
-  </label>
-</div>
+        <div>
+          <input
+            id="email"
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            placeholder="Enter your email"
+            className="w-full rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm text-gray-900 outline-none transition focus:border-red-500 focus:ring-2 focus:ring-red-100"
+          />
+        </div>
 
+        <div>
 
-  <div className="relative w-full">
-    <input className="peer w-[370px] border-Blue border-2 px-3 pt-5 pb-1 text-xs font-sans serif"
-      type="password" name="password" value={formData.password} onChange={handleChange} required
-    />
-    <label className="absolute left-3 top-1 text-xs text-black font-medium font-sans serif">Password</label>
-  </div>
+          <input
+            id="password"
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+            placeholder="Create a password"
+            className="w-full rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm text-gray-900 outline-none transition focus:border-red-500 focus:ring-2 focus:ring-red-100"
+          />
+        </div>
+      </div>
 
-  {message && <p className="text-center text-sm text-gray">{message}</p>}
-  
+      {message && (
+        <p className="text-center text-sm font-medium text-red-600">
+          {message}
+        </p>
+      )}
 
-  <div className="text-center">
-    <button className="w-64 border-1 -mt-4 font-sans serif text-white bg-Red text-xs font-semibold py-2 rounded hover:bg-Red" 
-     type="submit">
-     Register Now          
-    </button>
-  </div>
+      <div className="space-y-1">
+        <button
+          type="submit"
+          className="w-full rounded-xl bg-red-600 px-4 py-3 -mb-6 text-sm font-semibold text-white shadow-md transition hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-200"
+        >
+          Register Now
+        </button>
+      </div>
 
-<div className="mt-6 text-center">
   {/* Divider line */}
   <div className="flex items-center justify-center my-2">
-    <hr className="w-1/4 border-gray"/>
+    <hr className="w-1/4 border-gray" />
     <span className="px-2 text-xs font-sans serif font-semibold text-gray">OR</span>
-    <hr className="w-1/4 border-gray"/>
+    <hr className="w-1/4 border-gray" />
   </div>
 
-  {/* Centered Login link */}
-  <Link href="/login" className="text-sm font-sans serif text-Red hover:text-Blue font-bold">
-    Login
-  </Link>
-</div>
-  <GoogleLoginButton onSuccess={handleGoogleSuccess} onFailure={() => setMessage("Google authentication failed")}/>
-  </form>
-);};
+      <div className="space-y-1 text-center">
+        <GoogleLoginButton
+          onSuccess={handleGoogleSuccess}
+          onFailure={() => setMessage("Google authentication failed")}
+        />
+
+        <p className="text-sm text-gray-500">
+          Already have an account?
+        </p>
+
+        <Link
+          href="/login"
+          className="inline-block text-sm font-semibold text-red-600 hover:text-red-700 transition"
+        >
+          Login
+        </Link>
+      </div>
+    </form>
+  </div>
+);
+};
 export default Signup;

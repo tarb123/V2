@@ -114,11 +114,17 @@ const Header = () => {
             <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-white transition-all duration-300 group-hover:w-full"></span>
           </Link>
 
-<Link href="/PSF" className="relative text-white text-sm px-3 py-1 transition duration-300 group">
+          <Link href="/pgp-access" className="relative text-white text-sm px-3 py-1 transition duration-300 group">
+  <i className="fa fa-graduation-cap text-white"></i>
+  <span className="font-semibold text-white text-sm ml-1">PGP</span>
+  <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-white transition-all duration-300 group-hover:w-full"></span>
+</Link>
+
+{/* <Link href="/PSF" className="relative text-white text-sm px-3 py-1 transition duration-300 group">
   <i className="fa fa-file-alt text-white" aria-hidden="true"></i>
   <span className="font-sans serif font-semibold text-white text-sm">PSF</span>
   <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-white transition-all duration-300 group-hover:w-full"></span>
-</Link>
+</Link> */}
 
           <div className="ml-auto">
             <Link href="/login" className="text-white text-base py-1 group">
@@ -202,6 +208,15 @@ const Header = () => {
             <span className="ml-1">Personality Assessment</span>
           </Link>
           
+         <Link 
+           href="/pgp-access" 
+           className="rounded-lg px-3 py-3 hover:bg-white/10"
+           onClick={() => setMenuOpen(false)} 
+          >
+            <i className="fa fa-graduation-cap mr-2" aria-hidden="true"></i>
+            <span className="ml-1">PGP</span>
+          </Link>
+
           <Link
             href="/education"
             className="rounded-lg px-3 py-3 hover:bg-white/10"

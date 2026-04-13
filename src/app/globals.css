@@ -121,9 +121,7 @@ h2 {
 }
 
 @media screen and (max-width: 768px) {
-  .mainContent {
-    padding-top: -10px; /* or equal to .mobileTop height */
-  }
+ 
 }
 
 /* Print / PDF helpers */

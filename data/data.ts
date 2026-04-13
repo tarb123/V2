@@ -222,9 +222,9 @@ export const coursesData = [
       name: "Muhammad Majid Khan(Executive Director)",
       work: "DEVELOPER AND LEAD INSTRUCTOR",
     },
-    {
-      cover: "/ah.jpg",
-      name: "Anees Ahmed (Executive Director)",
-      work: "Lead Big Data & AI , automation Engineer Machine Learning | Deep Learning | Artificial Intelligence | Manager Data & AI Practices - RPA | EX GfK - An NIQ Company | Lead AI Trainer, PIAIC ",
-    },
+    // {
+    //   cover: "/ah.jpg",
+    //   name: "Anees Ahmed (Executive Director)",
+    //   work: "Lead Big Data & AI , automation Engineer Machine Learning | Deep Learning | Artificial Intelligence | Manager Data & AI Practices - RPA | EX GfK - An NIQ Company | Lead AI Trainer, PIAIC ",
+    // },
   ]

@@ -22,7 +22,7 @@ body {
     font-size: 1.2em;
   font-weight: bold;
     cursor: pointer;
-    margin-top: -50px;
+    /* margin-top: -50px; */
     transition: background-color 0.3s ease;
   }
   

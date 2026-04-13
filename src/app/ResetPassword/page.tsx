@@ -15,7 +15,7 @@ export default function VerifyCode() {
     e.preventDefault(); setLoading(true); // Start loading state
 
     try {
-      const response = await fetch("http://localhost:5000/verify-code", {
+      const response = await fetch("/api/verify-code", {
         method: "POST", headers: { "Content-Type": "application/json" }, 
         body: JSON.stringify({ email, code, password: newPassword }),
       });
@@ -29,9 +29,9 @@ export default function VerifyCode() {
         setTimeout(() => {
           router.push("/Main"); // Here i just for testing give route to Khudi Page but when where it have to routing.
         }, 2000); // Redirect after 2 seconds
-      } else {
-        // Show error message in case of failure
-        toast.error(data.message || "Invalid code or email.");
+      } 
+      else {
+        toast.error(data.message || "Invalid code or email."); // Show error message in case of failure
       }
     } 
 catch (error) {
@@ -44,35 +44,47 @@ finally {
   };
 
   return (
-     
-    <form onSubmit={handleVerifyAndReset} className="w-full max-w-md min-w-[320px] mx-auto my-12 bg-white p-8 rounded-lg shadow-md space-y-4">
-    <h2 className="text-xl font-bold text-center text-Red">Reset Password</h2> 
+    <div className="min-h-screen 
+    bg-slate-100 md:mt-16 -mt-44
+    flex items-center justify-center">  
+    <form onSubmit={handleVerifyAndReset} 
+      className="w-full max-w-md p-6  space-y-3" >
+
+      <div className="text-center">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.24em] text-blue-600">
+            Reset Password
+          </p>
+          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
+            Enter your 6 Digits Code to Reset Password
+          </h1>
+        </div>
 
     <div className="relative w-full">
       <input type="email"  placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} 
-      required className="peer w-[370px] border-Blue border-2 px-3 pt-5 pb-1 text-xs font-sans serif"
+      required 
+            className="w-full rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm text-gray-900 outline-none transition focus:border-red-500 focus:ring-2 focus:ring-red-100"
       />
-      <label className="absolute left-3 top-1 text-xs text-black font-medium font-sans serif">Email</label>
-    </div>  
+     </div>  
 
     <div className="relative w-full">
       <input type="text" placeholder="Your code" value={code} onChange={(e) => setCode(e.target.value)} 
-      required className="peer w-[370px] border-Blue border-2 px-3 pt-5 pb-1 text-xs font-sans serif"
+      required 
+      className="w-full rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm text-gray-900 outline-none transition focus:border-red-500 focus:ring-2 focus:ring-red-100"
       />
-      <label className="absolute left-3 top-1 text-xs text-black font-medium font-sans serif">Enter 6 Digits Code</label>
-    </div> 
+     </div> 
 
     <div className="relative w-full">
-      <input className="peer w-[370px] border-Blue border-2 px-3 pt-5 pb-1 text-xs font-sans serif"
+      <input 
+      className="w-full rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm text-gray-900 outline-none transition focus:border-red-500 focus:ring-2 focus:ring-red-100"
+
         type="password" placeholder="New password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required
       />
-      <label className="absolute left-3 top-1 text-xs text-black font-medium font-sans serif">Enter New Password</label>
-    </div>
+     </div>
 
 <div className="text-center">
   {/* Reset Password Button */}
   <button
-    className="w-64 border-1 -mt-4 font-sans serif text-white bg-Red text-xs font-semibold py-2 rounded hover:bg-Red"
+          className="w-full rounded-xl bg-red-600 px-4 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-200 disabled:cursor-not-allowed disabled:opacity-70"
     type="submit"
     disabled={loading}
   >
@@ -101,5 +113,7 @@ finally {
 </div>
 
     <ToastContainer />
-     </form>
+     </form>    
+    </div>
+ 
     );}

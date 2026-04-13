@@ -1,63 +1,75 @@
-"use client"; import { useState } from "react";
+"use client";
+import { useState } from "react";
 import Link from "next/link";
-
-import { toast, ToastContainer } from "react-toastify";import 'react-toastify/dist/ReactToastify.css';
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
-  const handleSendCode = async (e: React.FormEvent) => {
-    e.preventDefault(); setLoading(true);
 
-    try {
-      const response = await fetch("/api/send-code", 
-      {
-        method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({ email }),
-      });
+const handleSendCode = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  setLoading(true);
 
-      const data = await response.json();
+  try {
+    const response = await fetch("/api/send-code", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
 
-      if (response.ok) 
-      { toast.success(data.message || "Confirmation code sent to your email.") } 
-      else 
-      { toast.error(data.message || "User not found."); }
-    } 
+    const data = await response.json();
 
-catch (error) {
-  console.error("Forgot password error:", error);
-  toast.error("Something went wrong. Please try again later.");
-}
-
-    finally {setLoading(false);}
+    if (response.ok) {
+      toast.success(data.message || "Confirmation code sent to your email.");
+    } else {
+      toast.error(data.message || "User not found.");
+    }
+  } catch (error) {
+    console.error("Forgot password error:", error);
+    toast.error("Something went wrong. Please try again later.");
+  } finally {
+    setLoading(false);
+  }
 };
 
   return (
- 
-    <form onSubmit={handleSendCode}  className="w-full max-w-md min-w-[320px] mx-auto my-12 bg-white p-8 rounded-lg shadow-md space-y-4">
-        <h2 className="text-xl font-bold text-center text-Red">Forgot Password</h2>
-       
-      <div className="relative w-full">
-      <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required
-        className="peer w-[370px] border-Blue border-2 px-3 pt-5 pb-1 text-xs font-sans serif"
-      />
-      <label className="absolute left-3 top-1 text-sm text-customBlue font-bold">Email</label>
-      </div>
+    <div className="min-h-screen 
+    bg-slate-100 md:mt-2 -mt-44
+    flex items-center justify-center">      
+    <form
+     onSubmit={handleSendCode}
+     className="w-full max-w-md p-6 space-y-3">
+        
+      <div className="text-center">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.24em] text-blue-600">
+            Forgot Password
+          </p>
+          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
+            Enter your email to receive a confirmation code
+          </h1>
+        </div>
 
-<div className="text-center">
-  {/* Reset Password Button */}
-      <button type="submit" disabled={loading} 
-      className="w-64 border-2 text-white bg-Red text-xs font-semibold py-2 rounded hover:bg-Red">
-      {loading ? "Sending..." : "Send Confirmation Code"}
-      </button>
+        <div>
+          <input
+            id="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            placeholder="Enter your email"
+            className="w-full rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm text-gray-900 outline-none transition focus:border-red-500 focus:ring-2 focus:ring-red-100"
+          />
+        </div>
 
-  {/* Spacer */}
-  <h6 className="mt-4"></h6>
-
-  {/* Back to Home Link */}
-  <Link href="/#Home" className="block text-sm font-sans serif text-Red hover:text-Blue font-bold">
-    Back to Home
-  </Link>
-
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full rounded-xl bg-red-600 px-4 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-200 disabled:cursor-not-allowed disabled:opacity-70"
+        >
+          {loading ? "Sending..." : "Send Confirmation Code"}
+        </button>
   {/* Divider line */}
   <div className="flex items-center justify-center my-2">
     <hr className="w-1/4 border-gray" />
@@ -65,15 +77,18 @@ catch (error) {
     <hr className="w-1/4 border-gray" />
   </div>
 
-  {/* Login Link */}
-  <Link href="/login" className="block text-sm font-sans serif text-Red hover:text-Blue font-bold">
-    Login
-  </Link>
-</div>
+        <div className="text-center">
+          <Link
+            href="/login"
+            className="block text-sm font-semibold text-red-600 transition hover:text-red-700"
+          >
+            Back to Login
+          </Link>
+        </div>
 
-    <ToastContainer />
-
-    </form>
-  
-);}
+        <ToastContainer />
+      </form>
+    </div>
+  );
+}
 export default ForgotPassword;
