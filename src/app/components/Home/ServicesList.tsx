@@ -92,7 +92,7 @@ export default function Carousel() {
     autoPlay muted loop playsInline
   /> */}
 
-  <div className="relative z-10 flex flex-col items-center justify-center px-4 py-16">
+  <div className="relative z-10 sm:mt-20 -mt-2 flex flex-col items-center justify-center px-4 py-16">
     <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-5 text-center">
       Explore Our Services
     </h2>
