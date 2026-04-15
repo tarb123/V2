@@ -1,22 +1,13 @@
+// this is file now give me complete code
 'use client';
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import QuestionBlock from '../PP/QuestionBlock';
 import type { Answer, QuestionData } from '../PP/QuestionBlock';
 import ResultsPage from '../PP/ResultsPage';
-import {
-  skillList,
-  traitList,
-  skillCategoryMapping,
-  broadSkillCategories,
-  TraitCategory,
-} from '../quizData';
+import { skillList, traitList, skillCategoryMapping, broadSkillCategories, TraitCategory} from '../quizData';
 import CustomAlert from '../components/CustomAlert';
-import {
-  AllCareerProfiles,
-  CareerAnalyticsProfile,
-  selectTopMatchesWithFieldCap,
-} from '../careerAnalytics';
+import { AllCareerProfiles, CareerAnalyticsProfile, selectTopMatchesWithFieldCap } from "../careerAnalytics";
 
 type SelectedAnswers = Record<string, string | number>;
 
@@ -24,108 +15,176 @@ interface Candidate {
   name: string;
   email: string;
   age: string;
+  history?: {
+    oldName: string;
+    oldEmail: string;
+    oldAge: string;
+    changedAt: string;
+  }[];
 }
 
 interface CheckData {
   exists: boolean;
   candidate: Candidate;
 }
-
+ 
 function App() {
   const [questions, setQuestions] = useState<QuestionData[]>([]);
   const [quizState, setQuizState] = useState<'quiz' | 'results'>('quiz');
-
-  const [finalScores, setFinalScores] = useState<Record<string, number> | null>(null);
-  const [traitScores, setTraitScores] = useState<Record<string, number> | null>(null);
+ 
+  const [finalScores, setFinalScores] = useState<{ [key: string]: number } | null>(null);
+  const [traitScores, setTraitScores] = useState<{ [key: string]: number } | null>(null);
   const [careerMatches, setCareerMatches] = useState<{ name: string; score: number }[] | null>(null);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<SelectedAnswers>({});
   const [checkData, setCheckData] = useState<CheckData | null>(null);
-  const [showSlider, setShowSlider] = useState<boolean>(false);
+  const [showSlider, setShowSlider] = useState(false);
 
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
-  // ---------------- FETCH QUESTIONS ----------------
+
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
         const res = await fetch('/api/questions');
         const data = await res.json();
         if (data.success) setQuestions(data.questions);
+        else console.error('❌ Failed to load questions:', data.message);
       } catch (err) {
-        console.error(err);
+        console.error('❌ Error fetching questions from backend:', err);
       }
     };
     fetchQuestions();
   }, []);
 
-  // ---------------- ANSWER CHANGE ----------------
   const handleAnswerChange = useCallback(
-    (questionId: string, value: string | number) => {
-      setSelectedAnswers((prev) => ({ ...prev, [questionId]: value }));
+    (questionId: string, selectedValue: string | number) => {
+      setSelectedAnswers((prevAnswers) => ({
+        ...prevAnswers,
+        [questionId]: selectedValue,
+      }));
 
-      const q = questions[currentIndex];
-      if (q && q.type !== 'text' && currentIndex < questions.length - 1) {
-        setCurrentIndex((p) => p + 1);
+      const currentQ = questions[currentIndex];
+      if (currentQ && currentQ.type !== 'text') {
+        if (currentIndex < questions.length - 1) {
+          setCurrentIndex((prev) => prev + 1);
+        }
       }
     },
     [currentIndex, questions]
   );
 
-  const goToNext = () => setCurrentIndex((p) => Math.min(p + 1, questions.length - 1));
-  const goToPrevious = () => setCurrentIndex((p) => Math.max(p - 1, 0));
-
-  // ---------------- HELPERS ----------------
-  const getFormatWeight = (type: string) => {
-    if (type === 'forced') return 1.2;
-    if (type === 'sjt') return 1.4;
-    return 1;
+  const goToNext = () => {
+    if (currentIndex < questions.length - 1) setCurrentIndex((prev) => prev + 1);
   };
 
-  const findSelectedAnswer = (q: QuestionData, value: any) => {
-    return q.answers?.find((a) => a.id === value || a.optionKey === value);
+  const goToPrevious = () => {
+    setCurrentIndex((prev) => Math.max(prev - 1, 0));
+  };
+
+  // ---------------- HELPERS ----------------
+  const getFormatWeight = (questionType: 'likert' | 'forced' | 'sjt' | 'text' | 'select') => {
+    
+    switch (questionType) {
+      case 'likert':
+        return 1.0;
+      case 'forced':
+        return 1.2;
+      case 'sjt':
+        return 1.4;
+      default:
+        return 1.0;
+    }
+  };
+
+  const findSelectedAnswer = (q: QuestionData, selectedValue: string | number) => {
+    if (!q.answers) return undefined;
+
+    const byId = q.answers.find((ans) => ans.id === selectedValue);
+    if (byId) return byId;
+
+    const byOptionKey = q.answers.find((ans) => ans.optionKey === selectedValue);
+    if (byOptionKey) return byOptionKey;
+
+    return undefined;
   };
 
   // ---------------- PROGRESS ----------------
   const answeredCount = useMemo(() => {
-    return questions.filter((q) => selectedAnswers[q.id]).length;
+    return questions.reduce((count, q) => {
+      const v = selectedAnswers[q.id];
+      const hasAnswer = v !== undefined && v !== null && v !== '';
+      return hasAnswer ? count + 1 : count;
+    }, 0);
   }, [questions, selectedAnswers]);
 
   const progressPct = questions.length
     ? Math.round((answeredCount / questions.length) * 100)
     : 0;
-
-  const unanswered = questions.filter((q) => !selectedAnswers[q.id]);
+  // const unanswered = questions.filter((q) => !selectedAnswers[q.id]);
 
   // ---------------- SUBMIT ----------------
   const handleSubmit = async () => {
-    if (unanswered.length) {
-      toast.error('Answer all questions');
+    if (unansweredQuestionIds.length > 0) {
+      toast.error('Please answer all questions before submitting.');
       return;
     }
 
     const email = String(selectedAnswers['INFO-EMAIL'] || '');
 
-    const res = await fetch(`/api/candidates?email=${email}`);
-    const data = await res.json();
+    try {
+      const checkRes = await fetch(`/api/candidates?email=${email}`);
+      const data = await checkRes.json();
 
-    if (data.exists) {
-      setCheckData(data);
-      setShowAlert(true);
-      return;
+      if (data.exists && data.candidate) {
+        setCheckData(data);
+        setAlertMessage('Do you want to continue with previous details?');
+        setShowAlert(true);
+        return;
+      }
+
+      await saveResponses();
+      generateReport();
+    } 
+    catch (error: unknown) {
+      console.error('❌ Error in handleSubmit:', error);
+      toast.error('Something went wrong. Please try again.');
     }
-
-    await saveResponses();
-    generateReport();
   };
 
   // ---------------- SAVE ----------------
   const saveResponses = async () => {
+    
+    const likertResponses = questions
+      .filter((q) => q.type === 'likert')
+      .map((q) => ({
+        questionId: q.id,
+        responseText: q.options?.find((opt) => opt.value === selectedAnswers[q.id])?.label || 'No response',
+        responseValue: typeof selectedAnswers[q.id] === 'number' ? selectedAnswers[q.id] : null,
+      }));
+
+    const forcedResponses = questions
+      .filter((q) => q.type === 'forced')
+      .map((q) => ({
+        questionId: q.id,
+        optionKey: findSelectedAnswer(q, selectedAnswers[q.id])?.optionKey || 'No response',
+      }));
+
+    const sjtResponses = questions
+      .filter((q) => q.type === 'sjt')
+      .map((q) => ({
+        questionId: q.id,
+        optionKey: findSelectedAnswer(q, selectedAnswers[q.id])?.optionKey || 'No response',
+      }));
+
     const payload = {
       name: selectedAnswers['INFO-NAME'] || '',
       email: selectedAnswers['INFO-EMAIL'] || '',
       age: selectedAnswers['INFO-AGE'] || '',
+      likertResponses,
+      forcedResponses,
+      sjtResponses,
     };
 
     const res = await fetch('/api/saveResponses', {
@@ -134,12 +193,122 @@ function App() {
       body: JSON.stringify(payload),
     });
 
-    if (!res.ok) throw new Error('Save failed');
-    toast.success('Saved!');
+    if (!res.ok) throw new Error(await res.text());
+
+    toast.success('✅ Responses saved successfully!');
   };
 
   // ---------------- REPORT ----------------
-  const generateReport = () => {
+  // const generateReport = () => {
+    
+  //   const skillScoresAcc = skillList.reduce((acc, skill) => {
+  //     acc[skill] = 0;
+  //     return acc;
+  //   }, {} as { [key: string]: number });
+
+  //   const traitScoreAcc = traitList.reduce((acc, trait) => {
+  //     acc[trait] = { weightedScoreSum: 0, weightSum: 0 };
+  //     return acc;
+  //   }, {} as { [key: string]: { weightedScoreSum: number; weightSum: number } });
+
+  //   questions.forEach((question) => {
+  //     const selectedValue = selectedAnswers[question.id];
+  //     let selectedAnswerData = null;
+
+  //     if (!selectedValue) return;
+
+  //     if (question.type === 'likert' && question.answers) {
+  //       selectedAnswerData = question.answers.find((ans) => 'value' in ans && (ans).value === selectedValue);
+  //     } else if (question.answers) {
+  //       selectedAnswerData = findSelectedAnswer(question, selectedValue);
+  //     }
+
+  //     if (selectedAnswerData) {
+  //       const formatWeight = getFormatWeight(question.type);
+  //       const traitWeight = question.traitWeight || 1.0;
+  //       const sectionWeight = question.sectionWeight || 1.0;
+  //       const fullQuestionWeight = formatWeight * traitWeight * sectionWeight;
+
+  //       if (selectedAnswerData.scores) {
+  //         const scores = selectedAnswerData.scores as unknown as Record<string, number>;
+  //         for (const skill in scores) {
+  //           if (skillScoresAcc.hasOwnProperty(skill)) {
+  //             const baseSkillScore = Number(scores[skill]);
+  //             if (!isNaN(baseSkillScore)) skillScoresAcc[skill] += baseSkillScore * fullQuestionWeight;
+  //           }
+  //         }
+  //       }
+
+  //       const primaryTrait = selectedAnswerData.primaryTraitOverride || question.primaryTrait;
+  //       const baseScoreForTrait = selectedAnswerData.baseScoreValue;
+
+  //       if (primaryTrait && traitScoreAcc.hasOwnProperty(primaryTrait) && baseScoreForTrait !== undefined) {
+  //         const baseScoreNum = Number(baseScoreForTrait);
+  //         if (!isNaN(baseScoreNum)) {
+  //           traitScoreAcc[primaryTrait].weightedScoreSum += baseScoreNum * fullQuestionWeight;
+  //           traitScoreAcc[primaryTrait].weightSum += fullQuestionWeight;
+  //         }
+  //       }
+  //     }
+  //   });
+
+  //   const finalSkillScores: { [key: string]: number } = {};
+  //   const normalizedSkillScores: { [key: string]: number } = {};
+
+  //   for (const skill in skillScoresAcc) {
+  //     const rawScore = parseFloat(skillScoresAcc[skill].toFixed(3));
+  //     finalSkillScores[skill] = rawScore;
+
+  //     normalizedSkillScores[skill] =
+  //       maxSkillScores[skill] > 0 ? Math.max(0, Math.min(100, (rawScore / maxSkillScores[skill]) * 100)) : 0;
+  //   }
+
+  //   setFinalScores(finalSkillScores);
+
+  //   const finalTraitScores: { [key: string]: number } = {};
+  //   const normalizedTraitScores: { [key: string]: number } = {};
+
+  //   for (const trait in traitScoreAcc) {
+  //     let avgScore = 0;
+  //     if (traitScoreAcc[trait].weightSum > 0) {
+  //       avgScore = traitScoreAcc[trait].weightedScoreSum / traitScoreAcc[trait].weightSum;
+  //     }
+  //     finalTraitScores[trait] = parseFloat(avgScore.toFixed(3));
+  //     normalizedTraitScores[trait] = Math.max(0, Math.min(100, ((avgScore - 1) / 4) * 100));
+  //   }
+
+  //   setTraitScores(finalTraitScores);
+
+  //   const normalizedCategoryScores: Record<string, number> = {};
+
+  //   broadSkillCategories.forEach((categoryKey: TraitCategory) => {
+  //     const skillsInCategory = skillCategoryMapping[categoryKey];
+  //     let categoryScoreSum = 0;
+  //     let count = 0;
+
+  //     if (skillsInCategory) {
+  //       skillsInCategory.forEach((skillKey: string) => {
+  //         if (normalizedSkillScores[skillKey] !== undefined) {
+  //           categoryScoreSum += normalizedSkillScores[skillKey];
+  //           count++;
+  //         }
+  //       });
+  //     }
+
+  //     normalizedCategoryScores[categoryKey] = count > 0 ? parseFloat((categoryScoreSum / count).toFixed(1)) : 0;
+  //   });
+
+  //   normalizedCategoryScores['LogicalMathematical'] = normalizedTraitScores['LogicalMathematical'];
+  //   normalizedCategoryScores['Spatial'] = normalizedTraitScores['Spatial'];
+
+  //   const matches = calculateCareerMatches(normalizedTraitScores, normalizedCategoryScores);
+
+  //   setCareerMatches(matches);
+
+  //   setQuizState('results');
+  //   window.scrollTo(0, 0);
+  // };
+    const generateReport = () => {
     const skillScores: Record<string, number> = {};
     skillList.forEach((s) => (skillScores[s] = 0));
 
@@ -169,16 +338,18 @@ function App() {
     setQuizState('results');
   };
 
-const isAnswered = (questionId: string) => {
-  const v = selectedAnswers[questionId];
-  return v !== undefined && v !== null && v !== '';
-};
+  const isAnswered = (questionId: string) => {
+    const v = selectedAnswers[questionId];
+    return v !== undefined && v !== null && v !== '';
+  };
 
-const totalCount = questions.length;
+  const totalCount = questions.length;
 
-const unansweredQuestionIds = useMemo(() => {
-  return questions.filter(q => !isAnswered(q.id)).map(q => q.id);
-}, [questions, selectedAnswers]);
+  const unansweredQuestionIds = useMemo(() => {
+    return questions
+      .filter((q) => selectedAnswers[q.id] === undefined || selectedAnswers[q.id] === null || selectedAnswers[q.id] === '')
+      .map((q) => q.id);
+  }, [questions, selectedAnswers]);  
 
   const handleRestart = () => {
     setSelectedAnswers({});
@@ -187,9 +358,105 @@ const unansweredQuestionIds = useMemo(() => {
     setCareerMatches(null);
     setQuizState('quiz');
     setCurrentIndex(0);
+    window.scrollTo(0, 0);
   };
 
   const currentQuestion = questions[currentIndex];
+
+
+//////////////
+//   const calculateMaxSkillScore = useCallback(
+//     (skillToCalc: string) => {
+//       let maxScore = 0;
+
+//       questions.forEach((question) => {
+//         const formatWeight = getFormatWeight(question.type);
+//         const traitWeight = question.traitWeight || 1.0;
+//         const sectionWeight = question.sectionWeight || 1.0;
+//         const fullQuestionWeight = formatWeight * traitWeight * sectionWeight;
+
+//         let maxBaseForQuestion = 0;
+
+//         question.answers?.forEach((answer: Answer) => {
+//           const scores = answer.scores as unknown as Record<string, number> | undefined;
+
+//           if (scores && scores[skillToCalc] !== undefined) {
+//             const baseScore = Number(scores[skillToCalc]);
+//             if (!isNaN(baseScore) && baseScore > maxBaseForQuestion) maxBaseForQuestion = baseScore;
+//           }
+//         });
+
+//         maxScore += maxBaseForQuestion * fullQuestionWeight;
+//       });
+
+//       return maxScore > 0 ? maxScore : 1;
+//     },
+//     [questions]
+//   );
+//   const maxSkillScores = useMemo(() => {
+//     const maxScores: Record<string, number> = {};
+//     skillList.forEach((skill) => {
+//       maxScores[skill] = calculateMaxSkillScore(skill);
+//     });
+//     return maxScores;
+//   }, [calculateMaxSkillScore]);
+// type ScoreRecord = Record<string, number>;
+// const calculateCareerMatches = (normTraitScores: ScoreRecord, normCategoryScores: ScoreRecord) => {
+//   const results = AllCareerProfiles.map((career: CareerAnalyticsProfile) => {
+//     const traits = career.traits as Record<string, number>;
+//     let traitScoreSum = 0;
+//     let traitWeightSum = 0;
+
+//     for (const traitName in traits) {
+//       const traitKey = traitName === "Openness to Experience" ? "Openness" : traitName;
+//       const candidateScore = normTraitScores[traitKey];
+//       const weight = traits[traitName];
+
+//       if (candidateScore !== undefined && weight !== undefined) {
+//         traitScoreSum += candidateScore * weight;
+//         traitWeightSum += weight;
+//       }
+//     }
+
+
+//     const traitMatch = traitWeightSum > 0 ? traitScoreSum / traitWeightSum : 0;
+
+//     let skillScoreSum = 0;
+//     let skillWeightSum = 0;
+
+//     for (const skillCatName in career.skills) {
+//       let categoryKey = skillCatName;
+//       if (skillCatName === "Analytical & Problem-Solving") categoryKey = "AnalyticalProblemSolving";
+//       if (skillCatName === "Communication & Influence") categoryKey = "CommunicationInfluence";
+//       if (skillCatName === "Self-Management") categoryKey = "SelfManagement";
+//       if (skillCatName === "Interpersonal & Team") categoryKey = "InterpersonalTeam";
+//       if (skillCatName === "Leadership & Initiative") categoryKey = "LeadershipInitiative";
+//       if (skillCatName === "Learning & Development") categoryKey = "LearningDevelopment";
+//       if (skillCatName === "Ethical Professional") categoryKey = "EthicalProfessional";
+//       if (skillCatName === "Logical-Mathematical Intelligence") categoryKey = "LogicalMathematical";
+//       if (skillCatName === "Spatial Intelligence") categoryKey = "Spatial";
+
+//       const candidateScore = normCategoryScores[categoryKey];
+//       const weight = (career.skills as any)[categoryKey];
+
+//       if (candidateScore !== undefined && weight !== undefined) {
+//         skillScoreSum += candidateScore * weight;
+//         skillWeightSum += weight;
+//       }
+//     }
+
+//     const skillMatch = skillWeightSum > 0 ? skillScoreSum / skillWeightSum : 0;
+
+//     const overallMatch = traitMatch * 0.4 + skillMatch * 0.6;
+
+//     return { name: career.name, score: parseFloat(overallMatch.toFixed(1)) };
+//   });
+
+//   results.sort((a, b) => b.score - a.score);
+//   // ✅ Enforce: Top 6, max 2 from same field
+//   return selectTopMatchesWithFieldCap(results, 6, 2);
+// };
+////////////
 
   return (
     <>
@@ -228,7 +495,7 @@ const unansweredQuestionIds = useMemo(() => {
                       <h3 className="text-sm 2xl:text-base font-semibold">Question Map</h3>
                        <button
                         type="button"
-                        onClick={() => setShowSlider((prev: boolean) => !prev)}
+                        onClick={() => setShowSlider((prev) => !prev)}
                         className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-whitesmoke px-3 py-2 text-xs 2xl:text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-600"
                       >
                         {showSlider ? 'Hide' : 'Show'} questions <span aria-hidden="true">{showSlider ? '🙉' : '🙈'}</span>
@@ -298,8 +565,8 @@ const unansweredQuestionIds = useMemo(() => {
                     <p className="mt-1 text-sm 2xl:text-base text-slate-600">Answer honestly—there are no right or wrong choices.</p>
                     <p className="mt-1 text-sm 2xl:text-base font-semibold">Private & secure</p>
                     <p className="mt-1 text-sm 2xl:text-base text-slate-600">Your answers are used only to generate your report.</p>
-                  </div>
 
+                   </div>
                 </div>
               </aside>
 
