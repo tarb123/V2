@@ -199,144 +199,367 @@ function App() {
   };
 
   // ---------------- REPORT ----------------
-  // const generateReport = () => {
+  const generateReport = () => {
     
-  //   const skillScoresAcc = skillList.reduce((acc, skill) => {
-  //     acc[skill] = 0;
-  //     return acc;
-  //   }, {} as { [key: string]: number });
+    const skillScoresAcc = skillList.reduce((acc, skill) => {
+      acc[skill] = 0;
+      return acc;
+    }, {} as { [key: string]: number });
 
-  //   const traitScoreAcc = traitList.reduce((acc, trait) => {
-  //     acc[trait] = { weightedScoreSum: 0, weightSum: 0 };
-  //     return acc;
-  //   }, {} as { [key: string]: { weightedScoreSum: number; weightSum: number } });
+    const traitScoreAcc = traitList.reduce((acc, trait) => {
+      acc[trait] = { weightedScoreSum: 0, weightSum: 0 };
+      return acc;
+    }, {} as { [key: string]: { weightedScoreSum: number; weightSum: number } });
 
-  //   questions.forEach((question) => {
-  //     const selectedValue = selectedAnswers[question.id];
-  //     let selectedAnswerData = null;
+  // ---------- LOOP ----------
 
-  //     if (!selectedValue) return;
+    questions.forEach((question) => {
+      const selectedValue = selectedAnswers[question.id]
+      if (!selectedValue) return;
 
-  //     if (question.type === 'likert' && question.answers) {
-  //       selectedAnswerData = question.answers.find((ans) => 'value' in ans && (ans).value === selectedValue);
-  //     } else if (question.answers) {
-  //       selectedAnswerData = findSelectedAnswer(question, selectedValue);
-  //     }
+      // let selectedAnswerData = null;
+      let selectedAnswerData: Answer | undefined; //chapgt part 1 -> QuestionBlock.tsx
 
-  //     if (selectedAnswerData) {
-  //       const formatWeight = getFormatWeight(question.type);
-  //       const traitWeight = question.traitWeight || 1.0;
-  //       const sectionWeight = question.sectionWeight || 1.0;
-  //       const fullQuestionWeight = formatWeight * traitWeight * sectionWeight;
+      // if (question.type === 'likert' && question.answers) {
+      //   selectedAnswerData = question.answers.find(
+      //     (ans) => 'value' in ans && (ans).value === selectedValue
+      //   );
+      // } else if (question.answers) {
+      //   selectedAnswerData = findSelectedAnswer(question, selectedValue);
+      // } 
 
-  //       if (selectedAnswerData.scores) {
-  //         const scores = selectedAnswerData.scores as unknown as Record<string, number>;
-  //         for (const skill in scores) {
-  //           if (skillScoresAcc.hasOwnProperty(skill)) {
-  //             const baseSkillScore = Number(scores[skill]);
-  //             if (!isNaN(baseSkillScore)) skillScoresAcc[skill] += baseSkillScore * fullQuestionWeight;
-  //           }
-  //         }
-  //       }
+      if (question.type === 'likert') { // chagpt part 2
+      selectedAnswerData = question.answers?.find(
+        (ans) => 'value' in ans && ans.value === selectedValue
+      );
+    } else {
+      selectedAnswerData = findSelectedAnswer(question, selectedValue);
+    }
 
-  //       const primaryTrait = selectedAnswerData.primaryTraitOverride || question.primaryTrait;
-  //       const baseScoreForTrait = selectedAnswerData.baseScoreValue;
+    // if (selectedAnswerData)
+    if (!selectedAnswerData) return; //chat gpt part 3
 
-  //       if (primaryTrait && traitScoreAcc.hasOwnProperty(primaryTrait) && baseScoreForTrait !== undefined) {
-  //         const baseScoreNum = Number(baseScoreForTrait);
-  //         if (!isNaN(baseScoreNum)) {
-  //           traitScoreAcc[primaryTrait].weightedScoreSum += baseScoreNum * fullQuestionWeight;
-  //           traitScoreAcc[primaryTrait].weightSum += fullQuestionWeight;
-  //         }
-  //       }
-  //     }
-  //   });
+      {
+      // const formatWeight = getFormatWeight(question.type); // chat gpt part 4
+      // const traitWeight = question.traitWeight || 1.0;
+      // const sectionWeight = question.sectionWeight || 1.0;
+      // const fullQuestionWeight = formatWeight * traitWeight * sectionWeight;
 
-  //   const finalSkillScores: { [key: string]: number } = {};
-  //   const normalizedSkillScores: { [key: string]: number } = {};
+      const fullWeight =
+      getFormatWeight(question.type) *
+      (question.traitWeight || 1) *
+      (question.sectionWeight || 1);
 
-  //   for (const skill in skillScoresAcc) {
-  //     const rawScore = parseFloat(skillScoresAcc[skill].toFixed(3));
-  //     finalSkillScores[skill] = rawScore;
+  // ---------- SKILLS ----------
+        // if (selectedAnswerData.scores) {
+        //   const scores = selectedAnswerData.scores as unknown as Record<string, number>;
+        //   for (const skill in scores) {
+        //     if (skillScoresAcc.hasOwnProperty(skill)) {
+        //       const baseSkillScore = Number(scores[skill]);
+        //       if (!isNaN(baseSkillScore)) skillScoresAcc[skill] += baseSkillScore * fullQuestionWeight;
+        //     }
+        //   }
+        // }
 
-  //     normalizedSkillScores[skill] =
-  //       maxSkillScores[skill] > 0 ? Math.max(0, Math.min(100, (rawScore / maxSkillScores[skill]) * 100)) : 0;
-  //   }
-
-  //   setFinalScores(finalSkillScores);
-
-  //   const finalTraitScores: { [key: string]: number } = {};
-  //   const normalizedTraitScores: { [key: string]: number } = {};
-
-  //   for (const trait in traitScoreAcc) {
-  //     let avgScore = 0;
-  //     if (traitScoreAcc[trait].weightSum > 0) {
-  //       avgScore = traitScoreAcc[trait].weightedScoreSum / traitScoreAcc[trait].weightSum;
-  //     }
-  //     finalTraitScores[trait] = parseFloat(avgScore.toFixed(3));
-  //     normalizedTraitScores[trait] = Math.max(0, Math.min(100, ((avgScore - 1) / 4) * 100));
-  //   }
-
-  //   setTraitScores(finalTraitScores);
-
-  //   const normalizedCategoryScores: Record<string, number> = {};
-
-  //   broadSkillCategories.forEach((categoryKey: TraitCategory) => {
-  //     const skillsInCategory = skillCategoryMapping[categoryKey];
-  //     let categoryScoreSum = 0;
-  //     let count = 0;
-
-  //     if (skillsInCategory) {
-  //       skillsInCategory.forEach((skillKey: string) => {
-  //         if (normalizedSkillScores[skillKey] !== undefined) {
-  //           categoryScoreSum += normalizedSkillScores[skillKey];
-  //           count++;
-  //         }
-  //       });
-  //     }
-
-  //     normalizedCategoryScores[categoryKey] = count > 0 ? parseFloat((categoryScoreSum / count).toFixed(1)) : 0;
-  //   });
-
-  //   normalizedCategoryScores['LogicalMathematical'] = normalizedTraitScores['LogicalMathematical'];
-  //   normalizedCategoryScores['Spatial'] = normalizedTraitScores['Spatial'];
-
-  //   const matches = calculateCareerMatches(normalizedTraitScores, normalizedCategoryScores);
-
-  //   setCareerMatches(matches);
-
-  //   setQuizState('results');
-  //   window.scrollTo(0, 0);
-  // };
-    const generateReport = () => {
-    const skillScores: Record<string, number> = {};
-    skillList.forEach((s) => (skillScores[s] = 0));
-
-    questions.forEach((q) => {
-      const ans = findSelectedAnswer(q, selectedAnswers[q.id]);
-      if (!ans?.scores) return;
-
-      const weight =
-        getFormatWeight(q.type) *
-        (q.traitWeight || 1) *
-        (q.sectionWeight || 1);
-
-      Object.entries(ans.scores).forEach(([k, v]) => {
-        skillScores[k] += Number(v) * weight;
+    if (selectedAnswerData.scores) { // chat gpt part 5
+      Object.entries(selectedAnswerData.scores).forEach(([skill, value]) => {
+        if (skillScoresAcc.hasOwnProperty(skill)) {
+          const v = Number(value);
+          if (!isNaN(v)) {
+            skillScoresAcc[skill] += v * fullWeight;
+          }
+        }
       });
+    }
+
+  // ---------- TRAITS ----------
+  const primaryTrait = 
+    selectedAnswerData.primaryTraitOverride || question.primaryTrait;
+  
+  const baseScoreForTrait = selectedAnswerData.baseScoreValue;
+
+  if (
+    primaryTrait && 
+    traitScoreAcc.hasOwnProperty(primaryTrait) && 
+    baseScoreForTrait !== undefined
+  ) {
+    const baseScoreNum = Number(baseScoreForTrait);
+    if (!isNaN(baseScoreNum)) {
+      // traitScoreAcc[primaryTrait].weightedScoreSum += baseScoreNum * fullQuestionWeight;  
+      // traitScoreAcc[primaryTrait].weightSum += fullQuestionWeight;
+    traitScoreAcc[primaryTrait].weightedScoreSum += baseScoreNum * fullWeight; // chat gpt part 6
+    traitScoreAcc[primaryTrait].weightSum += fullWeight;
+      }
+    }
+      }
     });
 
-    setFinalScores(skillScores);
+  // ---------- FINAL SKILLS ----------
+    const finalSkillScores: { [key: string]: number } = {};
+    const normalizedSkillScores: { [key: string]: number } = {};
 
-    const matches = AllCareerProfiles.map((c: CareerAnalyticsProfile) => ({
-      name: c.name,
-      score: Math.random() * 100,
-    }));
+    for (const skill in skillScoresAcc) {
+      const rawScore = parseFloat(skillScoresAcc[skill].toFixed(3));
+      finalSkillScores[skill] = rawScore;
 
-    setCareerMatches(selectTopMatchesWithFieldCap(matches, 6, 2));
+      // normalizedSkillScores[skill] =
+      //   maxSkillScores[skill] > 0 
+      //   ? Math.max(0, Math.min(100, (rawScore / maxSkillScores[skill]) * 100)) : 0;
 
+      normalizedSkillScores[skill] = // chat gpt part 7
+      maxSkillScores[skill] > 0
+        ? Math.min(100, (rawScore / maxSkillScores[skill]) * 100)
+        : 0;
+    }
+
+    setFinalScores(finalSkillScores);
+
+  // ---------- FINAL TRAITS ----------
+    const finalTraitScores: { [key: string]: number } = {};
+    const normalizedTraitScores: { [key: string]: number } = {};
+
+    // for (const trait in traitScoreAcc) {
+    //   let avgScore = 0;
+    //   if (traitScoreAcc[trait].weightSum > 0) {
+    //     avgScore = traitScoreAcc[trait].weightedScoreSum / traitScoreAcc[trait].weightSum;
+    //   }
+    //   finalTraitScores[trait] = parseFloat(avgScore.toFixed(3));
+    //   normalizedTraitScores[trait] = Math.max(0, Math.min(100, ((avgScore - 1) / 4) * 100));
+    // }
+
+  for (const trait in traitScoreAcc) { // chat pgt part 8
+    const { weightedScoreSum, weightSum } = traitScoreAcc[trait];
+
+    const avg = weightSum > 0 ? weightedScoreSum / weightSum : 0;
+
+    finalTraitScores[trait] = parseFloat(avg.toFixed(3));
+    const boosted = Math.pow((avg - 1) / 4, 1.5); // amplify difference
+    normalizedTraitScores[trait] = Math.min(100, Math.max(0, boosted * 100));  
+  }
+    setTraitScores(finalTraitScores);
+
+  // ---------- CATEGORY SCORES ----------
+    const normalizedCategoryScores: Record<string, number> = {};
+
+    // broadSkillCategories.forEach((categoryKey: TraitCategory) => {
+    //   const skillsInCategory = skillCategoryMapping[categoryKey];
+    //   let categoryScoreSum = 0;
+    //   let count = 0;
+
+    //   if (skillsInCategory) {
+    //     skillsInCategory.forEach((skillKey: string) => {
+    //       if (normalizedSkillScores[skillKey] !== undefined) {
+    //         categoryScoreSum += normalizedSkillScores[skillKey];
+    //         count++;
+    //       }
+    //     });
+    //   }
+
+    //   normalizedCategoryScores[categoryKey] = count > 0 ? parseFloat((categoryScoreSum / count).toFixed(1)) : 0;
+    // });
+
+  broadSkillCategories.forEach((category) => { // chat gpt part 9
+  const skills = skillCategoryMapping[category];
+
+  if (!skills || skills.length === 0) {
+    normalizedCategoryScores[category] = 0;
+    return;
+  }
+
+  const scores: number[] = [];
+
+  skills.forEach((skill) => {
+    if (normalizedSkillScores[skill] !== undefined) {
+      scores.push(normalizedSkillScores[skill]);
+    }
+  });
+
+  if (scores.length === 0) {
+    normalizedCategoryScores[category] = 0;
+    return;
+  }
+
+  // ✅ NEW LOGIC (paste here)
+  const max = Math.max(...scores);
+  const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
+
+  const categoryScore = max * 0.6 + avg * 0.4;
+
+  normalizedCategoryScores[category] = parseFloat(categoryScore.toFixed(1));
+});   
+
+  // overwrite with trait-driven intelligence
+  normalizedCategoryScores['LogicalMathematical'] = 
+    normalizedTraitScores['LogicalMathematical'];
+  
+  normalizedCategoryScores['Spatial'] = 
+    normalizedTraitScores['Spatial'];
+
+  // ---------- CAREER MATCH ----------
+    const matches = calculateCareerMatches(
+  normalizedTraitScores, 
+  normalizedCategoryScores
+  );
+
+  setCareerMatches(matches);
+
+  // ---------- SHOW RESULT ----------
     setQuizState('results');
+    window.scrollTo(0, 0);
   };
+
+
+  //chatgpt
+  // const generateReport = () => {
+
+  // ---------- SKILL + TRAIT ACCUMULATION ----------
+  // const skillScoresAcc = skillList.reduce((acc, skill) => {
+  //   acc[skill] = 0;
+  //   return acc;
+  // }, {} as Record<string, number>);
+
+  // const traitScoreAcc = traitList.reduce((acc, trait) => {
+  //   acc[trait] = { weightedScoreSum: 0, weightSum: 0 };
+  //   return acc;
+  // }, {} as Record<string, { weightedScoreSum: number; weightSum: number }>);
+
+  // ---------- LOOP ----------
+  // questions.forEach((question) => {
+  //   const selectedValue = selectedAnswers[question.id];
+  //   if (!selectedValue) return;
+
+    // let selectedAnswerData: Answer | undefined;
+
+    // if (question.type === 'likert') {
+    //   selectedAnswerData = question.answers?.find(
+    //     (ans) => 'value' in ans && ans.value === selectedValue
+    //   );
+    // } else {
+    //   selectedAnswerData = findSelectedAnswer(question, selectedValue);
+    // }
+
+    // if (!selectedAnswerData) return;
+
+    // const fullWeight =
+    //   getFormatWeight(question.type) *
+    //   (question.traitWeight || 1) *
+    //   (question.sectionWeight || 1);
+
+    // ---------- SKILLS ----------
+    // if (selectedAnswerData.scores) {
+    //   Object.entries(selectedAnswerData.scores).forEach(([skill, value]) => {
+    //     if (skillScoresAcc.hasOwnProperty(skill)) {
+    //       const v = Number(value);
+    //       if (!isNaN(v)) {
+    //         skillScoresAcc[skill] += v * fullWeight;
+    //       }
+    //     }
+    //   });
+    // }
+
+    // ---------- TRAITS ----------
+    // const primaryTrait =
+    //   selectedAnswerData.primaryTraitOverride || question.primaryTrait;
+
+    // const baseScore = selectedAnswerData.baseScoreValue;
+
+  //   if (
+  //     primaryTrait &&
+  //     traitScoreAcc[primaryTrait] &&
+  //     baseScore !== undefined
+  //   ) {
+  //     const v = Number(baseScore);
+  //     if (!isNaN(v)) {
+  //       traitScoreAcc[primaryTrait].weightedScoreSum += v * fullWeight;
+  //       traitScoreAcc[primaryTrait].weightSum += fullWeight;
+  //     }
+  //   }
+  // });
+
+  // ---------- FINAL SKILLS ----------
+  // const finalSkillScores: Record<string, number> = {};
+  // const normalizedSkillScores: Record<string, number> = {};
+
+  // for (const skill in skillScoresAcc) {
+  //   const raw = parseFloat(skillScoresAcc[skill].toFixed(3));
+  //   finalSkillScores[skill] = raw;
+
+    // normalizedSkillScores[skill] =
+    //   maxSkillScores[skill] > 0
+    //     ? Math.min(100, (raw / maxSkillScores[skill]) * 100)
+    //     : 0;
+  // }
+
+  // setFinalScores(finalSkillScores);
+
+  // ---------- FINAL TRAITS ----------
+  // const finalTraitScores: Record<string, number> = {};
+  // const normalizedTraitScores: Record<string, number> = {};
+
+  // for (const trait in traitScoreAcc) {
+  //   const { weightedScoreSum, weightSum } = traitScoreAcc[trait];
+
+  //   const avg = weightSum > 0 ? weightedScoreSum / weightSum : 0;
+
+  //   finalTraitScores[trait] = parseFloat(avg.toFixed(3));
+  //   const boosted = Math.pow((avg - 1) / 4, 1.5); // amplify difference
+  //   normalizedTraitScores[trait] = Math.min(100, Math.max(0, boosted * 100));  
+  // }
+
+  // setTraitScores(finalTraitScores);
+
+  // ---------- CATEGORY SCORES ----------
+  // const normalizedCategoryScores: Record<string, number> = {};
+
+// broadSkillCategories.forEach((category) => {
+//   const skills = skillCategoryMapping[category];
+
+//   if (!skills || skills.length === 0) {
+//     normalizedCategoryScores[category] = 0;
+//     return;
+//   }
+
+//   const scores: number[] = [];
+
+//   skills.forEach((skill) => {
+//     if (normalizedSkillScores[skill] !== undefined) {
+//       scores.push(normalizedSkillScores[skill]);
+//     }
+//   });
+
+//   if (scores.length === 0) {
+//     normalizedCategoryScores[category] = 0;
+//     return;
+//   }
+
+//   // ✅ NEW LOGIC (paste here)
+//   const max = Math.max(...scores);
+//   const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
+
+//   const categoryScore = max * 0.6 + avg * 0.4;
+
+//   normalizedCategoryScores[category] = parseFloat(categoryScore.toFixed(1));
+// });
+
+  // overwrite with trait-driven intelligence
+  // normalizedCategoryScores['LogicalMathematical'] =
+  //   normalizedTraitScores['LogicalMathematical'];
+
+  // normalizedCategoryScores['Spatial'] =
+  //   normalizedTraitScores['Spatial'];
+
+  // ---------- CAREER MATCH ----------
+  // const matches = calculateCareerMatches(
+  //   normalizedTraitScores,
+  //   normalizedCategoryScores
+  // );
+
+  // setCareerMatches(matches);
+
+  // ---------- SHOW RESULT ----------
+//   setQuizState('results');
+//   window.scrollTo(0, 0);
+// };
 
   const isAnswered = (questionId: string) => {
     const v = selectedAnswers[questionId];
@@ -363,100 +586,109 @@ function App() {
 
   const currentQuestion = questions[currentIndex];
 
+  const calculateMaxSkillScore = useCallback(
+    (skillToCalc: string) => {
+      let maxScore = 0;
 
-//////////////
-//   const calculateMaxSkillScore = useCallback(
-//     (skillToCalc: string) => {
-//       let maxScore = 0;
+      questions.forEach((question) => {
+        const formatWeight = getFormatWeight(question.type);
+        const traitWeight = question.traitWeight || 1.0;
+        const sectionWeight = question.sectionWeight || 1.0;
+        const fullQuestionWeight = formatWeight * traitWeight * sectionWeight;
 
-//       questions.forEach((question) => {
-//         const formatWeight = getFormatWeight(question.type);
-//         const traitWeight = question.traitWeight || 1.0;
-//         const sectionWeight = question.sectionWeight || 1.0;
-//         const fullQuestionWeight = formatWeight * traitWeight * sectionWeight;
+        let maxBaseForQuestion = 0;
 
-//         let maxBaseForQuestion = 0;
+        question.answers?.forEach((answer: Answer) => {
+          const scores = answer.scores as unknown as Record<string, number> | undefined;
 
-//         question.answers?.forEach((answer: Answer) => {
-//           const scores = answer.scores as unknown as Record<string, number> | undefined;
+          if (scores && scores[skillToCalc] !== undefined) {
+            const baseScore = Number(scores[skillToCalc]);
+            if (!isNaN(baseScore) && baseScore > maxBaseForQuestion) maxBaseForQuestion = baseScore;
+          }
+        });
 
-//           if (scores && scores[skillToCalc] !== undefined) {
-//             const baseScore = Number(scores[skillToCalc]);
-//             if (!isNaN(baseScore) && baseScore > maxBaseForQuestion) maxBaseForQuestion = baseScore;
-//           }
-//         });
+        maxScore += maxBaseForQuestion * fullQuestionWeight;
+      });
 
-//         maxScore += maxBaseForQuestion * fullQuestionWeight;
-//       });
+      return maxScore > 0 ? maxScore : 1;
+    },
+    [questions]
+  );
+  const maxSkillScores = useMemo(() => {
+    const maxScores: Record<string, number> = {};
+    skillList.forEach((skill) => {
+      maxScores[skill] = calculateMaxSkillScore(skill);
+    });
+    return maxScores;
+  }, [calculateMaxSkillScore]);
+type ScoreRecord = Record<string, number>;
+const calculateCareerMatches = (normTraitScores: ScoreRecord, normCategoryScores: ScoreRecord) => {
+  const results = AllCareerProfiles.map((career: CareerAnalyticsProfile) => {
+    const traits = career.traits as Record<string, number>;
+    let traitScoreSum = 0;
+    let traitWeightSum = 0;
 
-//       return maxScore > 0 ? maxScore : 1;
-//     },
-//     [questions]
-//   );
-//   const maxSkillScores = useMemo(() => {
-//     const maxScores: Record<string, number> = {};
-//     skillList.forEach((skill) => {
-//       maxScores[skill] = calculateMaxSkillScore(skill);
-//     });
-//     return maxScores;
-//   }, [calculateMaxSkillScore]);
-// type ScoreRecord = Record<string, number>;
-// const calculateCareerMatches = (normTraitScores: ScoreRecord, normCategoryScores: ScoreRecord) => {
-//   const results = AllCareerProfiles.map((career: CareerAnalyticsProfile) => {
-//     const traits = career.traits as Record<string, number>;
-//     let traitScoreSum = 0;
-//     let traitWeightSum = 0;
+    for (const traitName in traits) {
+      const traitKey = traitName === "Openness to Experience" ? "Openness" : traitName;
+      const candidateScore = normTraitScores[traitKey];
+      const weight = traits[traitName];
 
-//     for (const traitName in traits) {
-//       const traitKey = traitName === "Openness to Experience" ? "Openness" : traitName;
-//       const candidateScore = normTraitScores[traitKey];
-//       const weight = traits[traitName];
-
-//       if (candidateScore !== undefined && weight !== undefined) {
-//         traitScoreSum += candidateScore * weight;
-//         traitWeightSum += weight;
-//       }
-//     }
+      if (candidateScore !== undefined && weight !== undefined) {
+        traitScoreSum += candidateScore * weight;
+        traitWeightSum += weight;
+      }
+    }
 
 
-//     const traitMatch = traitWeightSum > 0 ? traitScoreSum / traitWeightSum : 0;
+    const traitMatch = traitWeightSum > 0 ? traitScoreSum / traitWeightSum : 0;
 
-//     let skillScoreSum = 0;
-//     let skillWeightSum = 0;
+    let skillScoreSum = 0;
+    let skillWeightSum = 0;
 
-//     for (const skillCatName in career.skills) {
-//       let categoryKey = skillCatName;
-//       if (skillCatName === "Analytical & Problem-Solving") categoryKey = "AnalyticalProblemSolving";
-//       if (skillCatName === "Communication & Influence") categoryKey = "CommunicationInfluence";
-//       if (skillCatName === "Self-Management") categoryKey = "SelfManagement";
-//       if (skillCatName === "Interpersonal & Team") categoryKey = "InterpersonalTeam";
-//       if (skillCatName === "Leadership & Initiative") categoryKey = "LeadershipInitiative";
-//       if (skillCatName === "Learning & Development") categoryKey = "LearningDevelopment";
-//       if (skillCatName === "Ethical Professional") categoryKey = "EthicalProfessional";
-//       if (skillCatName === "Logical-Mathematical Intelligence") categoryKey = "LogicalMathematical";
-//       if (skillCatName === "Spatial Intelligence") categoryKey = "Spatial";
+    for (const skillCatName in career.skills) {
+      let categoryKey = skillCatName;
+      if (skillCatName === "Analytical & Problem-Solving") categoryKey = "AnalyticalProblemSolving";
+      if (skillCatName === "Communication & Influence") categoryKey = "CommunicationInfluence";
+      if (skillCatName === "Self-Management") categoryKey = "SelfManagement";
+      if (skillCatName === "Interpersonal & Team") categoryKey = "InterpersonalTeam";
+      if (skillCatName === "Leadership & Initiative") categoryKey = "LeadershipInitiative";
+      if (skillCatName === "Learning & Development") categoryKey = "LearningDevelopment";
+      if (skillCatName === "Ethical Professional") categoryKey = "EthicalProfessional";
+      if (skillCatName === "Logical-Mathematical Intelligence") categoryKey = "LogicalMathematical";
+      if (skillCatName === "Spatial Intelligence") categoryKey = "Spatial";
 
-//       const candidateScore = normCategoryScores[categoryKey];
-//       const weight = (career.skills as any)[categoryKey];
+      const candidateScore = normCategoryScores[categoryKey];
+      const weight = (career.skills as any)[categoryKey];
 
-//       if (candidateScore !== undefined && weight !== undefined) {
-//         skillScoreSum += candidateScore * weight;
-//         skillWeightSum += weight;
-//       }
-//     }
+      if (candidateScore !== undefined && weight !== undefined) {
+        skillScoreSum += candidateScore * weight;
+        skillWeightSum += weight;
+      }
+    }
 
-//     const skillMatch = skillWeightSum > 0 ? skillScoreSum / skillWeightSum : 0;
+    const skillMatch = skillWeightSum > 0 ? skillScoreSum / skillWeightSum : 0;
+    
+const overallMatch = traitMatch * 0.6 + skillMatch * 0.4;
 
-//     const overallMatch = traitMatch * 0.4 + skillMatch * 0.6;
+// 🚨 Add penalty here
+const variancePenalty = Math.abs(traitMatch - skillMatch) * 0.2;
 
-//     return { name: career.name, score: parseFloat(overallMatch.toFixed(1)) };
-//   });
+const finalScore = overallMatch - variancePenalty;
 
-//   results.sort((a, b) => b.score - a.score);
-//   // ✅ Enforce: Top 6, max 2 from same field
-//   return selectTopMatchesWithFieldCap(results, 6, 2);
-// };
-////////////
+return {
+  name: career.name,
+  score: parseFloat(finalScore.toFixed(1)),
+};
+    
+  });
+ 
+  results.sort((a, b) => b.score - a.score);
+  // ✅ Enforce: Top 6, max 2 from same field
+  return selectTopMatchesWithFieldCap(results, 6, 2);
+};
+
+
+//////////
 
   return (
     <>

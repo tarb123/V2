@@ -40,9 +40,7 @@ export const ITProfiles: CareerAnalyticsProfile[] = [
   mbti: { EI: 2, SN: 3, TF: 4, JP: 3 },
   workingStyle: { Auditory: 2, Visual: 4, Kinesthetic: 3 },
   multipleIntelligence: {
-    Linguistic: 2, LogicalMathematical: 5, Spatial: 4,
-    BodilyKinesthetic: 2, Musical: 1, Interpersonal: 2,
-    Intrapersonal: 4, Naturalist: 1
+    Linguistic: 2, LogicalMathematical: 5, Spatial: 4, BodilyKinesthetic: 2, Musical: 1, Interpersonal: 2, Intrapersonal: 4, Naturalist: 1
   },
   disc: { Dominance: 3, Influence: 2, Steadiness: 3, Compliance: 4 },
   attributes: {
@@ -66,8 +64,7 @@ export const ITProfiles: CareerAnalyticsProfile[] = [
     Openness: 5, Conscientiousness: 4, Extraversion: 2, Agreeableness: 3, EmotionalStability: 3
   },
   skills: {
-    AnalyticalProblemSolving: 5, CommunicationInfluence: 3, EthicalProfessional: 4,
-    InterpersonalTeam: 3, LeadershipInitiative: 2, LearningDevelopment: 5, SelfManagement: 4
+   AnalyticalProblemSolving: 5, CommunicationInfluence: 3, EthicalProfessional: 4, InterpersonalTeam: 3, LeadershipInitiative: 2, LearningDevelopment: 5, SelfManagement: 4
   },
 },
 // 2. Frontend Developer (1-5 scale)
@@ -77,9 +74,7 @@ export const ITProfiles: CareerAnalyticsProfile[] = [
   mbti: { EI: 3, SN: 3, TF: 4, JP: 3 },
   workingStyle: { Auditory: 2, Visual: 4, Kinesthetic: 2 },
   multipleIntelligence: {
-    Linguistic: 3, LogicalMathematical: 4, Spatial: 4,
-    BodilyKinesthetic: 2, Musical: 1, Interpersonal: 3,
-    Intrapersonal: 4, Naturalist: 1
+    Linguistic: 3, LogicalMathematical: 4, Spatial: 4, BodilyKinesthetic: 2, Musical: 1, Interpersonal: 3, Intrapersonal: 4, Naturalist: 1
   },
   disc: { Dominance: 3, Influence: 2, Steadiness: 3, Compliance: 4 },
   attributes: {
@@ -103,8 +98,7 @@ export const ITProfiles: CareerAnalyticsProfile[] = [
     Openness: 5, Conscientiousness: 4, Extraversion: 3, Agreeableness: 3, EmotionalStability: 4
   },
   skills: {
-    AnalyticalProblemSolving: 4, CommunicationInfluence: 4, EthicalProfessional: 3,
-    InterpersonalTeam: 3, LeadershipInitiative: 2, LearningDevelopment: 4, SelfManagement: 4
+    AnalyticalProblemSolving: 4, CommunicationInfluence: 4, EthicalProfessional: 3, InterpersonalTeam: 3, LeadershipInitiative: 2, LearningDevelopment: 4, SelfManagement: 4
   },
 },
 // 3. Backend Developer
@@ -114,14 +108,11 @@ export const ITProfiles: CareerAnalyticsProfile[] = [
     mbti: { EI: 2, SN: 4, TF: 4, JP: 3 },
     workingStyle: { Auditory: 1, Visual: 4, Kinesthetic: 2 },
     multipleIntelligence: {
-      Linguistic: 2, LogicalMathematical: 5, Spatial: 3,
-      BodilyKinesthetic: 2, Musical: 1, Interpersonal: 2,
-      Intrapersonal: 4, Naturalist: 1
+      Linguistic: 2, LogicalMathematical: 5, Spatial: 3, BodilyKinesthetic: 2, Musical: 1, Interpersonal: 2, Intrapersonal: 4, Naturalist: 1
     },
     disc: { Dominance: 3, Influence: 2, Steadiness: 3, Compliance: 4 },
     attributes: {
-      WorkingWithNumbers: 5, WorkingWithWords: 2, WorkingWithShapes: 3,
-      WorkingWithPeople: 2, WorkingWithData: 5, WorkingWithThings: 3,
+      WorkingWithNumbers: 5, WorkingWithWords: 2, WorkingWithShapes: 3, WorkingWithPeople: 2, WorkingWithData: 5, WorkingWithThings: 3,
       DiplomaticIndependentScore: 4,
       CooperativeCompetitiveScore: 3,
       SubmissiveAssertiveScore: 3,
@@ -140,8 +131,7 @@ export const ITProfiles: CareerAnalyticsProfile[] = [
       Openness: 4, Conscientiousness: 5, Extraversion: 2, Agreeableness: 3, EmotionalStability: 4
     },
     skills: {
-      AnalyticalProblemSolving: 5, CommunicationInfluence: 2, EthicalProfessional: 4,
-      InterpersonalTeam: 2, LeadershipInitiative: 2, LearningDevelopment: 4, SelfManagement: 5,
+     AnalyticalProblemSolving: 5, CommunicationInfluence: 2, EthicalProfessional: 4, InterpersonalTeam: 2, LeadershipInitiative: 2, LearningDevelopment: 4, SelfManagement: 5,
     },
 
 },
@@ -152,18 +142,11 @@ export const ITProfiles: CareerAnalyticsProfile[] = [
   mbti: { EI: 2, SN: 3, TF: 4, JP: 3 },
   workingStyle: { Auditory: 2, Visual: 4, Kinesthetic: 3 },
   multipleIntelligence: {
-    Linguistic: 3, LogicalMathematical: 4, Spatial: 4,
-    BodilyKinesthetic: 2, Musical: 1, Interpersonal: 2,
-    Intrapersonal: 4, Naturalist: 1
+    Linguistic: 3, LogicalMathematical: 4, Spatial: 4, BodilyKinesthetic: 2, Musical: 1, Interpersonal: 2, Intrapersonal: 4, Naturalist: 1
   },
   disc: { Dominance: 3, Influence: 2, Steadiness: 3, Compliance: 4 },
   attributes: {
-    WorkingWithNumbers: 4,
-    WorkingWithWords: 3,
-    WorkingWithShapes: 4,
-    WorkingWithPeople: 2,
-    WorkingWithData: 4,
-    WorkingWithThings: 2,
+    WorkingWithNumbers: 4, WorkingWithWords: 3, WorkingWithShapes: 4, WorkingWithPeople: 2, WorkingWithData: 4, WorkingWithThings: 2,
     DiplomaticIndependentScore: 3,
     CooperativeCompetitiveScore: 3,
     SubmissiveAssertiveScore: 3,
@@ -182,8 +165,7 @@ export const ITProfiles: CareerAnalyticsProfile[] = [
     Openness: 4, Conscientiousness: 4, Extraversion: 2, Agreeableness: 3, EmotionalStability: 4
   },
   skills: {
-    AnalyticalProblemSolving: 5, CommunicationInfluence: 3, EthicalProfessional: 4,
-    InterpersonalTeam: 4, LeadershipInitiative: 3, LearningDevelopment: 4, SelfManagement: 4
+    AnalyticalProblemSolving: 5, CommunicationInfluence: 3, EthicalProfessional: 4, InterpersonalTeam: 4, LeadershipInitiative: 3, LearningDevelopment: 4, SelfManagement: 4
   },
 },
 // 5. Mobile App Developer (1-5 scale)
@@ -193,14 +175,11 @@ export const ITProfiles: CareerAnalyticsProfile[] = [
   mbti: { EI: 2, SN: 3, TF: 4, JP: 3 },
   workingStyle: { Auditory: 2, Visual: 4, Kinesthetic: 3 },
   multipleIntelligence: {
-    Linguistic: 3, LogicalMathematical: 4, Spatial: 4, 
-    BodilyKinesthetic: 2, Musical: 1, Interpersonal: 2, 
-    Intrapersonal: 4, Naturalist: 1
+    Linguistic: 3, LogicalMathematical: 4, Spatial: 4, BodilyKinesthetic: 2, Musical: 1, Interpersonal: 2, Intrapersonal: 4, Naturalist: 1
   },
   disc: { Dominance: 3, Influence: 2, Steadiness: 3, Compliance: 4 },
   attributes: {
-    WorkingWithNumbers: 4, WorkingWithWords: 3, WorkingWithShapes: 4,
-    WorkingWithPeople: 2, WorkingWithData: 4, WorkingWithThings: 2,
+    WorkingWithNumbers: 4, WorkingWithWords: 3, WorkingWithShapes: 4, WorkingWithPeople: 2, WorkingWithData: 4, WorkingWithThings: 2,
     DiplomaticIndependentScore: 3, CooperativeCompetitiveScore: 3,
     SubmissiveAssertiveScore: 3, SpontaneousConscientiousScore: 4,
     InnovativeConventionalScore: 4, ReactiveOrganizedScore: 4,
@@ -210,8 +189,7 @@ export const ITProfiles: CareerAnalyticsProfile[] = [
   },
   traits: { Openness: 4, Conscientiousness: 4, Extraversion: 3, Agreeableness: 3, EmotionalStability: 4 },
   skills: {
-    AnalyticalProblemSolving: 4, CommunicationInfluence: 3, SelfManagement: 4,
-    InterpersonalTeam: 4, LeadershipInitiative: 3, LearningDevelopment: 4, EthicalProfessional: 4
+    AnalyticalProblemSolving: 4, CommunicationInfluence: 3, SelfManagement: 4, InterpersonalTeam: 4, LeadershipInitiative: 3, LearningDevelopment: 4, EthicalProfessional: 4
   },
 },
 // 6. Data Analyst 
@@ -221,13 +199,11 @@ export const ITProfiles: CareerAnalyticsProfile[] = [
   mbti: { EI: 2, SN: 4, TF: 4, JP: 3 },
   workingStyle: { Auditory: 2, Visual: 4, Kinesthetic: 2 },
   multipleIntelligence: {
-    Linguistic: 3, LogicalMathematical: 4, Spatial: 3, BodilyKinesthetic: 1,
-    Musical: 1, Interpersonal: 2, Intrapersonal: 4, Naturalist: 2,
+    Linguistic: 3, LogicalMathematical: 4, Spatial: 3, BodilyKinesthetic: 1, Musical: 1, Interpersonal: 2, Intrapersonal: 4, Naturalist: 2,
   },
   disc: { Dominance: 3, Influence: 2, Steadiness: 3, Compliance: 4 },
   attributes: {
-    WorkingWithNumbers: 5, WorkingWithWords: 3, WorkingWithShapes: 3,
-    WorkingWithPeople: 2, WorkingWithData: 5, WorkingWithThings: 2,
+    WorkingWithNumbers: 5, WorkingWithWords: 3, WorkingWithShapes: 3, WorkingWithPeople: 2, WorkingWithData: 5, WorkingWithThings: 2,
     DiplomaticIndependentScore: 3, CooperativeCompetitiveScore: 3,
     SubmissiveAssertiveScore: 3, SpontaneousConscientiousScore: 4,
     InnovativeConventionalScore: 4, ReactiveOrganizedScore: 4,
@@ -237,8 +213,7 @@ export const ITProfiles: CareerAnalyticsProfile[] = [
   },
   traits: { Openness: 4, Conscientiousness: 4, Extraversion: 2, Agreeableness: 3, EmotionalStability: 4 },
   skills: {
-    AnalyticalProblemSolving: 5, CommunicationInfluence: 3, EthicalProfessional: 4,
-    InterpersonalTeam: 4, LeadershipInitiative: 3, LearningDevelopment: 4, SelfManagement: 4
+    AnalyticalProblemSolving: 5, CommunicationInfluence: 3, EthicalProfessional: 4, InterpersonalTeam: 4, LeadershipInitiative: 3, LearningDevelopment: 4, SelfManagement: 4
   },
 },
 // 7. Data Scientist (1-5 scale)
@@ -248,13 +223,11 @@ export const ITProfiles: CareerAnalyticsProfile[] = [
   mbti: { EI: 2, SN: 4, TF: 4, JP: 3 },
   workingStyle: { Auditory: 1, Visual: 4, Kinesthetic: 2 },
   multipleIntelligence: {
-    Linguistic: 3, LogicalMathematical: 5, Spatial: 4, BodilyKinesthetic: 1,
-    Musical: 1, Interpersonal: 2, Intrapersonal: 4, Naturalist: 1,
+    Linguistic: 3, LogicalMathematical: 5, Spatial: 4, BodilyKinesthetic: 1, Musical: 1, Interpersonal: 2, Intrapersonal: 4, Naturalist: 1,
   },
   disc: { Dominance: 3, Influence: 2, Steadiness: 3, Compliance: 4 },
   attributes: {
-    WorkingWithNumbers: 5, WorkingWithWords: 3, WorkingWithShapes: 4,
-    WorkingWithPeople: 2, WorkingWithData: 5, WorkingWithThings: 2,
+    WorkingWithNumbers: 5, WorkingWithWords: 3, WorkingWithShapes: 4, WorkingWithPeople: 2, WorkingWithData: 5, WorkingWithThings: 2,
     DiplomaticIndependentScore: 4, CooperativeCompetitiveScore: 3,
     SubmissiveAssertiveScore: 3, SpontaneousConscientiousScore: 4,
     InnovativeConventionalScore: 4, ReactiveOrganizedScore: 5,
@@ -264,8 +237,7 @@ export const ITProfiles: CareerAnalyticsProfile[] = [
   },
   traits: { Openness: 1, Conscientiousness: 4, Extraversion: 2, Agreeableness: 3, EmotionalStability: 4 },
   skills: {
-    AnalyticalProblemSolving: 5, CommunicationInfluence: 3, EthicalProfessional: 4,
-    InterpersonalTeam: 2, LeadershipInitiative: 3, LearningDevelopment: 5, SelfManagement: 4,
+    AnalyticalProblemSolving: 5, CommunicationInfluence: 3, EthicalProfessional: 4, InterpersonalTeam: 2, LeadershipInitiative: 3, LearningDevelopment: 5, SelfManagement: 4,
   },
 },
 // 8. AI / Machine Learning Specialist
@@ -275,39 +247,23 @@ export const ITProfiles: CareerAnalyticsProfile[] = [
   mbti: { EI: 2, SN: 4, TF: 4, JP: 3 },
   workingStyle: { Auditory: 2, Visual: 4, Kinesthetic: 2 },
   multipleIntelligence: {
-    Linguistic: 2, LogicalMathematical: 5, Spatial: 4,
-    BodilyKinesthetic: 1, Musical: 1, Interpersonal: 2,
-    Intrapersonal: 4, Naturalist: 1,
+    Linguistic: 2, LogicalMathematical: 5, Spatial: 4, BodilyKinesthetic: 1, Musical: 1, Interpersonal: 2, Intrapersonal: 4, Naturalist: 1,
   },
   disc: { Dominance: 3, Influence: 2, Steadiness: 3, Compliance: 4 },
   attributes: {
-    WorkingWithNumbers: 5,
-    WorkingWithWords: 3,
-    WorkingWithShapes: 4,
-    WorkingWithPeople: 2,
-    WorkingWithData: 5,
-    WorkingWithThings: 2,
-    DiplomaticIndependentScore: 4,
-    CooperativeCompetitiveScore: 3,
-    SubmissiveAssertiveScore: 3,
-    SpontaneousConscientiousScore: 4,
-    InnovativeConventionalScore: 4,
-    ReactiveOrganizedScore: 4,
-    IntrovertExtrovertScore: 2,
-    SelfSufficientGroupOrientedScore: 3,
-    ReservedOutgoingScore: 2,
-    EmotionalStableScore: 4,
-    RestlessPoisedScore: 3,
-    ExcitableRelaxedScore: 3,
-    FrankSocialDesirabilityScore: 3,
+    WorkingWithNumbers: 5, WorkingWithWords: 3, WorkingWithShapes: 4, WorkingWithPeople: 2, WorkingWithData: 5, WorkingWithThings: 2,
+    DiplomaticIndependentScore: 4, CooperativeCompetitiveScore: 3,
+    SubmissiveAssertiveScore: 3, SpontaneousConscientiousScore: 4,
+    InnovativeConventionalScore: 4, ReactiveOrganizedScore: 4,
+    IntrovertExtrovertScore: 2, SelfSufficientGroupOrientedScore: 3,
+    ReservedOutgoingScore: 2, EmotionalStableScore: 4,
+    RestlessPoisedScore: 3, ExcitableRelaxedScore: 3, FrankSocialDesirabilityScore: 3,
   },
   traits: { 
     Openness: 5, Conscientiousness: 4, Extraversion: 2, Agreeableness: 3, EmotionalStability: 4
   },
   skills: {
-    AnalyticalProblemSolving: 5,
-    CommunicationInfluence: 3, EthicalProfessional: 4, InterpersonalTeam: 3,
-    LeadershipInitiative: 3, LearningDevelopment: 5, SelfManagement: 4
+    AnalyticalProblemSolving: 5, CommunicationInfluence: 3, EthicalProfessional: 4, InterpersonalTeam: 3, LeadershipInitiative: 3, LearningDevelopment: 5, SelfManagement: 4
   },
 },
 // 9. Cybersecurity Analyst
@@ -317,38 +273,23 @@ export const ITProfiles: CareerAnalyticsProfile[] = [
   mbti: { EI: 2, SN: 4, TF: 4, JP: 3 },
   workingStyle: { Auditory: 1, Visual: 4, Kinesthetic: 2 },
   multipleIntelligence: {
-    Linguistic: 3, LogicalMathematical: 4, Spatial: 3,
-    BodilyKinesthetic: 1, Musical: 1, Interpersonal: 2,
-    Intrapersonal: 4, Naturalist: 1,
+    Linguistic: 3, LogicalMathematical: 4, Spatial: 3, BodilyKinesthetic: 1, Musical: 1, Interpersonal: 2, Intrapersonal: 4, Naturalist: 1,
   },
   disc: { Dominance: 3, Influence: 2, Steadiness: 3, Compliance: 4 },
   attributes: {
-    WorkingWithNumbers: 4,
-    WorkingWithWords: 3,
-    WorkingWithShapes: 3,
-    WorkingWithPeople: 2,
-    WorkingWithData: 5,
-    WorkingWithThings: 2,
-    DiplomaticIndependentScore: 3,
-    CooperativeCompetitiveScore: 3,
-    SubmissiveAssertiveScore: 3,
-    SpontaneousConscientiousScore: 4,
-    InnovativeConventionalScore: 4,
-    ReactiveOrganizedScore: 4,
-    IntrovertExtrovertScore: 2,
-    SelfSufficientGroupOrientedScore: 3,
-    ReservedOutgoingScore: 2,
-    EmotionalStableScore: 4,
-    RestlessPoisedScore: 3,
-    ExcitableRelaxedScore: 3,
-    FrankSocialDesirabilityScore: 3,
+    WorkingWithNumbers: 4, WorkingWithWords: 3, WorkingWithShapes: 3, WorkingWithPeople: 2, WorkingWithData: 5, WorkingWithThings: 2,
+    DiplomaticIndependentScore: 3, CooperativeCompetitiveScore: 3,
+    SubmissiveAssertiveScore: 3, SpontaneousConscientiousScore: 4,
+    InnovativeConventionalScore: 4, ReactiveOrganizedScore: 4,
+    IntrovertExtrovertScore: 2, SelfSufficientGroupOrientedScore: 3,
+    ReservedOutgoingScore: 2, EmotionalStableScore: 4,
+    RestlessPoisedScore: 3, ExcitableRelaxedScore: 3, FrankSocialDesirabilityScore: 3,
   },
   traits: {
     Openness: 4, Conscientiousness: 5, Extraversion: 2, Agreeableness: 3, EmotionalStability: 5
   },
   skills: {
-    AnalyticalProblemSolving: 5, CommunicationInfluence: 3, EthicalProfessional: 5,
-    InterpersonalTeam: 2, LeadershipInitiative: 3, LearningDevelopment: 4, SelfManagement: 5
+    AnalyticalProblemSolving: 5, CommunicationInfluence: 3, EthicalProfessional: 5, InterpersonalTeam: 2, LeadershipInitiative: 3, LearningDevelopment: 4, SelfManagement: 5
   },
 },
 // 10. Cybersecurity Manager
@@ -358,38 +299,23 @@ export const ITProfiles: CareerAnalyticsProfile[] = [
   mbti: { EI: 2, SN: 3, TF: 4, JP: 3 },
   workingStyle: { Auditory: 2, Visual: 4, Kinesthetic: 2 },
   multipleIntelligence: {
-    Linguistic: 3, LogicalMathematical: 4, Spatial: 3,
-    BodilyKinesthetic: 2, Musical: 1, Interpersonal: 4, 
-    Intrapersonal: 4, Naturalist: 1,
+    Linguistic: 3, LogicalMathematical: 4, Spatial: 3, BodilyKinesthetic: 2, Musical: 1, Interpersonal: 4,  Intrapersonal: 4, Naturalist: 1,
   },
   disc: { Dominance: 4, Influence: 3, Steadiness: 4, Compliance: 4 },
   attributes: {
-    WorkingWithNumbers: 4,
-    WorkingWithWords: 3,
-    WorkingWithShapes: 4,
-    WorkingWithPeople: 4,
-    WorkingWithData: 4,
-    WorkingWithThings: 3,
-    DiplomaticIndependentScore: 4,
-    CooperativeCompetitiveScore: 3,
-    SubmissiveAssertiveScore: 3,
-    SpontaneousConscientiousScore: 4,
-    InnovativeConventionalScore: 4,
-    ReactiveOrganizedScore: 4,
-    IntrovertExtrovertScore: 2,
-    SelfSufficientGroupOrientedScore: 4,
-    ReservedOutgoingScore: 3,
-    EmotionalStableScore: 4,
-    RestlessPoisedScore: 3,
-    ExcitableRelaxedScore: 3,
-    FrankSocialDesirabilityScore: 3,
+    WorkingWithNumbers: 4, WorkingWithWords: 3, WorkingWithShapes: 4, WorkingWithPeople: 4, WorkingWithData: 4, WorkingWithThings: 3,
+    DiplomaticIndependentScore: 4, CooperativeCompetitiveScore: 3,
+    SubmissiveAssertiveScore: 3, SpontaneousConscientiousScore: 4,
+    InnovativeConventionalScore: 4, ReactiveOrganizedScore: 4,
+    IntrovertExtrovertScore: 2, SelfSufficientGroupOrientedScore: 4,
+    ReservedOutgoingScore: 3, EmotionalStableScore: 4,
+    RestlessPoisedScore: 3, ExcitableRelaxedScore: 3, FrankSocialDesirabilityScore: 3,
   },
   traits: { 
     Openness: 4, Conscientiousness: 4, Extraversion: 3, Agreeableness: 4, EmotionalStability: 4
   },
   skills: {
-    AnalyticalProblemSolving: 5, CommunicationInfluence: 4, EthicalProfessional: 5,
-    InterpersonalTeam: 4, LeadershipInitiative: 4, LearningDevelopment: 4, SelfManagement: 5
+    AnalyticalProblemSolving: 5, CommunicationInfluence: 4, EthicalProfessional: 5, InterpersonalTeam: 4, LeadershipInitiative: 4, LearningDevelopment: 4, SelfManagement: 5
   },
 },
 // 11. Cloud Architect
@@ -399,38 +325,23 @@ export const ITProfiles: CareerAnalyticsProfile[] = [
   mbti: { EI: 2, SN: 3, TF: 4, JP: 3 },
   workingStyle: { Auditory: 2, Visual: 4, Kinesthetic: 3 },
   multipleIntelligence: {
-    Linguistic: 3, LogicalMathematical: 4, Spatial: 4,  
-    BodilyKinesthetic: 2, Musical: 1, Interpersonal: 3, 
-    Intrapersonal: 4, Naturalist: 1,
+    Linguistic: 3, LogicalMathematical: 4, Spatial: 4,   BodilyKinesthetic: 2, Musical: 1, Interpersonal: 3, Intrapersonal: 4, Naturalist: 1,
   },
   disc: { Dominance: 3, Influence: 2, Steadiness: 3, Compliance: 4 },
   attributes: {
-    WorkingWithNumbers: 4,
-    WorkingWithWords: 3,
-    WorkingWithShapes: 4,
-    WorkingWithPeople: 3,
-    WorkingWithData: 4,
-    WorkingWithThings: 2,
-    DiplomaticIndependentScore: 3,
-    CooperativeCompetitiveScore: 3,
-    SubmissiveAssertiveScore: 3,
-    SpontaneousConscientiousScore: 4,
-    InnovativeConventionalScore: 4,
-    ReactiveOrganizedScore: 4,
-    IntrovertExtrovertScore: 2,
-    SelfSufficientGroupOrientedScore: 3,
-    ReservedOutgoingScore: 2,
-    EmotionalStableScore: 4,
-    RestlessPoisedScore: 3,
-    ExcitableRelaxedScore: 3,
-    FrankSocialDesirabilityScore: 3,
+    WorkingWithNumbers: 4, WorkingWithWords: 3, WorkingWithShapes: 4, WorkingWithPeople: 3, WorkingWithData: 4, WorkingWithThings: 2,
+    DiplomaticIndependentScore: 3, CooperativeCompetitiveScore: 3,
+    SubmissiveAssertiveScore: 3, SpontaneousConscientiousScore: 4,
+    InnovativeConventionalScore: 4, ReactiveOrganizedScore: 4,
+    IntrovertExtrovertScore: 2, SelfSufficientGroupOrientedScore: 3,
+    ReservedOutgoingScore: 2, EmotionalStableScore: 4,
+    RestlessPoisedScore: 3, ExcitableRelaxedScore: 3, FrankSocialDesirabilityScore: 3,
   },
   traits: {
     Openness: 4, Conscientiousness: 5, Extraversion: 3, Agreeableness: 3, EmotionalStability: 4
   },
   skills: {
-    AnalyticalProblemSolving: 5, CommunicationInfluence: 4, EthicalProfessional: 4,
-    InterpersonalTeam: 3, LeadershipInitiative: 4, LearningDevelopment: 5, SelfManagement: 4
+    AnalyticalProblemSolving: 5, CommunicationInfluence: 4, EthicalProfessional: 4, InterpersonalTeam: 3, LeadershipInitiative: 4, LearningDevelopment: 5, SelfManagement: 4
   },
 },
 // 12. DevOps Engineer
@@ -440,38 +351,23 @@ export const ITProfiles: CareerAnalyticsProfile[] = [
   mbti: { EI: 2, SN: 3, TF: 4, JP: 3 },
   workingStyle: { Auditory: 2, Visual: 4, Kinesthetic: 3 },
   multipleIntelligence: {
-    Linguistic: 3, LogicalMathematical: 4, Spatial: 4,
-    BodilyKinesthetic: 2, Musical: 1, Interpersonal: 3,
-    Intrapersonal: 4, Naturalist: 1,
+    Linguistic: 3, LogicalMathematical: 4, Spatial: 4, BodilyKinesthetic: 2, Musical: 1, Interpersonal: 3, Intrapersonal: 4, Naturalist: 1
   },
   disc: { Dominance: 3, Influence: 2, Steadiness: 3, Compliance: 4 },
   attributes: {
-    WorkingWithNumbers: 4,
-    WorkingWithWords: 3,
-    WorkingWithShapes: 4,
-    WorkingWithPeople: 3,
-    WorkingWithData: 4,
-    WorkingWithThings: 3,
-    DiplomaticIndependentScore: 3,
-    CooperativeCompetitiveScore: 3,
-    SubmissiveAssertiveScore: 3,
-    SpontaneousConscientiousScore: 4,
-    InnovativeConventionalScore: 4,
-    ReactiveOrganizedScore: 4,
-    IntrovertExtrovertScore: 2,
-    SelfSufficientGroupOrientedScore: 3,
-    ReservedOutgoingScore: 2,
-    EmotionalStableScore: 4,
-    RestlessPoisedScore: 3,
-    ExcitableRelaxedScore: 3,
-    FrankSocialDesirabilityScore: 3,
+    WorkingWithNumbers: 4, WorkingWithWords: 3, WorkingWithShapes: 4, WorkingWithPeople: 3, WorkingWithData: 4, WorkingWithThings: 3,
+    DiplomaticIndependentScore: 3, CooperativeCompetitiveScore: 3,
+    SubmissiveAssertiveScore: 3, SpontaneousConscientiousScore: 4,
+    InnovativeConventionalScore: 4, ReactiveOrganizedScore: 4,
+    IntrovertExtrovertScore: 2, SelfSufficientGroupOrientedScore: 3,
+    ReservedOutgoingScore: 2, EmotionalStableScore: 4,
+    RestlessPoisedScore: 3, ExcitableRelaxedScore: 3, FrankSocialDesirabilityScore: 3,
   },
   traits: {
     Openness: 4, Conscientiousness: 4, Extraversion: 2, Agreeableness: 3, EmotionalStability: 4
   },
   skills: {
-    AnalyticalProblemSolving: 5, CommunicationInfluence: 3, EthicalProfessional: 4,
-    InterpersonalTeam: 3, LeadershipInitiative: 3, LearningDevelopment: 4, SelfManagement: 4
+    AnalyticalProblemSolving: 5, CommunicationInfluence: 3, EthicalProfessional: 4, InterpersonalTeam: 3, LeadershipInitiative: 3, LearningDevelopment: 4, SelfManagement: 4
   },
 },
 // 13. System Administrator
@@ -481,38 +377,23 @@ export const ITProfiles: CareerAnalyticsProfile[] = [
   mbti: { EI: 2, SN: 3, TF: 4, JP: 3 },
   workingStyle: { Auditory: 2, Visual: 3, Kinesthetic: 3 },
   multipleIntelligence: {
-    Linguistic: 2, LogicalMathematical: 4, Spatial: 3,
-    BodilyKinesthetic: 2, Musical: 1, Interpersonal: 3,
-    Intrapersonal: 4, Naturalist: 1,
+    Linguistic: 2, LogicalMathematical: 4, Spatial: 3, BodilyKinesthetic: 2, Musical: 1, Interpersonal: 3, Intrapersonal: 4, Naturalist: 1,
   },
   disc: { Dominance: 3, Influence: 2, Steadiness: 4, Compliance: 4 },
   attributes: {
-    WorkingWithNumbers: 4,
-    WorkingWithWords: 3,
-    WorkingWithShapes: 3,
-    WorkingWithPeople: 3,
-    WorkingWithData: 4,
-    WorkingWithThings: 4,
-    DiplomaticIndependentScore: 3,
-    CooperativeCompetitiveScore: 3,
-    SubmissiveAssertiveScore: 3,
-    SpontaneousConscientiousScore: 4,
-    InnovativeConventionalScore: 4,
-    ReactiveOrganizedScore: 4,
-    IntrovertExtrovertScore: 2,
-    SelfSufficientGroupOrientedScore: 3,
-    ReservedOutgoingScore: 2,
-    EmotionalStableScore: 4,
-    RestlessPoisedScore: 3,
-    ExcitableRelaxedScore: 3,
-    FrankSocialDesirabilityScore: 3,
+    WorkingWithNumbers: 4, WorkingWithWords: 3, WorkingWithShapes: 3, WorkingWithPeople: 3, WorkingWithData: 4, WorkingWithThings: 4,
+    DiplomaticIndependentScore: 3, CooperativeCompetitiveScore: 3,
+    SubmissiveAssertiveScore: 3, SpontaneousConscientiousScore: 4,
+    InnovativeConventionalScore: 4, ReactiveOrganizedScore: 4,
+    IntrovertExtrovertScore: 2, SelfSufficientGroupOrientedScore: 3,
+    ReservedOutgoingScore: 2, EmotionalStableScore: 4,
+    RestlessPoisedScore: 3, ExcitableRelaxedScore: 3, FrankSocialDesirabilityScore: 3,
   },
   traits: {
     Openness: 3, Conscientiousness: 4, Extraversion: 2, Agreeableness: 3, EmotionalStability: 4
   },
   skills: {
-    AnalyticalProblemSolving: 4, CommunicationInfluence: 3, EthicalProfessional: 4,
-    InterpersonalTeam: 3, LeadershipInitiative: 3, LearningDevelopment: 4, SelfManagement: 4
+    AnalyticalProblemSolving: 4, CommunicationInfluence: 3, EthicalProfessional: 4, InterpersonalTeam: 3, LeadershipInitiative: 3, LearningDevelopment: 4, SelfManagement: 4
   },
 },
 // 14. Network Engineer
@@ -522,38 +403,23 @@ export const ITProfiles: CareerAnalyticsProfile[] = [
   mbti: { EI: 2, SN: 3, TF: 4, JP: 3 },
   workingStyle: { Auditory: 2, Visual: 4, Kinesthetic: 3 },
   multipleIntelligence: {
-    Linguistic: 2, LogicalMathematical: 4, Spatial: 4,
-    BodilyKinesthetic: 2, Musical: 1, Interpersonal: 3,
-    Intrapersonal: 4, Naturalist: 1,
+    Linguistic: 2, LogicalMathematical: 4, Spatial: 4, BodilyKinesthetic: 2, Musical: 1, Interpersonal: 3, Intrapersonal: 4, Naturalist: 1,
   },
   disc: { Dominance: 3, Influence: 2, Steadiness: 4, Compliance: 4 },
   attributes: {
-    WorkingWithNumbers: 4,
-    WorkingWithWords: 3,
-    WorkingWithShapes: 4,
-    WorkingWithPeople: 3,
-    WorkingWithData: 4,
-    WorkingWithThings: 4,
-    DiplomaticIndependentScore: 3,
-    CooperativeCompetitiveScore: 3,
-    SubmissiveAssertiveScore: 3,
-    SpontaneousConscientiousScore: 4,
-    InnovativeConventionalScore: 4,
-    ReactiveOrganizedScore: 4,
-    IntrovertExtrovertScore: 2,
-    SelfSufficientGroupOrientedScore: 3,
-    ReservedOutgoingScore: 2,
-    EmotionalStableScore: 4,
-    RestlessPoisedScore: 3,
-    ExcitableRelaxedScore: 3,
-    FrankSocialDesirabilityScore: 3,
+    WorkingWithNumbers: 4, WorkingWithWords: 3, WorkingWithShapes: 4, WorkingWithPeople: 3, WorkingWithData: 4, WorkingWithThings: 4,
+    DiplomaticIndependentScore: 3, CooperativeCompetitiveScore: 3, 
+    SubmissiveAssertiveScore: 3, SpontaneousConscientiousScore: 4, 
+    InnovativeConventionalScore: 4, ReactiveOrganizedScore: 4, 
+    IntrovertExtrovertScore: 2, SelfSufficientGroupOrientedScore: 3,
+    ReservedOutgoingScore: 2, EmotionalStableScore: 4, 
+    RestlessPoisedScore: 3, ExcitableRelaxedScore: 3, FrankSocialDesirabilityScore: 3,
   },
   traits: { 
     Openness: 4, Conscientiousness: 5, Extraversion: 2, Agreeableness: 3, EmotionalStability: 4 
   },
   skills: { 
-    AnalyticalProblemSolving: 5, CommunicationInfluence: 3, EthicalProfessional: 4, 
-    InterpersonalTeam: 3, LeadershipInitiative: 3, LearningDevelopment: 4, SelfManagement: 4 
+    AnalyticalProblemSolving: 5, CommunicationInfluence: 3, EthicalProfessional: 4, InterpersonalTeam: 3, LeadershipInitiative: 3, LearningDevelopment: 4, SelfManagement: 4 
   },
 },
 // 15. Database Administrator 
@@ -563,38 +429,23 @@ export const ITProfiles: CareerAnalyticsProfile[] = [
   mbti: { EI: 2, SN: 4, TF: 4, JP: 3 },
   workingStyle: { Auditory: 1, Visual: 4, Kinesthetic: 2 },
   multipleIntelligence: {
-    Linguistic: 3, LogicalMathematical: 5, Spatial: 3,
-    BodilyKinesthetic: 2, Musical: 1, Interpersonal: 2,
-    Intrapersonal: 4, Naturalist: 1,
+    Linguistic: 3, LogicalMathematical: 5, Spatial: 3, BodilyKinesthetic: 2, Musical: 1, Interpersonal: 2, Intrapersonal: 4, Naturalist: 1,
   },
   disc: { Dominance: 3, Influence: 2, Steadiness: 3, Compliance: 4 },
   attributes: {
-    WorkingWithNumbers: 5,
-    WorkingWithWords: 3,
-    WorkingWithShapes: 3,
-    WorkingWithPeople: 2,
-    WorkingWithData: 5,
-    WorkingWithThings: 3,
-    DiplomaticIndependentScore: 4,
-    CooperativeCompetitiveScore: 3,
-    SubmissiveAssertiveScore: 3,
-    SpontaneousConscientiousScore: 4,
-    InnovativeConventionalScore: 4,
-    ReactiveOrganizedScore: 4,
-    IntrovertExtrovertScore: 2,
-    SelfSufficientGroupOrientedScore: 3,
-    ReservedOutgoingScore: 2,
-    EmotionalStableScore: 4,
-    RestlessPoisedScore: 3,
-    ExcitableRelaxedScore: 3,
-    FrankSocialDesirabilityScore: 3,
+    WorkingWithNumbers: 5, WorkingWithWords: 3, WorkingWithShapes: 3, WorkingWithPeople: 2, WorkingWithData: 5, WorkingWithThings: 3,
+    DiplomaticIndependentScore: 4, CooperativeCompetitiveScore: 3,
+    SubmissiveAssertiveScore: 3, SpontaneousConscientiousScore: 4,
+    InnovativeConventionalScore: 4, ReactiveOrganizedScore: 4,
+    IntrovertExtrovertScore: 2, SelfSufficientGroupOrientedScore: 3,
+    ReservedOutgoingScore: 2, EmotionalStableScore: 4,
+    RestlessPoisedScore: 3, ExcitableRelaxedScore: 3, FrankSocialDesirabilityScore: 3,
   },
   traits: { 
     Openness: 4, Conscientiousness: 5, Extraversion: 2, Agreeableness: 3, EmotionalStability: 4 
   },
   skills: { 
-    AnalyticalProblemSolving: 5, CommunicationInfluence: 3, EthicalProfessional: 4, InterpersonalTeam: 3, 
-    LeadershipInitiative: 3, LearningDevelopment: 4, SelfManagement: 4 
+    AnalyticalProblemSolving: 5, CommunicationInfluence: 3, EthicalProfessional: 4, InterpersonalTeam: 3, LeadershipInitiative: 3, LearningDevelopment: 4, SelfManagement: 4 
   },
 },
 // 16. QA / Test Engineer 
@@ -604,38 +455,22 @@ export const ITProfiles: CareerAnalyticsProfile[] = [
   mbti: { EI: 2, SN: 3, TF: 4, JP: 3 },
   workingStyle: { Auditory: 2, Visual: 4, Kinesthetic: 2 },
   multipleIntelligence: {
-    Linguistic: 3, LogicalMathematical: 4, Spatial: 3,
-    BodilyKinesthetic: 2, Musical: 1, Interpersonal: 2,
-    Intrapersonal: 4, Naturalist: 1,
+    Linguistic: 3, LogicalMathematical: 4, Spatial: 3, BodilyKinesthetic: 2, Musical: 1, Interpersonal: 2, Intrapersonal: 4, Naturalist: 1,
   },
   disc: { Dominance: 3, Influence: 2, Steadiness: 4, Compliance: 4 },
   attributes: {
-    WorkingWithNumbers: 4,
-    WorkingWithWords: 3,
-    WorkingWithShapes: 3,
-    WorkingWithPeople: 2,
-    WorkingWithData: 4,
-    WorkingWithThings: 3,
-    DiplomaticIndependentScore: 3,
-    CooperativeCompetitiveScore: 3,
-    SubmissiveAssertiveScore: 3,
-    SpontaneousConscientiousScore: 4,
-    InnovativeConventionalScore: 4,
-    ReactiveOrganizedScore: 4,
-    IntrovertExtrovertScore: 2,
-    SelfSufficientGroupOrientedScore: 3,
-    ReservedOutgoingScore: 2,
-    EmotionalStableScore: 4,
-    RestlessPoisedScore: 3,
-    ExcitableRelaxedScore: 3,
-    FrankSocialDesirabilityScore: 3,
+    WorkingWithNumbers: 4, WorkingWithWords: 3, WorkingWithShapes: 3, WorkingWithPeople: 2, WorkingWithData: 4, WorkingWithThings: 3,
+    DiplomaticIndependentScore: 3, CooperativeCompetitiveScore: 3, SubmissiveAssertiveScore: 3,
+    SpontaneousConscientiousScore: 4, InnovativeConventionalScore: 4, ReactiveOrganizedScore: 4,
+    IntrovertExtrovertScore: 2, SelfSufficientGroupOrientedScore: 3,
+    ReservedOutgoingScore: 2, EmotionalStableScore: 4,
+    RestlessPoisedScore: 3, ExcitableRelaxedScore: 3, FrankSocialDesirabilityScore: 3,
   },
   traits: { 
     Openness: 4, Conscientiousness: 4, Extraversion: 2, Agreeableness: 3, EmotionalStability: 4 
   },
   skills: { 
-    AnalyticalProblemSolving: 4, CommunicationInfluence: 3, EthicalProfessional: 4, 
-    InterpersonalTeam: 3, LeadershipInitiative: 3, LearningDevelopment: 4, SelfManagement: 4
+    AnalyticalProblemSolving: 4, CommunicationInfluence: 3, EthicalProfessional: 4, InterpersonalTeam: 3, LeadershipInitiative: 3, LearningDevelopment: 4, SelfManagement: 4
   },
 },
 // 17. UI/UX Designer
