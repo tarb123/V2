@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import QuestionBlock from '../PP/QuestionBlock';
 import type { Answer, QuestionData } from '../PP/QuestionBlock';
 import ResultsPage from '../PP/ResultsPage';
-import { skillList, traitList, skillCategoryMapping, broadSkillCategories, BroadSkillCategory} from '../quizData';
+import { skillList, traitList, skillCategoryMapping, broadSkillCategories} from '../quizData';
 import CustomAlert from '../components/CustomAlert';
 import { AllCareerProfiles, CareerAnalyticsProfile, selectTopMatchesWithFieldCap } from "../careerAnalytics";
 

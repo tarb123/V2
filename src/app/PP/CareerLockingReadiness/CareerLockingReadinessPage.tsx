@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { broadSkillCategories, skillCategoryMapping, TraitCategory} from "../../quizData";
+import { broadSkillCategories, skillCategoryMapping, BroadSkillCategory} from "../../quizData";
 import { AllCareerProfiles } from "../../careerAnalytics";
 const careerDatabase = Object.values(AllCareerProfiles);
 
@@ -91,9 +91,9 @@ function statusTone(s: LockStatus) {
  */
 function computeCandidateCategoryPcts(
   skillScores: Record<string, number | null | undefined> | undefined,
-  mapping: Record<TraitCategory, string[]>
-): Record<TraitCategory, number> {
-  const out = {} as Record<TraitCategory, number>;
+  mapping: Record<BroadSkillCategory, string[]>
+): Record<BroadSkillCategory, number> {
+  const out = {} as Record<BroadSkillCategory, number>;
   for (const cat of broadSkillCategories) {
     const keys = mapping[cat] ?? [];
     const vals = keys
@@ -168,7 +168,7 @@ function computeReadinessPct(
  * - overall: mean across 7 categories
  */
 function computeCareerMatchPct(
-  candidateCats: Record<TraitCategory, number>,
+  candidateCats: Record<BroadSkillCategory, number>,
   careerTarget: Record<string, number>
 ) {
   const per: number[] = [];
@@ -185,7 +185,7 @@ function computeCareerMatchPct(
  * Top 3 biggest gaps (targetPct - candidatePct) for the PRIMARY career
  */
 function topGaps(
-  candidateCats: Record<TraitCategory, number>,
+  candidateCats: Record<BroadSkillCategory, number>,
   careerTarget: Record<string, number>,
   n = 3
 ) {
@@ -200,8 +200,8 @@ function topGaps(
   return gaps.filter((g) => g.gap > 0).slice(0, n);
 }
 
-function catTitle(cat: TraitCategory) {
-  const map: Record<TraitCategory, string> = {
+function catTitle(cat: BroadSkillCategory) {
+  const map: Record<BroadSkillCategory, string> = {
     AnalyticalProblemSolving: "Analytical & Problem Solving",
     CommunicationInfluence: "Communication & Influence",
     EthicalProfessional: "Ethical & Professional",
