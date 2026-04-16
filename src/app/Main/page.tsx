@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import QuestionBlock from '../PP/QuestionBlock';
 import type { Answer, QuestionData } from '../PP/QuestionBlock';
 import ResultsPage from '../PP/ResultsPage';
-import { skillList, traitList, skillCategoryMapping, broadSkillCategories, TraitCategory} from '../quizData';
+import { skillList, traitList, skillCategoryMapping, broadSkillCategories, BroadSkillCategory} from '../quizData';
 import CustomAlert from '../components/CustomAlert';
 import { AllCareerProfiles, CareerAnalyticsProfile, selectTopMatchesWithFieldCap } from "../careerAnalytics";
 
@@ -109,6 +109,17 @@ function App() {
 
     return undefined;
   };
+
+  const TRAIT_ALIASES: Record<string, string> = {
+  'Emotional Stability': 'EmotionalStability',
+  'EmotionalStability': 'EmotionalStability',
+  'Openness to Experience': 'Openness',
+};
+
+const normalizeTraitKey = (key?: string) => {
+  if (!key) return undefined;
+  return TRAIT_ALIASES[key] || key;
+};
 
   // ---------------- PROGRESS ----------------
   const answeredCount = useMemo(() => {
@@ -273,8 +284,10 @@ function App() {
     }
 
   // ---------- TRAITS ----------
-  const primaryTrait = 
-    selectedAnswerData.primaryTraitOverride || question.primaryTrait;
+const primaryTrait =
+  normalizeTraitKey(
+    selectedAnswerData.primaryTraitOverride || question.primaryTrait
+  );
   
   const baseScoreForTrait = selectedAnswerData.baseScoreValue;
 
@@ -314,86 +327,42 @@ function App() {
 
     setFinalScores(finalSkillScores);
 
-  // ---------- FINAL TRAITS ----------
-    const finalTraitScores: { [key: string]: number } = {};
-    const normalizedTraitScores: { [key: string]: number } = {};
+// ---------- FINAL TRAITS ----------
+const finalTraitScores: { [key: string]: number } = {};
+const normalizedTraitScores: { [key: string]: number } = {};
 
-    // for (const trait in traitScoreAcc) {
-    //   let avgScore = 0;
-    //   if (traitScoreAcc[trait].weightSum > 0) {
-    //     avgScore = traitScoreAcc[trait].weightedScoreSum / traitScoreAcc[trait].weightSum;
-    //   }
-    //   finalTraitScores[trait] = parseFloat(avgScore.toFixed(3));
-    //   normalizedTraitScores[trait] = Math.max(0, Math.min(100, ((avgScore - 1) / 4) * 100));
-    // }
+for (const trait in traitScoreAcc) {
+  const { weightedScoreSum, weightSum } = traitScoreAcc[trait];
+  const avg = weightSum > 0 ? weightedScoreSum / weightSum : 0;
 
-  for (const trait in traitScoreAcc) { // chat pgt part 8
-    const { weightedScoreSum, weightSum } = traitScoreAcc[trait];
+  finalTraitScores[trait] = parseFloat(avg.toFixed(3));
 
-    const avg = weightSum > 0 ? weightedScoreSum / weightSum : 0;
+  // linear normalization only
+  normalizedTraitScores[trait] = Math.max(
+    0,
+    Math.min(100, ((avg - 1) / 4) * 100)
+  );
+}
 
-    finalTraitScores[trait] = parseFloat(avg.toFixed(3));
-    const boosted = Math.pow((avg - 1) / 4, 1.5); // amplify difference
-    normalizedTraitScores[trait] = Math.min(100, Math.max(0, boosted * 100));  
-  }
-    setTraitScores(finalTraitScores);
-
-  // ---------- CATEGORY SCORES ----------
-    const normalizedCategoryScores: Record<string, number> = {};
-
-    // broadSkillCategories.forEach((categoryKey: TraitCategory) => {
-    //   const skillsInCategory = skillCategoryMapping[categoryKey];
-    //   let categoryScoreSum = 0;
-    //   let count = 0;
-
-    //   if (skillsInCategory) {
-    //     skillsInCategory.forEach((skillKey: string) => {
-    //       if (normalizedSkillScores[skillKey] !== undefined) {
-    //         categoryScoreSum += normalizedSkillScores[skillKey];
-    //         count++;
-    //       }
-    //     });
-    //   }
-
-    //   normalizedCategoryScores[categoryKey] = count > 0 ? parseFloat((categoryScoreSum / count).toFixed(1)) : 0;
-    // });
-
-  broadSkillCategories.forEach((category) => { // chat gpt part 9
-  const skills = skillCategoryMapping[category];
-
-  if (!skills || skills.length === 0) {
-    normalizedCategoryScores[category] = 0;
-    return;
-  }
-
-  const scores: number[] = [];
-
-  skills.forEach((skill) => {
-    if (normalizedSkillScores[skill] !== undefined) {
-      scores.push(normalizedSkillScores[skill]);
-    }
-  });
-
-  if (scores.length === 0) {
-    normalizedCategoryScores[category] = 0;
-    return;
-  }
-
-  // ✅ NEW LOGIC (paste here)
-  const max = Math.max(...scores);
-  const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
-
-  const categoryScore = max * 0.6 + avg * 0.4;
-
-  normalizedCategoryScores[category] = parseFloat(categoryScore.toFixed(1));
-});   
-
-  // overwrite with trait-driven intelligence
-  normalizedCategoryScores['LogicalMathematical'] = 
-    normalizedTraitScores['LogicalMathematical'];
+setTraitScores(finalTraitScores);
   
-  normalizedCategoryScores['Spatial'] = 
-    normalizedTraitScores['Spatial'];
+// ---------- CATEGORY SCORES ----------
+const normalizedCategoryScores: Record<string, number> = {};
+
+broadSkillCategories.forEach((category) => {
+  const skills = skillCategoryMapping[category] ?? [];
+
+  const scores = skills
+    .map((skill) => normalizedSkillScores[skill])
+    .filter((v): v is number => typeof v === 'number');
+
+  normalizedCategoryScores[category] =
+    scores.length > 0
+      ? parseFloat(
+          (scores.reduce((sum, v) => sum + v, 0) / scores.length).toFixed(1)
+        )
+      : 0;
+});
 
   // ---------- CAREER MATCH ----------
     const matches = calculateCareerMatches(
@@ -621,72 +590,59 @@ function App() {
     });
     return maxScores;
   }, [calculateMaxSkillScore]);
+
 type ScoreRecord = Record<string, number>;
-const calculateCareerMatches = (normTraitScores: ScoreRecord, normCategoryScores: ScoreRecord) => {
-  const results = AllCareerProfiles.map((career: CareerAnalyticsProfile) => {
-    const traits = career.traits as Record<string, number>;
-    let traitScoreSum = 0;
-    let traitWeightSum = 0;
 
-    for (const traitName in traits) {
-      const traitKey = traitName === "Openness to Experience" ? "Openness" : traitName;
-      const candidateScore = normTraitScores[traitKey];
-      const weight = traits[traitName];
-
-      if (candidateScore !== undefined && weight !== undefined) {
-        traitScoreSum += candidateScore * weight;
-        traitWeightSum += weight;
-      }
-    }
-
-
-    const traitMatch = traitWeightSum > 0 ? traitScoreSum / traitWeightSum : 0;
-
-    let skillScoreSum = 0;
-    let skillWeightSum = 0;
-
-    for (const skillCatName in career.skills) {
-      let categoryKey = skillCatName;
-      if (skillCatName === "Analytical & Problem-Solving") categoryKey = "AnalyticalProblemSolving";
-      if (skillCatName === "Communication & Influence") categoryKey = "CommunicationInfluence";
-      if (skillCatName === "Self-Management") categoryKey = "SelfManagement";
-      if (skillCatName === "Interpersonal & Team") categoryKey = "InterpersonalTeam";
-      if (skillCatName === "Leadership & Initiative") categoryKey = "LeadershipInitiative";
-      if (skillCatName === "Learning & Development") categoryKey = "LearningDevelopment";
-      if (skillCatName === "Ethical Professional") categoryKey = "EthicalProfessional";
-      if (skillCatName === "Logical-Mathematical Intelligence") categoryKey = "LogicalMathematical";
-      if (skillCatName === "Spatial Intelligence") categoryKey = "Spatial";
-
-      const candidateScore = normCategoryScores[categoryKey];
-      const weight = (career.skills as any)[categoryKey];
-
-      if (candidateScore !== undefined && weight !== undefined) {
-        skillScoreSum += candidateScore * weight;
-        skillWeightSum += weight;
-      }
-    }
-
-    const skillMatch = skillWeightSum > 0 ? skillScoreSum / skillWeightSum : 0;
-    
-const overallMatch = traitMatch * 0.6 + skillMatch * 0.4;
-
-// 🚨 Add penalty here
-const variancePenalty = Math.abs(traitMatch - skillMatch) * 0.2;
-
-const finalScore = overallMatch - variancePenalty;
-
-return {
-  name: career.name,
-  score: parseFloat(finalScore.toFixed(1)),
+const norm100ToScale5 = (value: number): number => {
+  const clamped = Math.max(0, Math.min(100, value ?? 0));
+  return 1 + (clamped / 100) * 4; // 0..100 => 1..5
 };
-    
+
+const similarity1to5 = (candidateValue: number, roleValue: number): number => {
+  return Math.max(0, 1 - Math.abs(candidateValue - roleValue) / 4);
+};
+
+const averageSimilarity = (
+  candidateScores100: ScoreRecord,
+  roleScores15: Record<string, number>
+): number => {
+  const entries = Object.entries(roleScores15 || {});
+  if (entries.length === 0) return 0;
+
+  let sum = 0;
+
+  for (const [rawKey, roleValue] of entries) {
+    const normalizedKey = normalizeTraitKey(rawKey) || rawKey;
+    const candidateValueOn5Scale = norm100ToScale5(
+      candidateScores100[normalizedKey] ?? 50
+    );
+
+    sum += similarity1to5(candidateValueOn5Scale, roleValue);
+  }
+
+  return sum / entries.length;
+};
+
+const calculateCareerMatches = (
+  normTraitScores: ScoreRecord,
+  normCategoryScores: ScoreRecord
+) => {
+  const results = AllCareerProfiles.map((career: CareerAnalyticsProfile) => {
+    const traitMatch = averageSimilarity(normTraitScores, career.traits || {});
+    const skillMatch = averageSimilarity(normCategoryScores, career.skills || {});
+
+    const overallMatch = traitMatch * 0.45 + skillMatch * 0.55;
+
+    return {
+      name: career.name,
+      score: parseFloat((overallMatch * 100).toFixed(1)),
+    };
   });
- 
+
   results.sort((a, b) => b.score - a.score);
-  // ✅ Enforce: Top 6, max 2 from same field
+
   return selectTopMatchesWithFieldCap(results, 6, 2);
 };
-
 
 //////////
 

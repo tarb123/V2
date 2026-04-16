@@ -235,7 +235,7 @@ export const ITProfiles: CareerAnalyticsProfile[] = [
     ReservedOutgoingScore: 2, EmotionalStableScore: 4,
     RestlessPoisedScore: 3, ExcitableRelaxedScore: 3, FrankSocialDesirabilityScore: 3,
   },
-  traits: { Openness: 1, Conscientiousness: 4, Extraversion: 2, Agreeableness: 3, EmotionalStability: 4 },
+  traits: { Openness: 4, Conscientiousness: 4, Extraversion: 2, Agreeableness: 3, EmotionalStability: 4 },  
   skills: {
     AnalyticalProblemSolving: 5, CommunicationInfluence: 3, EthicalProfessional: 4, InterpersonalTeam: 2, LeadershipInitiative: 3, LearningDevelopment: 5, SelfManagement: 4,
   },

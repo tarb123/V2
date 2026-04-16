@@ -1,4 +1,4 @@
-export type TraitCategory =
+export type BroadSkillCategory =
   | "AnalyticalProblemSolving"
   | "CommunicationInfluence"
   | "EthicalProfessional"
@@ -10,16 +10,16 @@ export type TraitCategory =
   export interface CareerProfile {
   name: string;
   traits: Partial<Record<string, number>>;
-  skills: Record<TraitCategory, number>;
+  skills: Record<BroadSkillCategory, number>;
 }
 
-export const broadSkillCategories: TraitCategory[] = 
+export const broadSkillCategories: BroadSkillCategory[] = 
 [
 'AnalyticalProblemSolving', 'CommunicationInfluence', 'EthicalProfessional', 
 'InterpersonalTeam', 'LeadershipInitiative', 'LearningDevelopment', 'SelfManagement',
 ];
 // Mapping: Granular Skill -> 7 Main Categories [cite: 1]
-export const skillCategoryMapping: Record<TraitCategory, string[]> = {
+export const skillCategoryMapping: Record<BroadSkillCategory, string[]> = {
 AnalyticalProblemSolving: 
 [ 
 'analyticalApproach', 'anomalyIdentification', 'criticalReasoning', 'creativeProblemSolving', 
@@ -63,11 +63,11 @@ SelfManagement:
 ],
 };
 
-export const traitList = [  
-'Openness','Conscientiousness','Extraversion','Agreeableness','Emotional Stability',
-'Linguistic','LogicalMathematical','Spatial','BodilyKinesthetic','Musical','Interpersonal','Intrapersonal','Naturalist',
-'Dominance','Influence','Steadiness','Compliance'
-];
+export const traitList = [
+  'Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'EmotionalStability', 'Linguistic', 
+  'LogicalMathematical', 'Spatial', 'BodilyKinesthetic', 'Musical', 'Interpersonal','Intrapersonal', 'Naturalist',
+  'Dominance', 'Influence', 'Steadiness', 'Compliance'
+] as const;
 
 // --- SKILLS LIST --- (Granular skills)
 export const skillList = [
