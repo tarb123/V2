@@ -3830,6 +3830,128 @@ const makeProfilesByField = (field: CareerField): CareerAnalyticsProfile[] => {
   return AllCareerProfiles.filter((p) => detectFieldByCode(p.code) === field);
 };
 
+export interface CareerFamilyProfile {
+  code: string;
+  name: string;
+  traits: Record<string, number>;
+  skills: Record<string, number>;
+  exampleRoles: string[];
+}
+
+const averageRecord = (records: Array<Record<string, number>>) => {
+  const allKeys = Array.from(
+    new Set(records.flatMap((record) => Object.keys(record || {})))
+  );
+
+  const averaged: Record<string, number> = {};
+
+  allKeys.forEach((key) => {
+    const values = records
+      .map((record) => record?.[key])
+      .filter((value): value is number => typeof value === 'number');
+
+    if (!values.length) return;
+
+    averaged[key] = parseFloat(
+      (values.reduce((sum, value) => sum + value, 0) / values.length).toFixed(2)
+    );
+  });
+
+  return averaged;
+};
+
+const buildFamilyProfile = (
+  field: CareerField,
+  code: string,
+  name: string,
+  exampleRoles: string[]
+): CareerFamilyProfile => {
+  const roles = makeProfilesByField(field);
+
+  return {
+    code,
+    name,
+    traits: averageRecord(roles.map((role) => role.traits)),
+    skills: averageRecord(roles.map((role) => role.skills)),
+    exampleRoles,
+  };
+};
+
+export const GeneralCareerProfiles: CareerFamilyProfile[] = [
+  buildFamilyProfile(
+    "IT_CS",
+    "FAM_TECH",
+    "Technology & Digital Systems",
+    ["Software Developer", "Data Analyst", "Cloud Architect"]
+  ),
+  buildFamilyProfile(
+    "ENGINEERING",
+    "FAM_ENGINEERING",
+    "Engineering & Applied Technical",
+    ["Electrical Engineer", "Mechanical Engineer", "Robotics Engineer"]
+  ),
+  buildFamilyProfile(
+    "MEDICAL",
+    "FAM_HEALTH",
+    "Health & Care",
+    ["Physician", "Nurse", "Medical Lab Technologist"]
+  ),
+  buildFamilyProfile(
+    "FINANCE",
+    "FAM_FINANCE",
+    "Finance & Compliance",
+    ["Chartered Accountant", "Financial Analyst", "Risk Analyst"]
+  ),
+  buildFamilyProfile(
+    "EDUCATION",
+    "FAM_EDUCATION",
+    "Teaching & Education",
+    ["Teacher / Educator", "Lecturer", "Curriculum Developer"]
+  ),
+  buildFamilyProfile(
+    "SUPPLY_CHAIN",
+    "FAM_OPERATIONS",
+    "Operations & Supply Chain",
+    ["Supply Chain Analyst", "Logistics Coordinator", "Operations Manager"]
+  ),
+  buildFamilyProfile(
+    "MARKETING",
+    "FAM_MARKETING",
+    "Marketing & Brand Communication",
+    ["Marketing Manager", "Digital Marketing Specialist", "Market Research Analyst"]
+  ),
+  buildFamilyProfile(
+    "SALES",
+    "FAM_SALES",
+    "Sales & Client Relations",
+    ["Sales Executive", "Account Manager", "Customer Success Manager"]
+  ),
+  buildFamilyProfile(
+    "HR",
+    "FAM_HR",
+    "People & Talent Development",
+    ["Human Resources Manager", "Talent Acquisition Specialist", "Learning & Development Manager"]
+  ),
+  buildFamilyProfile(
+    "ARTS_DESIGN",
+    "FAM_ARTS",
+    "Arts & Creative Design",
+    ["Creative Designer", "Graphic Designer", "Art Director"]
+  ),
+  buildFamilyProfile(
+    "MEDIA_SCIENCES",
+    "FAM_MEDIA",
+    "Media & Public Communication",
+    ["Journalist", "Media Analyst", "Public Relations Officer"]
+  ),
+  buildFamilyProfile(
+    "MULTIMEDIA",
+    "FAM_MULTIMEDIA",
+    "Multimedia & Interactive Design",
+    ["Multimedia Designer", "Animator", "Game Designer"]
+  ),
+];
+
 // 4) Now exports that depend on the helper
 export const ITCSCareerProfiles = makeProfilesByField("IT_CS");
 export const EngineeringCareerProfiles = makeProfilesByField("ENGINEERING");

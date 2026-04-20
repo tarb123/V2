@@ -26,7 +26,7 @@ const Header = () => {
             </Link>
           </div>
 
-          <div className="flex gap-4">
+          {/* <div className="flex gap-4">
             <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-Blue hover:text-black text-xl">
               <FaFacebookF />
             </a>
@@ -39,7 +39,7 @@ const Header = () => {
             <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-[#E4405F] hover:text-black text-xl">
               <FaInstagram />
             </a>
-          </div>
+          </div> */}
         </div>
 
         <nav className="flex -mt-2 px-9 items-center gap-3 bg-gradient-to-r from-[#ea2626] to-[#014FB7] relative text-white">
@@ -89,11 +89,18 @@ const Header = () => {
             )}
           </div>
 
-          <Link href="/Team" className="relative text-white text-base px-3 py-1 transition duration-300 group">
+          <Link href="/Main" className="relative text-white px-3 py-1 transition duration-300 group">
+            <i className="fa fa-clipboard-list fa-brain mr-1 text-white" aria-hidden="true"></i>
+            <span lang="ur" className="font-urdu text-lg font-bold text-white">خودی</span>{' '}
+            <span className="font-sans serif font-semibold text-white">Personality Assessment</span>
+            <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-white transition-all duration-300 group-hover:w-full"></span>
+          </Link>
+
+          {/* <Link href="/Team" className="relative text-white text-base px-3 py-1 transition duration-300 group">
             <i className="fa fa-users mr-1 text-white" aria-hidden="true"></i>
             <span className="font-sans serif font-semibold text-white text-sm">Team</span>
             <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-white transition-all duration-300 group-hover:w-full"></span>
-          </Link>
+          </Link> */}
 
           <Link href="/Blogs/" className="relative text-white text-sm px-3 py-1 transition duration-300 group">
             <i className="fa fa-file-alt text-white" aria-hidden="true"></i>
@@ -104,13 +111,6 @@ const Header = () => {
           <Link href="/education" className="relative text-white text-sm px-3 py-1 transition duration-300 group">
             <i className="fa fa-file-alt text-white" aria-hidden="true"></i>
             <span className="font-sans serif font-semibold text-white text-sm">Education</span>
-            <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-white transition-all duration-300 group-hover:w-full"></span>
-          </Link>
-
-          <Link href="/Main" className="relative text-white px-3 py-1 transition duration-300 group">
-            <i className="fa fa-clipboard-list fa-brain mr-1 text-white" aria-hidden="true"></i>
-            <span lang="ur" className="font-urdu text-lg font-bold text-white">خودی</span>{' '}
-            <span className="font-sans serif font-semibold text-white">Personality Assessment</span>
             <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-white transition-all duration-300 group-hover:w-full"></span>
           </Link>
 
@@ -267,23 +267,20 @@ const Header = () => {
               </Link>
             </div>
           )}
-          <Link
-            href="/Team"
-            className="rounded-lg px-3 py-3 hover:bg-white/10"
+          {/* <Link href="/Team" className="rounded-lg px-3 py-3 hover:bg-white/10"
             onClick={() => setMenuOpen(false)}
           >
             <i className="fa fa-users mr-2" aria-hidden="true"></i>
             Team
-          </Link>
+          </Link> */}
 
-          <Link
-            href="/Blogs/"
-            className="rounded-lg px-3 py-3 hover:bg-white/10"
+          <Link href="/Blogs/" className="rounded-lg px-3 py-3 hover:bg-white/10"
             onClick={() => setMenuOpen(false)}
           >
             <i className="fa fa-file-alt mr-2" aria-hidden="true"></i>
             Blogs
           </Link>
+
           {/* <Link
             href="/CRR/"
             className="rounded-lg px-3 py-3 hover:bg-white/10"

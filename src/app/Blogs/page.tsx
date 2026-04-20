@@ -30,17 +30,17 @@ const BlogCard = () => {
   return (
     <section className="relative overflow-hidden py-14 sm:py-16 md:py-24">
       {/* Background video */}
-      <video
+      {/* <video
         src="/explore services.mp4"
         className="absolute inset-0 h-full w-full object-cover"
         autoPlay
         muted
         loop
         playsInline
-      />
+      /> */}
 
       {/* Dark overlay */}
-      <div className="absolute inset-0 bg-transparent" />
+      <div className="absolute inset-0  bg-blue-950" />
 
       {/* Soft gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/50" />

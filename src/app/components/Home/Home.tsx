@@ -8,7 +8,7 @@ const Home = () => {
     <div>
       <Hero/>
       <Habout/>
-      <Awrapper />
+      {/* <Awrapper /> */}
     </div>
 )}
 export default Home
