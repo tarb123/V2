@@ -5,12 +5,7 @@ const AboutCard = () => {
   return (
     <div className="relative  overflow-hidden">
       {/* Background Video */}
-      {/* <video
-        src="/t2.mp4"
-        autoPlay
-        muted
-        loop
-        playsInline
+      {/* <video src="/t2.mp4" autoPlay muted loop playsInline
         className="absolute top-0 left-0 w-full h-full object-cover z-0"
       /> */}
 
