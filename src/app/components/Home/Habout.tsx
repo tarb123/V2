@@ -22,7 +22,7 @@ const AboutCard = () => {
           <div className="container mx-auto flex flex-col md:flex-row px-4 sm:px-6">
             <div className="video-container w-full md:w-1/2 mt-2 md:mt-0 md:pl-1 lg:w-4/5 lg:m-auto py-5">
               <video
-                src="/Video.mp4"
+                src="/Video1.mp4"
                 controls
                 autoPlay
                 loop
