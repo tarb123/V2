@@ -666,7 +666,7 @@ const calculateCareerMatches = (
                         {/* ✅ Scale title for big screens */}
                         <h1 className="-mt-1 text-xl sm:text-2xl lg:text-3xl 2xl:text-4xl font-semibold">
                           <span lang="ur" dir="rtl" className="font-urdu leading-[2] text-right mr-2 inline-block"> خودی</span>
-                          <span className="text-slate-300">/</span> Personality Assessment
+                             <span>Personality Assessment</span>
                         </h1>
                       </div>
 
