@@ -1,61 +1,82 @@
 import { db } from "@/utils/mysql";
 import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
+import { OAuth2Client } from "google-auth-library";
+
+const client = new OAuth2Client(process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID);
 
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { name, email, googleId } = body;
+    const { credential } = body;
 
-    if (!email) {
+    if (!credential) {
       return NextResponse.json(
-        { message: "Email is required" },
+        { message: "Google credential is required" },
         { status: 400 }
       );
     }
 
-    const normalizedEmail = String(email).trim().toLowerCase();
+    const ticket = await client.verifyIdToken({
+      idToken: credential,
+      audience: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+
+    if (!payload || !payload.email) {
+      return NextResponse.json(
+        { message: "Unable to get Google user email" },
+        { status: 400 }
+      );
+    }
+
+    const name = payload.name || "Google User";
+    const email = String(payload.email).trim().toLowerCase();
+    const googleId = payload.sub;
 
     const [rows] = await db.execute(
       "SELECT * FROM userinfo WHERE email = ?",
-      [normalizedEmail]
+      [email]
     );
 
     let userId;
-    let userName = name || "Google User";
+    let userName = name;
 
     if (rows.length > 0) {
       userId = rows[0].id;
-      userName = rows[0].name || userName;
+      userName = rows[0].name || name;
 
       if (!rows[0].google_id && googleId) {
         await db.execute(
           "UPDATE userinfo SET google_id = ? WHERE email = ?",
-          [googleId, normalizedEmail]
+          [googleId, email]
         );
       }
     } else {
       const [result] = await db.execute(
         "INSERT INTO userinfo (name, email, google_id) VALUES (?, ?, ?)",
-        [userName, normalizedEmail, googleId || null]
+        [name, email, googleId]
       );
       userId = result.insertId;
     }
 
     const token = jwt.sign(
-      { id: userId, name: userName, email: normalizedEmail },
+      { id: userId, name: userName, email },
       process.env.JWT_SECRET || "default_secret",
       { expiresIn: "1h" }
     );
 
     return NextResponse.json(
       {
-        message: rows.length > 0 ? "Login successful!" : "User registered via Google!",
+        message: rows.length > 0
+          ? "Login successful!"
+          : "User registered via Google!",
         token,
         user: {
           id: userId,
           name: userName,
-          email: normalizedEmail,
+          email,
         },
       },
       { status: 200 }
@@ -63,7 +84,7 @@ export async function POST(req) {
   } catch (err) {
     console.error("GOOGLE LOGIN ERROR:", err);
     return NextResponse.json(
-      { message: "Database error", error: err.message },
+      { message: "Google login failed", error: err.message },
       { status: 500 }
     );
   }
