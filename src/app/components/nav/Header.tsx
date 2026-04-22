@@ -15,14 +15,14 @@ const Header = () => {
         <div className="flex items-center justify-between px-2 py-0">
          
           {/* Left Logo */}
-          <Link href="/" className="flex items-center -mb-2">
+          <Link href="https://sanjeeda.io" className="flex items-center -mb-2">
             <Image src="/sanjeeda logo1.png"
               alt="Website Logo" width={200} height={100}
               priority className="h-auto w-auto object-contain"
             />
           </Link>
 
-<Link href="/" className="flex items-center justify-end shrink-0" aria-label="Conductivity Logo">
+<Link href="https://conductivity.com.pk" className="flex items-center justify-end shrink-0" aria-label="Conductivity Logo">
   <Image src="/conductivitylogo.png" alt="Conductivity Logo" width={180} height={10} priority className="h-14 w-56"/>
 </Link>
         </div>

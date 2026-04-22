@@ -1,4 +1,4 @@
-import mysql from "mysql2/promise";
+import { db } from "@/utils/mysql";
 import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
 
@@ -13,14 +13,6 @@ export async function POST(req) {
       );
     }
 
-    const db = await mysql.createConnection({
-      host: process.env.DB_HOST,
-      user: process.env.DB_USER,
-      password: process.env.DB_PASS,
-      database: process.env.DB_NAME,
-      port: process.env.DB_PORT || 3306,
-    });
-
     const normalizedEmail = String(email).trim().toLowerCase();
 
     const [rows] = await db.execute(
@@ -28,16 +20,20 @@ export async function POST(req) {
       [normalizedEmail]
     );
 
-    await db.end();
-
     if (rows.length === 0) {
-      return NextResponse.json({ message: "User not found" }, { status: 404 });
+      return NextResponse.json(
+        { message: "User not found" },
+        { status: 404 }
+      );
     }
 
     const user = rows[0];
 
     if (user.password !== password) {
-      return NextResponse.json({ message: "Invalid credentials" }, { status: 401 });
+      return NextResponse.json(
+        { message: "Invalid credentials" },
+        { status: 401 }
+      );
     }
 
     const token = jwt.sign(
@@ -63,7 +59,10 @@ export async function POST(req) {
       { status: 200 }
     );
   } catch (err) {
-    console.error("❌ Database error:", err);
-    return NextResponse.json({ message: "Database error" }, { status: 500 });
+    console.error("Login error:", err);
+    return NextResponse.json(
+      { message: "Database error", error: err.message },
+      { status: 500 }
+    );
   }
 }

@@ -1,4 +1,4 @@
-import mysql from "mysql2/promise";
+import { db } from "@/utils/mysql";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
@@ -12,14 +12,6 @@ export async function POST(req) {
       );
     }
 
-    const db = await mysql.createConnection({
-      host: process.env.DB_HOST,
-      user: process.env.DB_USER,
-      password: process.env.DB_PASS,
-      database: process.env.DB_NAME,
-      port: process.env.DB_PORT || 3306,
-    });
-
     const normalizedEmail = String(email).trim().toLowerCase();
 
     const [existing] = await db.execute(
@@ -28,7 +20,6 @@ export async function POST(req) {
     );
 
     if (existing.length > 0) {
-      await db.end();
       return NextResponse.json(
         { message: "An account with this email already exists" },
         { status: 409 }
@@ -40,16 +31,14 @@ export async function POST(req) {
       [name.trim(), normalizedEmail, password]
     );
 
-    await db.end();
-
     return NextResponse.json(
       { message: "User registered successfully!" },
       { status: 201 }
     );
   } catch (err) {
-    console.error("❌ Signup error:", err);
+    console.error("Signup error:", err);
     return NextResponse.json(
-      { message: "Database error" },
+      { message: "Database error", error: err.message },
       { status: 500 }
     );
   }

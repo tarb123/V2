@@ -1,10 +1,8 @@
-import mysql from "mysql2/promise";
+import { db } from "@/utils/mysql";
 import nodemailer from "nodemailer";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
-  let db;
-
   try {
     const { email } = await req.json();
 
@@ -14,6 +12,8 @@ export async function POST(req) {
         { status: 400 }
       );
     }
+
+    const normalizedEmail = String(email).trim().toLowerCase();
 
     const EMAIL_USER = process.env.EMAIL_USER;
     const EMAIL_PASS = process.env.EMAIL_PASS;
@@ -26,17 +26,9 @@ export async function POST(req) {
       );
     }
 
-    db = await mysql.createConnection({
-      host: process.env.DB_HOST,
-      user: process.env.DB_USER,
-      password: process.env.DB_PASS,
-      database: process.env.DB_NAME,
-      port: Number(process.env.DB_PORT) || 3306,
-    });
-
     const [rows] = await db.execute(
       "SELECT email FROM userinfo WHERE email = ?",
-      [email]
+      [normalizedEmail]
     );
 
     if (!rows || rows.length === 0) {
@@ -49,7 +41,9 @@ export async function POST(req) {
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     const expiry = new Date(Date.now() + 10 * 60 * 1000);
 
-    const resetLink = `${BASE_URL}/ResetPassword?email=${encodeURIComponent(email)}`;
+    const resetLink = `${BASE_URL}/ResetPassword?email=${encodeURIComponent(
+      normalizedEmail
+    )}`;
 
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
@@ -61,11 +55,9 @@ export async function POST(req) {
       },
     });
 
-    await transporter.verify();
-
     await transporter.sendMail({
       from: `"Support" <${EMAIL_USER}>`,
-      to: email,
+      to: normalizedEmail,
       subject: "Password Reset Code",
       html: `
         <div style="font-family: Arial, sans-serif; padding: 20px; line-height: 1.6;">
@@ -74,11 +66,7 @@ export async function POST(req) {
           <p>Your password reset code is:</p>
           <h1 style="letter-spacing: 4px; color: #dc2626;">${code}</h1>
           <p>This code expires in 10 minutes.</p>
-
-          <p style="margin-top: 20px;">
-            You can also click the button below to open the reset password page:
-          </p>
-
+          <p style="margin-top: 20px;">Open reset page:</p>
           <a
             href="${resetLink}"
             style="
@@ -94,20 +82,13 @@ export async function POST(req) {
           >
             Open Reset Password Page
           </a>
-
-          <p style="margin-top: 20px; font-size: 14px; color: #555;">
-            If the button does not work, copy and open this link:
-          </p>
-          <p style="font-size: 14px;">
-            <a href="${resetLink}">${resetLink}</a>
-          </p>
         </div>
       `,
     });
 
     await db.execute(
       "UPDATE userinfo SET reset_code = ?, reset_code_expiry = ? WHERE email = ?",
-      [code, expiry, email]
+      [code, expiry, normalizedEmail]
     );
 
     return NextResponse.json(
@@ -117,13 +98,8 @@ export async function POST(req) {
   } catch (err) {
     console.error("SEND CODE ERROR:", err);
     return NextResponse.json(
-      {
-        message: "Failed to send code",
-        error: err.message,
-      },
+      { message: "Failed to send code", error: err.message },
       { status: 500 }
     );
-  } finally {
-    if (db) await db.end();
   }
 }

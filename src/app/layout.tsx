@@ -2,10 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 import "../App.css";
 import { jameelNoori } from "./fonts";
-
 import ResponsiveNav from "./components/nav/ResponsiveNav";
 import Footer from "./footer/Footer";
-import { Toaster } from "react-hot-toast";  // ✅ Import Toaster
+import { Toaster } from "react-hot-toast";  
 
 export const metadata: Metadata = {
   title: "Sanjeeda.io",
