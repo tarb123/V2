@@ -35,7 +35,7 @@ const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({ onSuccess, onFail
       if (data.token) 
       {
         localStorage.setItem("token", data.token);
-        router.push("/Main");
+        router.push("/");
       } 
       else 
       { console.error("Login failed:", data.message); }
