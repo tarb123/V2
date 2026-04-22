@@ -37,15 +37,17 @@ const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({
         }),
       });
 
-      const data = await res.json();
-      console.log("Server Response:", data);
+const data = await res.json();
 
-      if (res.ok && data.token) {
-        localStorage.setItem("token", data.token);
-        router.push("/");
-      } else {
-        console.error("Login failed:", data.message);
-      }
+console.log("Server Response:", data);
+console.log("Google ID:", data.user?.google_id);
+
+if (res.ok && data.token) {
+  localStorage.setItem("token", data.token);
+  router.push("/");
+} else {
+  console.error("Login failed:", data.message);
+}
     } catch (error) {
       console.error("Login Error:", error);
     }

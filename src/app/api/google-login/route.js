@@ -61,22 +61,21 @@ export async function POST(req) {
       userId = result.insertId;
     }
 
-    const token = jwt.sign(
-      { id: userId, name: userName, email },
-      process.env.JWT_SECRET || "default_secret",
-      { expiresIn: "1h" }
-    );
-
     return NextResponse.json(
       {
         message: rows.length > 0
           ? "Login successful!"
           : "User registered via Google!",
-        token,
+        token: jwt.sign(
+          { id: userId, name: userName, email },
+          process.env.JWT_SECRET || "default_secret",
+          { expiresIn: "1h" }
+        ),
         user: {
           id: userId,
           name: userName,
           email,
+          google_id: googleId,
         },
       },
       { status: 200 }
