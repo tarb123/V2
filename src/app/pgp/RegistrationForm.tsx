@@ -134,7 +134,7 @@ export default function RegistrationForm() {
 
   return (
     <main className="min-h-screen bg-slate-50 px-4 py-10 sm:px-6 lg:px-8">
-      <section className="mx-auto mt-20 max-w-3xl rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <section className="mx-auto mt-20 max-w-xl rounded-2xl border border-slate-200 bg-white shadow-sm">
         <div className="border-b border-slate-200 px-6 py-6 sm:px-8">
           <p className="text-sm font-medium text-blue-600">PGP Registration</p>
           <h1 className="mt-1 text-3xl font-semibold tracking-tight text-slate-900">
@@ -172,96 +172,50 @@ export default function RegistrationForm() {
             onSubmit={(event) => event.preventDefault()}
             noValidate
           >
-            <div className="grid gap-5 sm:grid-cols-2">
-              <div>
-                <label
-                  htmlFor="fullName"
-                  className="text-sm font-medium text-slate-700"
-                >
-                  Full Name <span className="text-rose-600">*</span>
-                </label>
-                <input
-                  id="fullName"
-                  value={form.name}
-                  onChange={(event) =>
-                    handleFieldChange("name", event.target.value)
-                  }
-                  placeholder="Enter full name"
-                  aria-invalid={Boolean(errors.name)}
-                  aria-describedby={errors.name ? "fullName-error" : undefined}
-                  className={inputClasses(Boolean(errors.name))}
-                />
-                {errors.name ? (
-                  <p id="fullName-error" className="mt-2 text-sm text-rose-600">
-                    {errors.name}
-                  </p>
-                ) : null}
-              </div>
+  <div className="grid gap-5 sm:grid-cols-2">
+    <div>
+      <label htmlFor="fullName" className="text-sm font-medium text-slate-700">Full Name <span className="text-rose-600">*</span></label>
+        <input id="fullName" value={form.name} onChange={(event) =>
+          handleFieldChange("name", event.target.value)
+          } placeholder="Enter full name" aria-invalid={Boolean(errors.name)} aria-describedby={errors.name ? "fullName-error" : undefined} className={inputClasses(Boolean(errors.name))}
+        />
+        {errors.name ? (
+          <p id="fullName-error" className="mt-2 text-sm text-rose-600">{errors.name}</p>
+        ) : null}
+    </div>
 
-              <div>
-                <label
-                  htmlFor="email"
-                  className="text-sm font-medium text-slate-700"
-                >
-                  Email Address <span className="text-rose-600">*</span>
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  value={form.email}
-                  onChange={(event) =>
-                    handleFieldChange("email", event.target.value)
-                  }
-                  placeholder="Enter email address"
-                  aria-invalid={Boolean(errors.email)}
-                  aria-describedby={
-                    errors.email ? "email-help email-error" : "email-help"
-                  }
-                  className={inputClasses(Boolean(errors.email))}
-                />
-                <p id="email-help" className="mt-2 text-xs text-slate-500">
-                  This email will be used as the active student session.
-                </p>
-                {errors.email ? (
-                  <p id="email-error" className="mt-2 text-sm text-rose-600">
-                    {errors.email}
-                  </p>
-                ) : null}
-              </div>
+    <div>
+      <label htmlFor="email" className="text-sm font-medium text-slate-700">Email Address <span className="text-rose-600">*</span></label>
+        <input id="email" type="email" value={form.email} onChange={(event) => handleFieldChange("email", event.target.value)}
+          placeholder="Enter email address" aria-invalid={Boolean(errors.email)} aria-describedby={ errors.email ? "email-help email-error" : "email-help"}
+          className={inputClasses(Boolean(errors.email))}
+        />
+        <p id="email-help" className="mt-2 text-xs text-slate-500"> This email will be used as the active student session.</p>
+          {errors.email ? (
+        <p id="email-error" className="mt-2 text-sm text-rose-600">{errors.email}</p>
+          ) : null}
+    </div>
 
-              <div>
-                <label
-                  htmlFor="education"
-                  className="text-sm font-medium text-slate-700"
-                >
-                  Education Background <span className="text-rose-600">*</span>
-                </label>
-                <select
-                  id="education"
-                  value={form.education}
-                  onChange={(event) =>
-                    handleFieldChange("education", event.target.value)
-                  }
-                  aria-invalid={Boolean(errors.education)}
-                  aria-describedby={
-                    errors.education ? "education-error" : undefined
-                  }
-                  className={inputClasses(Boolean(errors.education))}
-                >
-                  <option value="">Select education level</option>
-                  <option value="Bachelors">Bachelors</option>
-                  <option value="Masters">Masters</option>
-                  <option value="Intermediate">Intermediate</option>
-                  <option value="DAE">DAE</option>
-                </select>
-                {errors.education ? (
-                  <p id="education-error" className="mt-2 text-sm text-rose-600">
-                    {errors.education}
-                  </p>
-                ) : null}
-              </div>
+    <div>
+      <label htmlFor="education" className="text-sm font-medium text-slate-700">Education Background <span className="text-rose-600">*</span></label>
+        
+        <select id="education" value={form.education} onChange={(event) => handleFieldChange("education", event.target.value)}
+         aria-invalid={Boolean(errors.education)} aria-describedby={ errors.education ? "education-error" : undefined } className={inputClasses(Boolean(errors.education))}
+        >
+          <option value="">Select education level</option>
+          <option value="Bachelors">Bachelors</option>
+          <option value="Masters">Masters</option>
+          <option value="Intermediate">Intermediate</option>
+          <option value="DAE">DAE</option>
+        </select>
+        
+        {errors.education ? (
+          <p id="education-error" className="mt-2 text-sm text-rose-600">{errors.education}</p>
+          ) : null}
 
-              <div>
+    </div>
+
+      <div>
                 <label
                   htmlFor="discipline"
                   className="text-sm font-medium text-slate-700"
