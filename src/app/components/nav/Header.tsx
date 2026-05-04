@@ -99,12 +99,15 @@ const Header = () => {
             <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-white transition-all duration-300 group-hover:w-full"></span>
           </Link>
 
-          <div className="ml-auto">
-            <Link href="/login" className="text-white text-base py-1 group">
-              <i className="fa fa-lock-open"></i>
-              <span className="font-sans serif font-semibold"> Login</span>
-            </Link>
-          </div>
+ <div className="ml-auto flex items-center">
+  <Link
+    href="/login"
+    className="inline-flex h-8 items-center gap-2 bg-[#014FB7] px-4 text-sm font-medium text-white transition hover:bg-[#014FB7]-100"
+  >
+    <i className="fa fa-sign-in-alt text-xs" aria-hidden="true"></i>
+    <span>Login</span>
+  </Link>
+</div>
         </nav>
       </header>
 
