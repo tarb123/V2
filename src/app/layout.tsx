@@ -5,6 +5,7 @@ import { jameelNoori } from "./fonts";
 import ResponsiveNav from "./components/nav/ResponsiveNav";
 import Footer from "./footer/Footer";
 import { Toaster } from "react-hot-toast";  
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export const metadata: Metadata = {
   title: "Sanjeeda.io",

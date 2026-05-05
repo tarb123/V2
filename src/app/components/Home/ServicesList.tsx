@@ -86,9 +86,7 @@ export default function Carousel() {
 // </section>
 
 <section className="relative overflow-hidden bg-blue-950">
-  {/* <video
-    src="/explore services.mp4"
-    className="absolute h-full md:h-auto left-0 w-full  object-cover z-0"
+  {/* <video src="/explore services.mp4" className="absolute h-full md:h-auto left-0 w-full  object-cover z-0"
     autoPlay muted loop playsInline
   /> */}
 

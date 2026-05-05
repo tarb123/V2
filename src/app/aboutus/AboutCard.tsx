@@ -1,6 +1,4 @@
 // import Awrapper from "./Awrapper";
-
-
 const AboutCard = () => {
   return (
     <div className="bg-blue-950 w-full pt-[16vh] md:pt-12 h-screen">
