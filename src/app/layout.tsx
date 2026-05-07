@@ -29,10 +29,10 @@ export default function RootLayout({
 }>) {
   return (
      <html lang="en" className="h-full w-full">
- 
       <body className={`${jameelNoori.variable} antialiased min-h-screen w-full overflow-x-hidden`}>
-        <ResponsiveNav/>        
-        {children}
+        <ResponsiveNav/>      
+          <SpeedInsights />  
+            {children}
         <Analytics />
         <Footer/>
         <Toaster/>
